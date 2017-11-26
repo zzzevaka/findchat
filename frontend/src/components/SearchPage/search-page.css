@@ -104,7 +104,7 @@
 
 .search-input .Select-control {
     border: 1px solid #ddd !important;
-    border-radius: 20px;
+    border-radius: 20px !important;
     box-shadow: none !important;
     padding: 0 15px 0 15px;
 }

@@ -34,6 +34,7 @@ class SearchFiler extends Component {
 
         return (
             <Creatable
+                options={[]}
                 className='search-input'
                 value={selectFilter}
                 placeholder={<img src='/svg/search_color.svg' />}

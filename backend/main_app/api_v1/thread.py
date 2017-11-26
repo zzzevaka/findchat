@@ -69,7 +69,7 @@ class ThreadInterface():
 class API_Thread(BaseHandler):
 
 
-    @tornado.web.authenticated
+    # @tornado.web.authenticated
     def get(self, thread_id):
         '''
             load a thread with posts

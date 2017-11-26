@@ -35,16 +35,10 @@ export class NewPostPhotoModal extends PureComponent {
         return (
             <Modal {...rest} dialogClassName='modal-new-post-photo'>
                 <Modal.Header closeButton>
-                    <img src='/img/icons/icon-plus-black.png' />
+                    <img src='/svg/photo_color.svg' className='icon' />
                     {title}
                 </Modal.Header>
                 <Modal.Body>
-                    {false && <UploadImageButton
-                        className='button-add-photo'
-                        onSuccess={this.imageUploaded}
-                    >
-                        <img src='/img/icons/photo.png' />
-                    </UploadImageButton>}
                     { this.renderUploadedImages() }
                     <ThreadPostComposer
                         ref={e => this.composer = e}
@@ -85,7 +79,7 @@ export class NewPostPhotoModal extends PureComponent {
                 className='button-add-photo'
                 onSuccess={this.imageUploaded}
             >
-                <img src='/img/icons/photo.png' />
+                <img src='/svg/photo_color.svg' />
              </UploadImageButton>
         );
     }

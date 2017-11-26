@@ -136,10 +136,7 @@ const ChatPost = pure(
                         { currentUserId() == author.id && DeletePostMenuItem(post, dispatch) }
                     </DropdownTools>
                 </div>
-                <img
-                    className='avatar'
-                    src={`/img/${author.thumbnail || 'avatar-dummy.jpg'}`}
-                />
+                <UserAvatar thumbnail={author.thumbnail} />
                 <span className='author-name'>{author.firstname}</span>
                 <br />
                 <PostTime datetime={post.datetime} />

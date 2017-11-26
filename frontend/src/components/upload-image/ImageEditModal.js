@@ -5,14 +5,14 @@ import { findDOMNode } from 'react-dom';
 import { Modal, Image, Button, Glyphicon } from 'react-bootstrap';
 import ReactCrop from 'react-image-crop';
 
+import {LoaderIcon} from '../Icons';
 import { uploadImage } from '../../actions';
 
 import './image-modal.css';
 // import 'react-image-crop/dist/ReactCrop.css';
 
 
-const INITIAL_CROP = {width: 95, height: 95, x: 2.5, y: 2.5};
-
+const INITIAL_CROP = {width: 100, height: 100, x: 0, y: 0};
 
 
 export default class ImageEditModal extends React.Component {
@@ -35,7 +35,6 @@ export default class ImageEditModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showSrc: true,
             crop: props.crop
         };
     }
@@ -57,7 +56,8 @@ export default class ImageEditModal extends React.Component {
                 <Modal.Header closeButton>
                     Upload image
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body
+                >
                     <div className='image-area'>
                         { this._renderImageArea() }
                     </div>
@@ -87,18 +87,15 @@ export default class ImageEditModal extends React.Component {
         const {uploadedImages, storeKey} = this.props;
         const img = uploadedImages[storeKey];
         if (img.src === 'l') {
-            return (
-                <Image className='loader' src={'/img/loading.gif'} />
-            )
+            return <LoaderIcon />;
         }
         if (crop) {
             return (
                 <ReactCrop
+                    crop={crop || INITIAL_CROP}
                     src={img.src}
-                    crop={crop.perc}
                     keepSelection={true}
-                    onComplete={this._onCrop.bind(this)}
-                    onImageLoaded={this._onImageLoaded.bind(this)}
+                    onChange={this._onCrop}
                 />
             )
         } else {
@@ -112,18 +109,19 @@ export default class ImageEditModal extends React.Component {
     }
 
     // for right ReactCrop initial state
-    _onImageLoaded(perc, img, pixel) {
-        this._onCrop(perc, pixel);
-    }
+    // _onImageLoaded(perc, img, pixel) {
+    //     this._onCrop(perc, pixel);
+    // }
 
-    _onCrop(perc, pixel) {
-        this.setState({crop: {perc:perc, pixel: pixel}})
+    _onCrop = (crop) => {
+        console.log(crop);
+        this.setState({crop: crop});
     }
     
     _toggleCrop = () => {
         this.setState({
-                crop: this.state.crop ? null : { perc: INITIAL_CROP }            
-        })
+            crop: this.state.crop ? null : INITIAL_CROP         
+        });
     }
 
     _uploadToServer() {
@@ -145,20 +143,4 @@ export default class ImageEditModal extends React.Component {
     _cancel() {
         this.props.onCancel();
     }
-}
-
-
-
-
-class ToolBar extends React.Component {
-
-    render() {
-        let alClass = this.props.right ? 'tool-bar--right' : 'tool-bar--left';
-        return (
-            <div className={`tool-bar ${alClass}`}>
-                {this.props.children}
-            </div>
-        )
-    }
-
 }

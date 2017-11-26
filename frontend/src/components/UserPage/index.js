@@ -221,7 +221,7 @@ export function UserAvatar({thumbnail, avatarID}) {
 
     return (
         <div className='avatar'>
-            <img src={`/img/${thumbnail || 'avatar-dummy.jpg'}`} />
+            <img src={thumbnail ? `/img/${thumbnail}` : '/svg/user.svg'} />
         </div>
     );
 

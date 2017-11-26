@@ -171,12 +171,14 @@ export function updateUser(user, callback) {
         xhr.onreadystatechange = function() {
             if (xhr.readyState !== 4) return;
             if (xhr.status === 200) {
+                const {users} = JSON.parse(xhr.responseText);
                 dispatch(
                     Notifications.info({
                         position: 'tr',
                         children: <EditingSuccess />,
                     })
                 )
+                dispatch(loadUsersSuccess(users));
                 if (callback) callback();
             }
             else {

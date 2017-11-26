@@ -106,12 +106,6 @@ body {
     color: rgb(249, 73, 182) !important;
 }
 
-img.loader {
-    height: 50px;
-    width: 50px;
-    margin: auto;
-}
-
 .icon-loader svg {
     width: 40px;
     height: 40px;
@@ -310,4 +304,10 @@ img.loader {
     background: #fff;
     color: #f949b6;
     border-radius: 50%;
+}
+
+/* IMAGES */
+
+.icon {
+    height: 18px;
 }

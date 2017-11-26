@@ -209,6 +209,7 @@ class Modals extends Component {
 
             case 'new_chat_offer': {
                 const user = store.users[currentUserId()];
+                if (!user || !user.offer_thread_id) return null;
                 return (
                     <NewOfferModal
                         show={true}
@@ -221,6 +222,7 @@ class Modals extends Component {
 
             case 'new_photo': {
                 const user = store.users[currentUserId()];
+                if (!user || !user.offer_thread_id) return null;
                 return (
                     <NewPostPhotoModal
                         show={true}

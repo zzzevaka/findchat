@@ -28,7 +28,7 @@ class UploadImageButton extends Component {
     static defaultProps = {
         maxFileSize: MAX_FILE_SIZE,
         elevationMessage: ELEVATION_MSG,
-        notificationPostion: NOTIFICATION_POS
+        notificationPostion: NOTIFICATION_POS,
     }
 
     constructor() {
