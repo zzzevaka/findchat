@@ -211,7 +211,7 @@ class LoginForm extends PureComponent {
                 </form>
                 <div className='buttons'>
                     <button className='button-no-style' onClick={this.submit}>
-                        <img src='/img/icons/enter.png' />
+                        <img src='/img/icons/enter.png' />login
                     </button>
                     <span>or</span>
                     <button className='button-no-style'>
