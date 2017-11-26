@@ -1,0 +1,329 @@
+.top-fixed-bar {
+    position: fixed;
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 45px;
+    padding: 0 20px;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    z-index: 10;
+}
+
+.user-page {
+    padding-bottom: 40px;
+}
+
+.company_title {
+    margin: auto;
+    text-align: center;
+}
+
+.company_title .logo {
+    height: 24px;
+    margin-right: 12px;
+}
+
+.company_title .logo_name {
+    height: 15px;
+}
+
+@media screen and (min-width: 768px) {
+
+    .top-fixed-bar {
+        height: 60px;
+    }
+
+    .company_title .logo{
+        height: 30px;
+    }
+
+    .company_title .logo_name {
+        height: 20px;
+    }
+
+}
+
+.user-page-grid {
+    padding-top: 45px;
+    position: relative;
+}
+
+.user-info-background {
+    background: rgb(255, 255, 255);
+    border-bottom: 1px solid #eee;
+}
+
+@media screen and (min-width: 768px) {
+
+    .user-page-grid {
+        padding-top: 60px;
+    }
+
+}
+
+.user-option {
+    position: absolute;
+    /*font-size: 1.2em;*/
+    top: 61px;
+    right: 12px;
+    /*color: #ddd;*/
+    z-index: 2;
+}
+
+.user-option button {
+    font-size: 1.4em;
+    color: #ddd;
+
+}
+
+@media screen and (min-width: 768px) {
+
+    .user-option {
+        top: 94px;
+        right: 18px;
+    }
+
+}
+
+.col-avatar {
+    display: flex;
+    padding: 14px;
+}
+
+.col-avatar .avatar {
+    width: 190px;
+    height: 190px;
+    margin: auto;
+}
+
+
+@media screen and (min-width: 768px) {
+
+    .col-avatar .avatar {
+        width: 130px;
+        height: 130px;
+    }
+
+    .col-avatar {
+        height: 190px;
+    }
+
+}
+
+.col-user-info {
+    text-align: center;
+    padding: 4px;
+}
+
+@media screen and (min-width: 768px) {
+
+    .col-user-info {
+        padding: 40px 0 0 96px;
+        text-align: left;
+    }
+
+} 
+
+.user-info {
+    padding-bottom: 6px;
+    height: 90px;
+}
+
+.user-info .name {
+    font-size: 1.4em;
+}
+
+.user-info .nick-age {
+    font-size: 1em;
+    color: #777;
+    margin: 0;
+}
+
+.user-info .dot {
+    margin: 12px;
+    color: #bbb;
+}
+
+.user-info .name .age {
+    /*font-size: 0.9em;*/
+    color: #777;
+}
+
+.user-info .lang {
+    font-size: 1.1em;
+    color: #999;
+}
+
+.about {
+    position: relative;
+    font-size: 0.9em;
+    color: #555;
+    padding: 0 12px 20px 12px;
+}
+
+.about-short p {
+    display: none;
+    max-height: 1.25em;
+    line-height: 1.25;
+    overflow: hidden;
+    padding-right: 10px;
+}
+
+@media screen and (min-width: 768px) {
+
+    .about {
+        margin-right: 16px;
+        padding: 0 0 18px 0;
+    }
+
+    .about-short p {
+        display: block;
+    }
+
+}
+
+.about-opened p {
+    display: block;
+    height: auto;
+    max-height: 30vh;
+    overflow-y: auto;
+    padding-right: 20px;
+}
+
+.about-opened p {
+    overflow: auto;
+}
+
+.about .about-toggle {
+    font-size: 16px;
+    color: rgb(249, 73, 182);
+    background: #fff !important;
+    position: absolute;
+    right: calc(50% - 8px);
+    bottom: 4px;
+    z-index: 2;
+    padding: 0;
+    margin: 0;
+    border: none;
+    outline: none;
+}
+
+.about-opened .about-toggle {
+    box-shadow: none;
+}
+
+@media screen and (min-width: 768px) {
+
+    .about .about-toggle {
+        font-size: 1em;
+        right: 0;
+        left: auto;
+        top: 0;
+        bottom: auto;
+    }
+
+    .about-short .about-toggle {
+        box-shadow: -10px 0 22px 10px #fff;
+    }
+
+}
+
+.user-buttons {
+    background: #fff;
+    max-width: 620px;
+    margin: 8px auto 0 auto;
+    height: 48px;
+    display: flex;
+    padding: 0;
+}
+
+.button-new-offer {
+    display: none;
+}
+
+@media screen and (min-width: 768px) {
+
+    .user-buttons {
+        height: 38px;
+        margin: 10px auto 0 auto;
+    }
+
+    .button-new-offer {
+        display: block;
+    }
+
+}
+
+.user-buttons button {
+    width: 33.3%;
+    overflow: hidden;
+    flex-grow: 1;
+    flex-shrink: 0;
+    vertical-align: top;
+    line-height: 38px;
+    font-size: 0.9em;
+    border-bottom: 1px solid #eee;
+    /*border: 1px solid rgb(249, 73, 182);*/
+}
+
+.user-buttons img {
+    height: 14px;
+    margin: 0 10px 3px 0;
+}
+
+/* SWITCH THREAD TYPE */
+
+.thread-type-switch {z
+    margin-top: 8px;
+    background: none;
+    display: block;
+    height: 48px;
+    line-height: 40px;
+    text-align: center;
+}
+
+.thread-type-switch span {
+    color: #999;
+}
+
+.thread-type-switch button {
+    margin: 0px 15px;
+    padding: 0 25px;
+    line-height: 2.5em;
+    color: #999;
+}
+
+.thread-type-switch button.thread-active {
+    color: #333;
+    border-bottom: 1px solid rgb(249, 73, 182);
+}
+
+@media screen and (min-width: 768px) {
+    .thread-type-switch {
+        margin-top: 18px;
+        margin-bottom: 0;
+    }
+}
+
+.user-page .thread-area {
+    max-width: 620px;
+    margin: auto;
+}
+
+
+
+
+/*TEMP*/
+
+svg.icon-male {
+    fill: #3A9ED1;
+    /*width: 20px;*/
+    height: 1em;
+    vertical-align: middle;
+    padding: 0 0 0.2em 12px;
+    /*padding: 0 0 0.2em 0;*/
+    /*border: 1px solid black;*/
+    /*margin: auto;*/
+}

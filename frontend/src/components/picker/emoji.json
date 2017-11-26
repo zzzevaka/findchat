@@ -1,0 +1,310 @@
+[ {
+    "label": "1f600",
+    "category": "people",
+    "emoji": [ {
+        "shortname": "grinning", "id": "1f600", "choice": []
+    }
+    ,
+    {
+        "shortname": "smiley", "id": "1f603", "choice": []
+    }
+    ,
+    {
+        "shortname": "smile", "id": "1f604", "choice": []
+    }
+    ,
+    {
+        "shortname": "grin", "id": "1f601", "choice": []
+    }
+    ,
+    {
+        "shortname": "laughing", "id": "1f606", "choice": []
+    }
+    ,
+    {
+        "shortname": "sweat_smile", "id": "1f605", "choice": []
+    }
+    ,
+    {
+        "shortname": "joy", "id": "1f602", "choice": []
+    }
+    ,
+    {
+        "shortname": "rofl", "id": "1f923", "choice": []
+    }
+    ,
+    {
+        "shortname": "relaxed", "id": "263a", "choice": []
+    }
+    ,
+    {
+        "shortname": "blush", "id": "1f60a", "choice": []
+    }
+    ,
+    {
+        "shortname": "innocent", "id": "1f607", "choice": []
+    }
+    ,
+    {
+        "shortname": "slight_smile", "id": "1f642", "choice": []
+    }
+    ,
+    {
+        "shortname": "upside_down", "id": "1f643", "choice": []
+    }
+    ,
+    {
+        "shortname": "wink", "id": "1f609", "choice": []
+    }
+    ,
+    {
+        "shortname": "relieved", "id": "1f60c", "choice": []
+    }
+    ,
+    {
+        "shortname": "heart_eyes", "id": "1f60d", "choice": []
+    }
+    ,
+    {
+        "shortname": "kissing_heart", "id": "1f618", "choice": []
+    }
+    ,
+    {
+        "shortname": "kissing", "id": "1f617", "choice": []
+    }
+    ,
+    {
+        "shortname": "kissing_smiling_eyes", "id": "1f619", "choice": []
+    }
+    ,
+    {
+        "shortname": "kissing_closed_eyes", "id": "1f61a", "choice": []
+    }
+    ,
+    {
+        "shortname": "yum", "id": "1f60b", "choice": []
+    }
+    ,
+    {
+        "shortname": "stuck_out_tongue_winking_eye", "id": "1f61c", "choice": []
+    }
+    ,
+    {
+        "shortname": "stuck_out_tongue_closed_eyes", "id": "1f61d", "choice": []
+    }
+    ,
+    {
+        "shortname": "stuck_out_tongue", "id": "1f61b", "choice": []
+    }
+    ,
+    {
+        "shortname": "money_mouth", "id": "1f911", "choice": []
+    }
+    ,
+    {
+        "shortname": "hugging", "id": "1f917", "choice": []
+    }
+    ,
+    {
+        "shortname": "nerd", "id": "1f913", "choice": []
+    }
+    ,
+    {
+        "shortname": "sunglasses", "id": "1f60e", "choice": []
+    }
+    ,
+    {
+        "shortname": "clown", "id": "1f921", "choice": []
+    }
+    ,
+    {
+        "shortname": "cowboy", "id": "1f920", "choice": []
+    }
+    ,
+    {
+        "shortname": "smirk", "id": "1f60f", "choice": []
+    }
+    ,
+    {
+        "shortname": "unamused", "id": "1f612", "choice": []
+    }
+    ,
+    {
+        "shortname": "disappointed", "id": "1f61e", "choice": []
+    }
+    ,
+    {
+        "shortname": "pensive", "id": "1f614", "choice": []
+    }
+    ,
+    {
+        "shortname": "worried", "id": "1f61f", "choice": []
+    }
+    ,
+    {
+        "shortname": "confused", "id": "1f615", "choice": []
+    }
+    ,
+    {
+        "shortname": "slight_frown", "id": "1f641", "choice": []
+    }
+    ,
+    {
+        "shortname": "frowning2", "id": "2639", "choice": []
+    }
+    ,
+    {
+        "shortname": "persevere", "id": "1f623", "choice": []
+    }
+    ,
+    {
+        "shortname": "confounded", "id": "1f616", "choice": []
+    }
+    ,
+    {
+        "shortname": "tired_face", "id": "1f62b", "choice": []
+    }
+    ,
+    {
+        "shortname": "weary", "id": "1f629", "choice": []
+    }
+    ,
+    {
+        "shortname": "triumph", "id": "1f624", "choice": []
+    }
+    ,
+    {
+        "shortname": "angry", "id": "1f620", "choice": []
+    }
+    ,
+    {
+        "shortname": "rage", "id": "1f621", "choice": []
+    }
+    ,
+    {
+        "shortname": "no_mouth", "id": "1f636", "choice": []
+    }
+    ,
+    {
+        "shortname": "neutral_face", "id": "1f610", "choice": []
+    }
+    ,
+    {
+        "shortname": "expressionless", "id": "1f611", "choice": []
+    }
+    ,
+    {
+        "shortname": "hushed", "id": "1f62f", "choice": []
+    }
+    ,
+    {
+        "shortname": "frowning", "id": "1f626", "choice": []
+    }
+    ,
+    {
+        "shortname": "anguished", "id": "1f627", "choice": []
+    }
+    ,
+    {
+        "shortname": "open_mouth", "id": "1f62e", "choice": []
+    }
+    ,
+    {
+        "shortname": "astonished", "id": "1f632", "choice": []
+    }
+    ,
+    {
+        "shortname": "dizzy_face", "id": "1f635", "choice": []
+    }
+    ,
+    {
+        "shortname": "flushed", "id": "1f633", "choice": []
+    }
+    ,
+    {
+        "shortname": "scream", "id": "1f631", "choice": []
+    }
+    ,
+    {
+        "shortname": "fearful", "id": "1f628", "choice": []
+    }
+    ,
+    {
+        "shortname": "cold_sweat", "id": "1f630", "choice": []
+    }
+    ,
+    {
+        "shortname": "cry", "id": "1f622", "choice": []
+    }
+    ,
+    {
+        "shortname": "disappointed_relieved", "id": "1f625", "choice": []
+    }
+    ,
+    {
+        "shortname": "drooling_face", "id": "1f924", "choice": []
+    }
+    ,
+    {
+        "shortname": "sob", "id": "1f62d", "choice": []
+    }
+    ,
+    {
+        "shortname": "sweat", "id": "1f613", "choice": []
+    }
+    ,
+    {
+        "shortname": "sleepy", "id": "1f62a", "choice": []
+    }
+    ,
+    {
+        "shortname": "sleeping", "id": "1f634", "choice": []
+    }
+    ,
+    {
+        "shortname": "rolling_eyes", "id": "1f644", "choice": []
+    }
+    ,
+    {
+        "shortname": "thinking", "id": "1f914", "choice": []
+    }
+    ,
+    {
+        "shortname": "lying_face", "id": "1f925", "choice": []
+    }
+    ,
+    {
+        "shortname": "grimacing", "id": "1f62c", "choice": []
+    }
+    ,
+    {
+        "shortname": "zipper_mouth", "id": "1f910", "choice": []
+    }
+    ,
+    {
+        "shortname": "nauseated_face", "id": "1f922", "choice": []
+    }
+    ,
+    {
+        "shortname": "sneezing_face", "id": "1f927", "choice": []
+    }
+    ,
+    {
+        "shortname": "mask", "id": "1f637", "choice": []
+    }
+    ,
+    {
+        "shortname": "thermometer_face", "id": "1f912", "choice": []
+    }
+    ,
+    {
+        "shortname": "head_bandage", "id": "1f915", "choice": []
+    }
+    ,
+    {
+        "shortname": "smiling_imp", "id": "1f608", "choice": []
+    }
+    ]
+}
+
+]

@@ -1,0 +1,13 @@
+
+@media screen and (min-width: 768px) {
+
+    .modal-private-message {
+        height: 300px;
+    }
+
+    .modal-private-message .modal-content {
+        height: 300px;
+        margin-top: calc(50vh - 300px);
+    }
+
+}

@@ -1,0 +1,128 @@
+.settings-page {
+    height: 100vh;
+}
+
+.settings-page .top-fixed-bar {
+    position: absolute;
+}
+
+.settings-page-grid {
+    padding-top: 45px;
+    height: 100%;
+}
+
+.settings-page-grid .row {
+    height: 100%;
+}
+
+@media screen and (min-width: 768px) {
+
+    .settings-page .top-fixed-bar {
+        position: fixed;
+    }
+
+    .settings-page-grid {
+        padding-top: 60px;
+    }
+
+}
+
+.top-fixed-bar .title {
+    margin: auto;
+    font-size: 1.4em;
+    line-height: 20px;
+}
+
+.top-fixed-bar .title span {
+    vertical-align: top;
+}
+
+.settings-page .top-fixed-bar svg {
+    height: 20px;
+    width: 20px;
+    margin-right: 15px;
+}
+
+.settings-page .col-settings {
+    height: 100%;
+    padding: 0;
+    text-align: center;
+}
+
+.settings-page .col-settings .icon-loader {
+    margin-top: 10vh;
+    display: block;
+}
+
+@media screen and (min-width: 768px) {
+
+    .settings-page .col-settings {
+        padding: 17px 0;
+    }
+
+}
+
+.settings-page .settings-container {
+    min-height: 100%;
+    padding: 0 15px 40px 15px;
+    background: #fff;
+    border: 1px solid #ddd;
+    text-align: center;
+    overflow: auto;
+}
+
+.settings-page .settings-container form {
+    padding: 20px 0;
+}
+
+.settings-container h4 {
+    width: 100%;
+    max-width: 350px;
+    text-align: left;
+    display: inline-block;
+    margin: 20px 0;
+    padding: 0 10px;
+    color: #555;
+}
+
+.settings-container hr {
+    margin: 0;
+}
+
+.settings-container .input-container {
+    width: 100%;
+    max-width: 350px;
+    margin: 0 0 30px 0;
+    display: inline-block;
+}
+
+.settings-container .input-container input {
+    width: 100%;
+    margin: 0 0;
+}
+
+.settings-container .input-round {
+    width: 100%;
+    max-width: 350px;
+    display: inline-block;
+}
+
+.settings-container .button-back,
+.settings-container .button-submit {
+    /*margin: 1.1em 6px;*/
+    font-size: 1.1em;
+}
+
+.settings-container .button-submit {
+    color: rgb(249, 73, 182);
+    transition: color 1s linear;
+}
+
+.settings-container .button-submit:disabled {
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+.settings-container .button-back {
+    color: #555;
+}

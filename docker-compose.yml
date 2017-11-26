@@ -1,0 +1,81 @@
+version: "3.2"
+services:
+  #
+  # POSTGRESQL
+  #
+  pgsql:
+    image: postgres
+    environment:
+      POSTGRES_USER: findchat
+      POSTGRES_PASSWORD: hfpldfnhb
+    volumes:
+      - type: bind
+        source: ./pgsql/pgdata
+        target: /var/lib/postgresql/data
+  #
+  # SQL WEB CLIENT
+  #
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
+  #
+  # REDIS
+  #
+  redis:
+    image: redis
+    volumes:
+      - type: bind
+        source: ./redis/data
+        target: /data
+  #
+  # FINDCHAT WEB APP
+  #
+  webapp:
+    image: findchat-app
+    volumes:
+      - type: bind
+        source: ./backend
+        target: /app
+      - type: bind
+        source: ./htdocs
+        target: /htdocs
+  #
+  # NGINX
+  #
+  nginx:
+    image: nginx 
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "4000:80"
+    volumes:
+      - type: bind
+        source: ./htdocs
+        target: /htdocs
+      - type: bind
+        source: ./nginx/etc/conf.d
+        target: /etc/nginx/conf.d
+      - type: bind
+        source: ./nginx/etc/nginx.conf
+        target: /etc/nginx/nginx.conf
+      - type: bind
+        source: ./nginx/cert
+        target: /cert
+  #
+  # FINDCHAT REACT APP
+  #
+  react:
+    image: findchat-react
+    volumes:
+      - type: bind
+        source: ./frontend/src
+        target: /app/findchat-react/src
+networks:
+  webnet:

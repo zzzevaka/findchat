@@ -1,0 +1,81 @@
+@media screen and (min-width: 768px) {
+    
+    .modal-edit-image {
+        height: 90vh;
+        width: 800px;
+        margin-top: 5vh !important;
+        margin-left: calc(50vw - 400px) !important;
+    }
+    
+    .modal-edit-image .modal-content {
+        height: 90vh;
+        width: 800px;
+    }
+    
+}
+
+.modal-edit-image .modal-body {
+    background: #222;
+}
+
+.modal-edit-image .modal-body .image-footer {
+    height: 50px;
+    background: #fff;
+    position: relative;
+}
+
+.modal-edit-image .button-resize {
+    position: absolute;
+    right: 55px;
+    top: calc(100% - 35px);
+    height: 20px;
+    width: 20px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.modal-edit-image .button-submit {
+    position: absolute;
+    right: 15px;
+    top: calc(100% - 35px);
+    height: 20px;
+    width: 20px;
+    font-size: 20px;
+    cursor: pointer;
+    cursor: pointer;
+}
+
+.modal-edit-image .modal-body .image-area {
+    flex-grow: 1;
+    position: relative;
+    display: flex;
+}
+
+.modal-edit-image .modal-body .image-preview
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+/*.modal-edit-image .modal-body .ReactCrop,
+.modal-edit-image .modal-body .ReactCrop__image
+{
+    max-height: calc(100vh - 170px);
+    margin: auto;
+}
+
+@media screen and (min-width: 768px) {
+
+    .modal-edit-image .modal-body .ReactCrop,
+    .modal-edit-image .modal-body .ReactCrop__image
+     {
+        max-height: calc(90vh - 100px);
+    }
+
+}*/

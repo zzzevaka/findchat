@@ -1,0 +1,239 @@
+.thread-placeholder {
+    text-align: center;
+    margin: 2em;
+    font-size: 1.5em;
+    color: #aaa;
+}
+
+.post-offer-wrapper {
+    background: #fff;
+    border: 1px solid #dfdfdf;
+    margin-bottom: 8px;
+}
+
+.post-offer-item {
+    padding: 20px 12px 10px 68px;
+}
+
+@media screen and (min-width: 768px) {
+    
+    .post-offer-wrapper {
+        margin-bottom: 18px;
+    }
+    
+    .post-offer-item {
+        padding: 20px 22px 10px 80px;        
+    }
+}
+
+.post-offer-item .avatar {
+    position: absolute;
+    top: 18px;
+    left: 12px;
+    height: 45px;
+    width: 45px;
+}
+
+@media screen and (min-width: 768px) {
+    .post-offer-item .avatar {
+        top: 18px;
+        left: 18px;
+    }
+}
+
+.post-offer-item .post-option {
+    position: absolute;
+    top: 18px;
+    right: 12px;
+    font-size: 1.2em;
+}
+
+@media screen and (min-width: 768px) {
+    .post-offer-item .post-option {
+        top: 12px;
+        right: 18px;
+    }
+}
+
+.post-offer-item .author-name {
+    font-size: 1.2em;
+}
+
+.post-offer-item .post-text {
+    margin: 14px 0;
+}
+
+.post-offer-item .post-content {
+    margin: 14px 0;
+    max-height: 250px;
+    max-width: 100%;
+    display: block;
+}
+
+.post-offer-wrapper .button-area {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.post-offer-wrapper .button-answer {
+    height: 20px;
+}
+
+.post-offer-wrapper .button-answer svg {
+    height: 20px;
+    width: 20px;
+    margin-right: 15px;
+}
+
+.post-offer-wrapper .button-answer .button-text {
+    vertical-align: middle;
+    padding: 0;
+    vertical-align: top;
+}
+
+ /* CHAT POST */
+
+.chat-thread {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-thread .post-composer {
+    flex-shrink: 0; 
+    border-top: 1px solid #ddd;
+}
+
+.chat-thread .post-list {
+    height: auto !important;
+    flex-grow: 2;
+}
+
+.chat-thread .post-item-first {
+    margin-top: 10px;
+}
+
+.post-chat-item {
+    position: relative;
+    padding: 4px 12px 2px 82px;
+    margin-bottom: 8px;
+}
+
+.post-chat-item .post-option {
+    position: absolute;
+    top: 4px;
+    right: 12px;
+    font-size: 1.2em;
+}
+
+.post-chat-item .avatar {
+    position: absolute;
+    top: 4px;
+    left: 12px;
+    height: 42px;
+    width: 42px;
+}
+
+@media screen and (min-width: 768px) {
+    .post-chat-item .avatar {
+        left: 18px;
+    }
+}
+
+.post-chat-item .author-name {
+    color: #777;
+}
+
+
+.post-chat-item .post-text {
+    margin: 14px 0;
+}
+
+.post-chat-item span {
+    display: inline-block;
+    vertical-align: top;
+    word-wrap: break-word;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+.post-chat-item .author-name {
+    font-size: 1.1em;
+}
+
+.post-chat-item .post-content {
+    margin: 14px 0;
+    max-height: 250px;
+    max-width: 90%;
+    display: block;
+    cursor: pointer;
+}
+
+/*USER THREAD*/
+
+.post-user-item {
+    padding: 20px 12px 10px 68px;
+}
+
+@media screen and (min-width: 768px) {
+    
+    .post-user-item {
+        padding: 20px 22px 10px 80px;        
+    }
+}
+
+
+.post-user-item {
+    display: block;
+    background: #fff;
+    border: 1px solid #ddd;
+    /*border-bottom: none;*/
+    margin-bottom: 8px;
+}
+
+.post-user-item .avatar {
+    position: absolute;
+    top: 18px;
+    left: 12px;
+    height: 45px;
+    width: 45px;
+}
+
+@media screen and (min-width: 768px) {
+
+    .post-user-item {
+        margin-bottom: 18px;
+    }
+
+    .post-user-item .avatar {
+        top: 18px;
+        left: 18px;
+    }
+}
+
+.post-user-item .author-name {
+    font-size: 1.1em;
+}
+
+.post-user-item .lang {
+    color: #777;
+    font-size: 0.9em;
+}
+
+.post-user-item .hashtags {
+    margin: 6px 0;
+}
+
+.post-user-item .hashtag {
+    font-size: 1.1em;
+}
+
+span.hashtag {
+    color: #f949b6;
+    margin-right: 10px; 
+}

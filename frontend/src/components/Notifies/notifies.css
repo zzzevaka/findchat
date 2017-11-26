@@ -1,0 +1,16 @@
+.notify-content {
+    vertical-align: middle;
+    display: flex;
+    font-size: 1.1em;
+    height: 100%;
+}
+
+.notify-content span {
+    margin: auto;
+}
+
+.notify-offer-answer-success span {
+    /*line-height: 1em;*/
+    font-size: 1.3em;
+    margin: auto 20px;
+}

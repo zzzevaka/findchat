@@ -1,0 +1,97 @@
+{% extends index.html %}
+{% block title %}
+<title>Person editing</title>
+{% end %}
+{% block wrapped %}
+<div class="row col-sm-8 col-sm-offset-2">
+    <h2>Personal info editing</h2>
+    <div id="result"></div>
+    <form id="editForm" class="form-horizontal" role="form" action="edit_person">
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="name">Name:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="name" value="{{ person.firstname }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="surname">Surname:</label>
+            <div class="col-sm-4">
+                {% if person.lastname %}
+                <input type="text" class="form-control" name="surname" value="{{ person.lastname }}">
+                {% else %}
+                <input type="text" class="form-control" name="surname">
+                {% end %}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="birth">Date of birth:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="birth" value="{{ person.birth_date.strftime('%d.%m.%Y') }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="name">Gender:</label>
+            <div class="col-sm-4">
+                {% if person.sex == 'male' %}
+                <input type="radio" name="gender" id="gender" value="male" checked /> Male
+                <input type="radio" name="gender" id="gender" value="female" /> Female
+                {% else %}
+                <input type="radio" name="gender" id="gender" value="male" /> Male
+                <input type="radio" name="gender" id="gender" value="female" checked /> Female
+                {% end %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-xs-12">
+                <button type="submit" class="btn btn-success">Save</button>
+            </div>
+        </div>
+    </form>
+    <form id="aboutEdit" class="form-horizontal" role="form" action="/about_edit">
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="surname">About:</label>
+            <div class="col-sm-4">
+                {% if person.about %}
+                <textarea name="about" rows="5" cols="60">{{ person.about }}</textarea>
+                {% else %}
+                <textarea name="about" rows="5" cols="60"></textarea>
+                {% end %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-xs-12">
+                <button type="submit" class="btn btn-success">Save</button>
+            </div>
+        </div>
+    </form>
+    <form id="uploadPhoto" class="form-horizontal" role="form" action="/photo_upload">
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="photo">Avatar:</label>
+            <div class="col-sm-4">
+                <input type="file" class="form-control" name="avatar" multiple>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-xs-12">
+                <button type="submit" class="btn btn-success">Change avatar</button>
+            </div>
+        </div>
+    </form>
+    <form id="uploadPhoto" class="form-horizontal" role="form" action="/photo_upload">
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="photo">Photos:</label>
+            <div class="col-sm-4">
+                <input type="file" class="form-control" name="photo" multiple>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-xs-12">
+                <button type="submit" class="btn btn-success">Upload</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% end %}
+{% block local-js %}
+<script src="js/edit_person.js"></script>
+{% end %}

@@ -1,0 +1,60 @@
+.photo-thread {
+    padding-bottom: 100px;
+}
+
+.post-photo-item {
+    margin-bottom: 15px;
+    padding: 0 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.post-photo-item .avatar {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    display: none;
+}
+
+@media screen and (min-width: 768px) {
+
+    .post-photo-item {
+        padding: 0 60px;
+    }
+
+    .post-photo-item .avatar {
+        display: block;
+    }
+
+}
+
+.post-photo-item .post-option {
+    position: absolute;
+    bottom: 7px;
+    right: 10px;
+    font-size: 1.2em;
+}
+
+.post-photo-item .post-option .button-tools {
+    color: #bbb;
+}
+
+.post-photo-item .post-content-wrapper {
+    flex-grow: 2;
+    border-radius: 10px;
+    border: 1px solid #dfdfdf;
+    overflow: hidden;
+    max-height: 800px;
+}
+
+.post-photo-item .post-content {
+    width: 100%;
+}
+
+.post-photo-item .post-footer {
+    width: 100%;
+    padding: 10px;
+    position: relative;
+}

@@ -1,0 +1,32 @@
+/* COMMON */
+
+/*@media screen and (min-width: 768px) {
+    
+    .modal-post {
+        height: 90vh;
+        width: 800px;
+        margin-top: 5vh !important;
+        margin-left: calc(50vw - 400px) !important;
+    }
+    
+    .modal-post .modal-content {
+        height: 90vh;
+        width: 800px;
+    }
+    
+}
+
+.modal-post .post-item {
+    margin: 0;
+    border: none;
+    overflow: hidden;
+    flex-shrink: 1000;
+}
+
+.modal-post .post-content {
+    max-height: 60vh;
+}*/
+
+.modal-post .post-area {
+    overflow: auto;
+}

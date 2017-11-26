@@ -1,0 +1,11 @@
+{% block photoalbum %}
+<section class="slider">
+    {% for pic in pictures %}
+    <div>
+        <a href="{% pic.file_path %}">
+            <img class="photo" src="{% pic.file_path %}" />
+        </a>
+    </div>
+    {% end %}
+</section>
+{% end %}

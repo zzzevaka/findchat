@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/freelancer.css" rel="stylesheet">
+    {% block local-css %}
+    <link rel="stylesheet" type="text/css" href="slick/slick.css">
+    <link rel="stylesheet" type="text/css" href="slick/slick-theme.css">
+    <link rel="stylesheet" href="nivo-lightbox/nivo-lightbox.css">
+    <link rel="stylesheet" href="css/photoalbum.css">
+    {% end %}
+    {% block title %}
+    <title>{{ person.firstname }} {{ person.lastname }}</title>
+    {% end %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="mainNav" class="navbar navbar-default navbar-fixed-top navbar-custom">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="#page-top">Project name</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#portfolio">Portfolio</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#about">About</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+    {% block wrapped %}
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-lg-offset-1">
+                    {% if person.avatar %}
+                    <a href="{{ person.avatar.large }}">
+                        <img class="img-responsive" src="{{ person.avatar.medium }}">
+                    </a>
+                    {% else %}
+                    <img class="img-responsive" src="/img/ava-dummy.png">
+                    {% end %}
+                </div>
+                <div class="col-lg-6">
+                    <div class="intro-text">
+                        <span class="name">{{ person.firstname }} {{ person.lastname }}, {{ person.age }} {{ person.sex }}</span>
+                        <hr class="hr">
+                        <span class="skills">This is a place for some imformation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- About Section -->
+    <section class="success" id="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <h4>About</h4>
+                    <p>{% raw person.about_links %}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="portfolio">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <h4>Photos</h4>
+                    {% if person.albums[0].pictures %}
+                        <section class="slider">
+                        {% for pic in person.albums[0].pictures %}
+                        <div>
+                            <a href="{{ pic.large }}">
+                                <img class="photo" src="{{ pic.medium }}" width="100%"/>
+                            </a>
+                        </div>
+                        {% end %}
+                        </section>
+                    {% else %}
+                        <p>There are no photos</p>
+                    {% end %}
+                </div>
+            </div>
+        </div>
+    </section>
+    {% end %}
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/freelancer.js"></script>
+    {% block local-js %}
+    <script src="slick/slick.js"></script>
+    <script src="nivo-lightbox/nivo-lightbox.min.js"></script>
+    <script src="js/photoalbum.js"></script>
+    {% end %}
+    <!-- Footer -->
+    <footer class="text-center">
+        <div class="footer-below">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        Copyright &copy; Your Website 2016
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

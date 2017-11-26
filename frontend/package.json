@@ -1,0 +1,40 @@
+{
+  "name": "findchat-react",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "array-from": "^2.1.1",
+    "classnames": "^2.2.5",
+    "photoswipe": "^4.1.2",
+    "react": "^16.1.1",
+    "react-addons-css-transition-group": "^15.6.2",
+    "react-bootstrap": "^0.31.5",
+    "react-contenteditable": "^2.0.5",
+    "react-custom-scrollbars": "^4.2.1",
+    "react-dom": "^16.1.1",
+    "react-image-crop": "^3.0.7",
+    "react-notification-system-redux": "^1.2.0",
+    "react-redux": "^5.0.6",
+    "react-router": "^3.2.0",
+    "react-router-scroll": "^0.4.4",
+    "react-scripts": "1.0.17",
+    "react-select": "^1.0.0",
+    "react-svg-inline": "^2.0.1",
+    "react-timeago": "^3.4.3",
+    "recompose": "^0.26.0",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0",
+    "reselect": "^3.0.1",
+    "shortid": "^2.2.8",
+    "updeep": "^1.0.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "redux-logger": "^3.0.6"
+  }
+}

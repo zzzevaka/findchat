@@ -1,0 +1,114 @@
+.edit-user-page {
+    width: 100%;
+    height: 100%;
+}
+
+.edit-user-page.top-fixed-bar {
+    position: absolute;
+}
+
+.edit-user-page-grid {
+    /*padding: 45px 0 0 0;*/
+    padding-top: 45px;
+    height: 100%;
+}
+
+.edit-user-page-grid .row {
+    height: 100%;
+    /*width: 100%;
+    padding: 0;*/
+}
+
+@media screen and (min-width: 768px) {
+
+    .edit-user-page.top-fixed-bar {
+        position: fixed;
+    }
+
+    .edit-user-page-grid {
+        padding-top: 60px;
+    }
+
+}
+
+.edit-user-page .col-settings {
+    height: 100%;
+    padding: 0;
+    text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+
+    .edit-user-page .col-settings {
+        padding: 17px 0;
+    }
+
+}
+
+.edit-user-page .settings-container {
+    min-height: 100%;
+    padding: 0 15px 80px 15px;
+    background: #fff;
+    border: 1px solid #ddd;
+    text-align: center;
+    overflow: auto;
+}
+
+.edit-user-page h4 {
+    width: 100%;
+    max-width: 350px;
+    text-align: left;
+    display: inline-block;
+    margin: 20px 0;
+    padding: 0 10px;
+    color: #555;
+}
+
+.edit-user-page hr {
+    margin: 0;
+}
+
+.edit-user-page .date-select {
+    flex-grow: 10;
+    width: 100%;
+    max-width: 350px;
+    text-align: center;
+    display: inline-block;
+}
+
+.edit-user-page textarea {
+    width: 100%;
+    max-width: 350px;
+    min-height: 100px;
+    resize: vertical;
+}
+
+.edit-user-page .search-input {
+    max-width: 350px;
+}
+
+.edit-user-page .search-input .Select-menu-outer {
+    margin-top: 5px;
+}
+
+
+/* DATE SELECT */
+
+.date-select .Select {
+  display: inline-block;
+}
+
+.date-select .select-year {
+    width: 28%;
+    margin-right: 2%;
+}
+
+.date-select .select-month {
+  width: 45%;
+  margin-right: 2%;
+}
+
+.date-select .select-day {
+  width: 23%;
+}
+

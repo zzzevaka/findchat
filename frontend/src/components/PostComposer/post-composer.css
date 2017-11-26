@@ -1,0 +1,101 @@
+
+
+.post-composer-main {
+    min-height: 46px; 
+    position: relative;
+    display: flex;
+}
+  
+  .post-composer .textarea {
+    flex-grow: 1;
+    margin: 5px 70px 5px 0;
+    outline: none;
+    overflow: hidden;
+    background: #fff;
+}
+
+.post-composer .textarea[contenteditable=true]:empty:before {
+  content: attr(placeholder);
+  display: block; /* For Firefox */
+  color: #999;
+}
+
+.post-composer .textarea[contenteditable=true]:focus:before {
+  content: ''
+}
+
+  .post-composer-image .textarea {
+      margin-left: 35px;
+  }
+  
+  .post-composer-main .glyph-button {
+    position: absolute;
+    cursor: pointer;
+  }
+  
+  .post-composer-main .button-send {
+    bottom: 12px;    
+    right: 20px;
+    height: 20px;
+    width: 20px;
+  }
+
+  .post-composer-main .button-emoji {
+    bottom: 13px;
+    right: 60px;
+    height: 18px;
+    width: 18px;
+}
+
+.post-composer .button-image {
+    bottom: 8px;
+    left: 15px;
+    display: none;
+}
+
+.post-composer .button-image img {
+  height: 18px;
+  width: 18px;
+}
+
+.post-composer-image .button-image {
+  color: #777;
+  display: block;
+}
+
+  .post-composer .attach-preview {
+    max-height: 100px;
+    padding: 5px;
+    flex-grow: 0;
+    border-bottom: 1px solid #ddd;
+  }
+  
+
+
+  .post-composer .attach-preview-item {
+      display: inline-block;
+      position: relative;
+      max-height: 75px;
+      max-width: 80%;
+  }
+
+  .post-composer .attach-preview-item img {
+    max-height: 75px;
+    max-width: 100%;
+  }
+
+.post-composer .attach-preview-delete {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    font-size: 10px;
+    z-index: 2;
+    color: #fff;
+    background: rgba(34, 34, 34, 0.7) !important;
+}
+  
+  .post-composer-main .send.send-disabled {
+    color: #c2b8b8;
+    cursor: wait;
+  }
+  

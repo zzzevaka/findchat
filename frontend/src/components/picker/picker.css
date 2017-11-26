@@ -1,0 +1,29 @@
+.picker-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.picker-category-list {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.picker-categoty-list-item-selected {
+  border-bottom: 1px solid #000;
+}
+
+.picker-item-list {
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+.picker-categoty-list-item,
+.picker-item-list-item {
+  cursor: pointer;
+  margin: 4px;
+}

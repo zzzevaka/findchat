@@ -1,0 +1,130 @@
+.search-page .top-fixed-bar {
+    position: absolute;
+}
+
+.search-page-grid {
+    padding-top: 45px;
+}
+
+@media screen and (min-width: 768px) {
+
+    .search-page .top-fixed-bar {
+        position: fixed;
+    }
+
+    .search-page-grid {
+        padding-top: 60px;
+    }
+
+}
+
+.col-search-result {
+    padding: 5px 0 48px 0;
+}
+
+/* SWITCH SEARCH TYPE */
+
+.search-type-switch {
+    background: none;
+    display: block;
+    height: 48px;
+    line-height: 40px;
+    text-align: center;
+}
+
+.search-type-switch span {
+    color: #999;
+}
+
+.search-type-switch a {
+    margin: 0px 15px;
+    padding: 8px 25px;
+    line-height: 2.5em;
+    color: #999;
+}
+
+.search-type-switch a.link-active {
+    color: #333;
+    border-bottom: 1px solid rgb(249, 73, 182);
+}
+
+
+/* SEARCH PEOPLE */
+
+
+.search-user-thread {
+    border: 1px solid #dfdfdf;
+}
+
+.user-item {
+    display: block;
+    height: 82px;
+    border-bottom: 1px solid #dfdfdf;
+    background: #fff;
+    /* margin-bottom: 15px; */
+    padding: 20px;
+}
+
+.user-item .avatar {
+    margin-right: 15px;
+}
+
+
+/* SEARCH INPUT */
+
+.search-input {
+    outline: none !important;
+    margin: auto;
+    flex-grow: 2;
+    max-width: 640px;
+}
+
+.search-input .Select-placeholder {
+    padding-left: 15px;
+    cursor: text;
+}
+
+.search-input .Select-placeholder img {
+    vertical-align: baseline;
+    height: 100%;
+    width: 18px;
+}
+
+.search-input.is-focused .Select-placeholder {
+    display: none;
+}
+
+.search-input .Select-arrow-zone {
+    display: none;
+}
+
+.search-input .Select-clear {
+    vertical-align: middle;
+}
+
+.search-input .Select-control {
+    border: 1px solid #ddd !important;
+    border-radius: 20px;
+    box-shadow: none !important;
+    padding: 0 15px 0 15px;
+}
+
+.search-input .Select-value {
+    background: #fff;
+    color: #333;
+    border: 1px solid rgb(249, 73, 182);
+    border-radius: 20px;
+    padding: 0 20px !important;
+}
+
+.search-input .Select-value .Select-value-icon {
+    background: #fff;
+    border: none;
+    height: 18px;
+    font-size: 1.2em;
+    vertical-align: top;
+}
+
+.search-input .Select-value .Select-value-icon:hover {
+    color: #333;
+}

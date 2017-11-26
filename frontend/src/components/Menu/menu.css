@@ -1,0 +1,94 @@
+.main-menu {
+    margin: 0;
+    list-style-type: none;
+    padding: 44px 0 0 12px;
+    
+}
+
+.main-menu li {
+    font-size: 1.1em;
+    margin-bottom: 1.2em;
+    vertical-align: baseline; 
+}
+
+.main-menu li img {
+    margin-right: 10px;
+    padding-bottom: 2px;
+}
+
+.mobile-main-menu {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    z-index: 1000;
+    background: #fff;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+}
+
+@media screen and (min-width: 768px) {
+    .mobile-main-menu {
+        display: none;
+    }
+}
+
+.menu-link {
+    color: #555;
+    fill: #888;
+}
+
+.menu-link .icon {
+    height: 20px;
+    width: 20px;
+    margin-right: 10px;
+}
+
+.menu-link svg {
+    height: 20px;
+    width: 20px;
+    vertical-align: bottom;
+    margin-right: 10px;
+}
+
+.menu-link.link-new-offer svg {
+    height: 25px;
+    width: 25px;
+}
+
+.menu-link-active,
+.menu-link:hover {
+    fill: #333;
+    color: #333;
+}
+
+/*.menu-link .icon svg {
+    height: 18px;
+    width: 18px;
+    vertical-align: middle;
+}*/
+
+.menu-link .unreaded-posts {
+    margin-left: 0.8em;
+    border: 1px solid #777;
+    padding: 0 0.6em;
+    background: #fff;
+}
+
+.mobile-main-menu .menu-link {
+    position: relative;
+    /*border: 1px solid black;*/
+}
+
+.mobile-main-menu .unreaded-posts {
+    position: absolute;
+    font-size: 0.7em;
+    top: -5px;
+    right: 0px;
+    border: 1px solid #333;
+    padding: 0 0.6em;
+    /*background: none;*/
+}

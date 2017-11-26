@@ -1,0 +1,374 @@
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import Select from 'react-select';
+import {Grid, Row, Col, FormGroup, ControlLabel, FormControl} from 'react-bootstrap';
+import MainMenu, {MobileMenu} from '../Menu';
+import currentUserId from '../../auth';
+import {loadUsers, updateUser} from '../../actions';
+import API from '../../api';
+
+import './edit-user-page.css';
+
+const api = new API('/api_v1');
+
+class EditUserPage extends Component {
+
+    constructor() {
+        super();
+        this.state = this.getDefaultState();
+    }
+
+    componentDidMount() {
+        const {user, dispatch} = this.props;
+        if (!user) {
+            dispatch(
+                loadUsers(currentUserId())
+            );
+        }
+    }
+
+    getDefaultState = () => ({form: {}, edited: false})
+
+    _inputChange = ({target: {name, value}}) => {
+        this.setState({
+            form: {
+                ...this.state.form,
+                [name]: value || null
+            },
+            edited: true
+        })
+    }
+
+    _birthChange = v => this.setState({
+        form: {
+            ...this.state.form,
+            birth_date: v.toISOString().split('.')[0]
+        },
+        edited: true
+        
+    })
+
+    _laguagesChange = v => this.setState({
+        form: {
+            ...this.state.form,
+            lang: v.split(',')
+        },
+        edited: true
+    })
+
+    _onSubmit = e => {
+        e.preventDefault();
+        this.props.dispatch(
+            updateUser(
+                this.state.form,
+                () => this.setState(this.getDefaultState())
+            )
+        );
+        // this.setState({
+        //     form: {},
+        //     edited: false
+        // });
+    }
+
+    render() {
+        const {user} = this.props;
+        const { form, edited } = this.state;
+        console.log(form);
+        if (!user) return null;
+        return (
+            <div className='edit-user-page'>
+                <div className='top-fixed-bar'>
+                    <div className='title'>
+                        <span>User's information</span>
+                    </div>
+                </div>
+                <MobileMenu />
+                <Grid fluid className='edit-user-page-grid main-container'>
+                    <Row>
+                        <Col sm={2} className='col-menu'>
+                            <MainMenu />
+                        </Col>
+                        <Col sm={8} className='col-settings'>
+                            <div className='settings-container'>
+                                <form
+                                    onSubmit={this._onSubmit}
+                                >
+                                    <UsernameFormGroup
+                                        placeholder={user.firstname}
+                                        onChange={this._inputChange}
+                                        value={form.firstname || ''}
+                                    />
+                                    <hr />
+                                    <BirthDateFormGroup
+                                        value={new Date(form.birth_date || user.birth_date)}
+                                        onChange={this._birthChange}
+                                    />
+                                    <hr />
+                                    <LanguagesFormGroup
+                                        value={form.lang || user.lang}
+                                        onChange={this._laguagesChange}
+                                    />
+                                    <hr />
+                                    <AboutFormGroup
+                                        placeholder={user.about}
+                                        onChange={this._inputChange}
+                                        value={form.about}
+                                    />
+                                    <hr />
+                                    <br />
+                                    <button
+                                        className='button-no-style button-submit'
+                                        disabled={!edited}
+                                    >
+                                        Submit
+                                    </button>
+                                </form>
+                            </div>
+                        </Col>
+                    </Row>
+                </Grid>
+            </div>
+        )
+    }
+}
+
+function mapStateToProps(state) {
+    return {
+        user: state.users[currentUserId()],
+        dispatch: state.dispatch
+    };
+}
+
+export default connect(mapStateToProps)(EditUserPage);
+
+class LanguagesFormGroup extends Component {
+
+    constructor() {
+        super();
+        this.state = {};
+    }
+
+    componentDidMount() {
+        let xhr = api.getLanguages();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState != 4) return;
+            if (xhr.status === 200) {
+                const lang = JSON.parse(xhr.responseText).map( l => ({
+                    value: l.name,
+                    label: `${l.name} (${l.native_name})`
+                }));
+                this.setState({options: lang});
+            }
+        }
+    }
+
+    _onInputChange = v => v.startsWith(' ') ? '' : v
+
+    render() {
+        const {options} = this.state;
+        if (!options) return null;
+        const {value, onChange} = this.props;
+        return (
+                <FormGroup>
+                    <h4>Languages you want to talk in:</h4>
+                    <Select
+                        className='search-input'
+                        placeholder=''
+                        value={value}
+                        options={options}
+                        onChange={onChange}
+                        onInputChange={this._onInputChange}
+                        inputProps1={{ readOnly: 'readonly' }}
+                        simpleValue
+                        multi
+                    />
+                </FormGroup>
+        );
+    }
+
+}
+
+
+class UsernameFormGroup extends Component {
+
+    render() {
+        const {value, onChange, placeholder} = this.props;
+        return (
+                <FormGroup className='input-round'>
+                    <h4>Your name:</h4>
+                    <FormControl
+                        name='firstname'
+                        type="text"
+                        placeholder={placeholder}
+                        value={value}
+                        onChange={onChange}
+                        autoComplete='off'
+                    />
+                    <FormControl.Feedback />
+                </FormGroup>
+        );
+    }
+
+}
+
+
+class AboutFormGroup extends Component {
+
+    render() {
+        const {
+            value, placeholder, onChange
+        } = this.props;
+        return (
+                <FormGroup className='input-round'>
+                    <h4>Few words about you:</h4>
+                    <FormControl
+                        name='about'
+                        componentClass="textarea"
+                        value={value}
+                        placeholder={placeholder}
+                        onChange={onChange}
+                        autoComplete='off'
+                    />
+                </FormGroup>
+        );
+    }
+
+}
+
+
+class BirthDateFormGroup extends Component {
+
+    render() {
+        const {
+            value, onChange
+        } = this.props;
+        return (
+                <FormGroup>
+                    <h4>Birth date:</h4>
+                    <DateSelect
+                        value={value}
+                        onChange={onChange}
+                    />
+                </FormGroup>
+        );
+    }
+
+}
+
+
+class DateSelect extends Component {
+
+    static propTypes = {
+        minYear: PropTypes.number.isRequired,
+        maxYear: PropTypes.number.isRequired,
+        onChange: PropTypes.func,
+        value: PropTypes.instanceOf(Date).isRequired
+    }
+
+    static defaultProps = {
+        minYear: 1900,
+        maxYear: new Date().getFullYear(),
+        value: new Date(),
+        onChange: () => {}
+    }
+
+    static months = [
+        {value: 0, label: 'January'},
+        {value: 1, label: 'February'},
+        {value: 2, label: 'March'},
+        {value: 3, label: 'April'},
+        {value: 4, label: 'May'},
+        {value: 5, label: 'June'},
+        {value: 6, label: 'July'},
+        {value: 7, label: 'August'},
+        {value: 8, label: 'September'},
+        {value: 9, label: 'October'},
+        {value: 10, label: 'November'},
+        {value: 11, label: 'December'}
+    ];
+
+    static days = [];
+
+    constructor(props) {
+        super(props);
+        const {minYear, maxYear} = this.props;
+        this.years = [];
+        for (let i=minYear;i<=maxYear;i++) {
+            this.years.push(
+                {value: i, label: i}
+            );
+        }
+        this.days = [];
+        for (let i=1;i<=31;i++) {
+            this.days.push(
+                {value: i, label: i}
+            );
+        }
+        
+    }
+
+    _getMaxMonthDay(y, m) {
+        return  new Date(y, m +1, 0).getDate();
+    }
+
+    _onChange(y, m, d) {
+        let newDate = new Date(this.props.value);
+        if (y) newDate.setYear(y);
+        if (m) newDate.setMonth(m);
+        if (d) newDate.setDate(d);
+        this.props.onChange(newDate);
+    }
+
+    render() {
+        const {
+            value,
+            onChange,
+            minYear,
+            maxYear,
+            ...rest
+        } = this.props;
+        const maxDay = this._getMaxMonthDay(
+            value.getFullYear(),
+            value.getMonth()
+        );
+        return (
+            <div className='date-select' {...rest}>
+                <Select
+                    options={this.years}
+                    value={value.getFullYear()}
+                    simpleValue
+                    className="select-year"
+                    onChange={(v) => {this._onChange(v, null, null)}}
+                    placeholder='Year'
+                    clearable={false}
+                    autoBlur
+                    inputProps={{ readOnly: 'readonly' }}
+                />
+                <Select
+                    options={DateSelect.months}
+                    value={value.getMonth()}
+                    simpleValue
+                    className="select-month"
+                    placeholder='Month'
+                    clearable={false}
+                    onChange={(v) => {this._onChange(null, v, null)}}
+                    autoBlur
+                    inputProps={{ readOnly: 'readonly' }}
+                />
+                <Select
+                    options={this.days.slice(0, maxDay)}
+                    value={value.getDate()}
+                    simpleValue
+                    className="select-day"
+                    placeholder='Day'
+                    clearable={false}
+                    onChange={(v) => {this._onChange(null, null, v)}}
+                    autoBlur
+                    inputProps={{ readOnly: 'readonly' }}
+                />
+            </div>
+        )
+    }
+
+}

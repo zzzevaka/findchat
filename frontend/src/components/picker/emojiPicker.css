@@ -1,0 +1,34 @@
+body {
+  background: #eee;
+}
+
+.emoji-picker {
+  max-height: 20vh;
+}
+
+.emoji-category-list {
+  background: #fff;
+}
+
+.emoji-item-list {
+  max-height: 20vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  align-content: flex-start;
+}
+
+.close-button {
+  padding: 5px;
+  font-size: 1.7em;
+  margin-left: auto;
+}
+
+.emoji-item {
+  height: 32px;
+  width: 28px;
+}
+
+.emoji-item img {
+  height: 28px;
+  width: 28px;
+}

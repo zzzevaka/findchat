@@ -1,0 +1,189 @@
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import {loadThread, flushThread} from '../../actions';
+import { createSelector } from 'reselect';
+import getCurrentUserId from '../../auth';
+
+
+const ConnectedThread = WrappedComponent => {
+
+    return class extends Component {
+        
+        static propTypes = {
+            threadID: PropTypes.oneOfType([
+                    PropTypes.string,
+                    PropTypes.number,
+                ]).isRequired,
+            thread: PropTypes.object,
+            postsOnPage: PropTypes.number.isRequired,
+            postsPreload: PropTypes.number.isRequired,
+            loadMethod: PropTypes.func.isRequired,
+            filter: PropTypes.object
+        }
+
+        static defaultProps = {
+            postsOnPage: 20,
+            postsPreload: 20,
+            subscribeThread: false,
+            loadMethod: loadThread
+        }
+
+        constructor(props) {
+            super(props);
+            const {postsOnPage} = props;
+            this.state = {showPosts: postsOnPage};
+        }
+
+        componentDidMount() {
+            this._loadThread();
+        }
+
+        componentDidUpdate(pProps, pState) {
+            const {thread, filter, postsOnPage, dispatch} = this.props;
+            if (pState.showPosts < this.state.showPosts || thread.status === 'flushed') {
+                this._loadThread();
+            }
+        }
+
+        _loadThread = () => {
+            const {
+                dispatch,
+                thread,
+                loadMethod,
+                postsPreload
+            } = this.props;
+            const mustBeLoaded = this.state.showPosts + postsPreload;
+            if (thread) {
+                if (thread.posts.length < mustBeLoaded && !thread.no_more_posts) {
+                    loadMethod(mustBeLoaded, thread.posts.length, dispatch);
+                }
+            }
+            else {
+                loadMethod(mustBeLoaded, 0, dispatch);
+            }
+        }
+
+        flush = () => {
+            const {dispatch, threadID, postsOnPage} = this.props;
+            dispatch(flushThread([threadID,]));
+            this.setState({showPosts: postsOnPage});
+        }
+
+        showMorePosts = () => { 
+            const {thread, postsOnPage} = this.props;
+            if (thread.no_more_posts && this.state.showPosts >= thread.posts.length) return;
+            this.setState({
+                showPosts:  this.state.showPosts + postsOnPage
+            });
+        }
+
+        render() {
+            const {
+                thread,
+                threadID,
+                postsOnPage,
+                postsPreload,
+                loadMethod,
+                ...rest
+            } = this.props;
+            if (!thread) return null;
+            return (
+                <WrappedComponent
+                    showPosts={this.state.showPosts}
+                    showMorePosts={this.showMorePosts}
+                    thread={thread}
+                    {...rest}
+                />
+            )
+        }
+
+    }
+
+}
+
+
+export default function connectThread() {
+
+    return WrappedComponent => connect.apply(null, arguments)(
+        ConnectedThread(WrappedComponent)
+    );
+
+}
+
+const threadPostSelector = createSelector(
+    [
+        (state, thread) => thread,
+        (state, thread) => state.users,
+        (state, thread) => state.posts,
+    ],
+    (thread, users, posts) => ({
+        ...thread,
+        members: [users[ thread.members && thread.members.length ? thread.members[0] : getCurrentUserId()],],
+        posts: thread.posts.map(pID => {
+            return {
+                post: posts[pID],
+                author: users[posts[pID].author_id]
+            }
+        })
+    })
+);
+
+const threadUsersSelector = createSelector(
+    [
+        (state, thread) => thread,
+        (state, thread) => state.users,
+    ],
+    (thread, users) => ({
+        ...thread,
+        posts: thread.posts.map(uID => users[uID])
+    })
+);
+
+const threadChatListSelector = createSelector(
+    [
+        (state, thread) => thread,
+        (state, thread) => state.threads,
+        (state, thread) => state.posts,
+        (state, thread) => state.users
+    ],
+    (thread, threads, posts, users) => {
+        return {
+            ...thread,
+            posts: thread.posts.map(id => ({
+                ...threads[id],
+                member: users[threads[id].members[0] || getCurrentUserId()],
+                lastPost: posts[threads[id].posts[0]]
+            })).sort((a,b) => {
+                return Number(a.posts[0]) < Number(b.posts[0]) ? 1 : -1
+            })
+        }
+    }
+
+);
+
+export function mapStateToPropsUsers(state, {threadID}) {
+    const t = state.threads[threadID];
+    return {
+        dispatch: state.dispatch,
+        thread: t ? threadUsersSelector(state, t) : undefined,
+    };
+}
+
+export function mapStateToPropsChatList(state, {threadID}) {
+    const t = state.threads[threadID];
+    return {
+        dispatch: state.dispatch,
+        thread: t ? threadChatListSelector(state, t) : undefined,
+        unreadedPosts: state.unreadedPosts
+    };
+}
+
+export function mapStateToProps(state, {threadID}) {
+    const t = state.threads[threadID];
+    return {
+        dispatch: state.dispatch,
+        thread: t ? threadPostSelector(state, t) : undefined,
+        unreadedPosts: state.unreadedPosts.threads[threadID],
+    };
+}

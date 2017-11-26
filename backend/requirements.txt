@@ -1,0 +1,7 @@
+sqlalchemy
+aioredis
+redis
+tornado
+pillow
+bcrypt
+psycopg2
