@@ -7,7 +7,7 @@ __pycache__/
 *.rdb
 
 # sql
-pgdata/*
+pgsql/*
 
 # images
 htdocs/static/img/*
