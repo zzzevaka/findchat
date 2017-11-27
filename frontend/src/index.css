@@ -1,5 +1,11 @@
 /* MAIN */
 
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+}
+
 body {
     background: #fafafa;
     font-family: 'Open Sans', sans-serif;
