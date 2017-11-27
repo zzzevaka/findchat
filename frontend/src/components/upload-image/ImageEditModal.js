@@ -12,7 +12,7 @@ import './image-modal.css';
 // import 'react-image-crop/dist/ReactCrop.css';
 
 
-const INITIAL_CROP = {width: 100, height: 100, x: 0, y: 0};
+const INITIAL_CROP = {width: 95, height: 95, x: 2.5, y: 2.5};
 
 
 export default class ImageEditModal extends React.Component {
@@ -38,6 +38,15 @@ export default class ImageEditModal extends React.Component {
             crop: props.crop
         };
     }
+    
+    onWindowResize = (e) => this.forceUpdate()
+    
+    componentDidMount() {
+        window.addEventListener(
+            'resize',
+            this.onWindowResize
+        );
+    }
 
     render() {
         const {uploadedImages, storeKey} = this.props;
@@ -57,6 +66,9 @@ export default class ImageEditModal extends React.Component {
                     Upload image
                 </Modal.Header>
                 <Modal.Body
+                    style={{
+                        height: `${window.innerHeight - 50}px`
+                    }}
                 >
                     <div className='image-area'>
                         { this._renderImageArea() }

@@ -24,7 +24,7 @@ class API_Image(BaseHandler):
             img = ImageContent(
                 src_img,
                 os.path.join(self.settings.get('static_path'), 'img'),
-                crop=arg_img['crop']['pixel'] if 'crop' in arg_img else None
+                crop=arg_img['crop'] if 'crop' in arg_img else None
             )
             self.db.add(img)
             self.db.commit()

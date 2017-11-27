@@ -1,3 +1,15 @@
+.modal-edit-image {
+    height: 100%;
+    width: 100%;
+    margin: 0 !important;
+}
+
+.modal-edit-image .modal-content {
+    height: 100%;
+    width: 100%;
+}
+
+/*
 @media screen and (min-width: 768px) {
     
     .modal-edit-image {
@@ -13,6 +25,7 @@
     }
     
 }
+*/
 
 .modal-edit-image .modal-body {
     background: #222;
@@ -71,7 +84,7 @@
 .modal-edit-image .modal-body .ReactCrop,
 .modal-edit-image .modal-body .ReactCrop__image
 {
-    max-height: calc(100vh - 100px);
+    max-height: 100%;
     margin: auto;
 }
 
@@ -80,7 +93,7 @@
     .modal-edit-image .modal-body .ReactCrop,
     .modal-edit-image .modal-body .ReactCrop__image
     {
-        max-height: calc(90vh - 100px);
+        max-height: 100%;
     }
 
 }

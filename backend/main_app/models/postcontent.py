@@ -55,11 +55,16 @@ class ImageContent(PostContent):
         imgname = str(uuid4())
         img = rotate_if_needed(img)
         if crop:
+            logging.debug('crop %s' % str(crop))
+            first_left = crop['x'] * img.size[0] / 100
+            first_top = crop['y'] * img.size[1] / 100
+            second_left = first_left + crop['width'] * img.size[0] / 100
+            second_top = first_top + crop['height'] * img.size[1] / 100
             img = img.crop([
-                crop['x'],
-                crop['y'],
-                crop['x'] + crop['width'],
-                crop['y'] + crop['height']
+                first_left,
+                first_top,
+                second_left,
+                second_top
             ])
         for s_n, s_v in self.SIZES.items():
             resized = resize_with_max(img, s_v)

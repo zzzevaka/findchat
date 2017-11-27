@@ -186,8 +186,7 @@ class API_Post(BaseHandler, HashTagInterface):
             for u2t in thread.user2thread:
                 if u2t.user_id == DEFAULT_USER_ID:
                     self.redis.publish('updates:thread:%s' % u2t.thread_id, jsoined)
-                elif u2t.user_id != self.current_user:
-                    self.redis.publish('updates:user:%s' % u2t.user_id, jsoined)
+                self.redis.publish('updates:user:%s' % u2t.user_id, jsoined)
         except tornado.web.HTTPError:
             raise
         except:
@@ -286,8 +285,9 @@ class API_Post(BaseHandler, HashTagInterface):
             if not post:
                 raise tornado.web.HTTPError(404)
             for i_p in post.ignored_posts:
-                if i_p.del_user_id == self.current_user:
-                    self.db.delete(i_p)
+                self.db.delete(i_p)
+                # if i_p.del_user_id == self.current_user:
+                #     self.db.delete(i_p)
             self.db.commit()
         except tornado.web.HTTPError:
             raise

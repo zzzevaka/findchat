@@ -31,15 +31,17 @@ class WSUpdates(tornado.websocket.WebSocketHandler):
     @tornado.gen.coroutine
     def open(self):
         logging.debug('opend ws')
-        conn = yield self.redis_pool.acquire()
-        user_id = self.get_cookie('current_user_id', None)
-        if not user_id:
+        self.conn = yield self.redis_pool.acquire()
+        self.user_id = self.get_cookie('current_user_id', None)
+        if not self.user_id:
             return
-        try:
-            ch_name = 'updates:user:%i' % int(user_id)
-            yield conn.execute_pubsub('subscribe', ch_name)
-            channel = conn.pubsub_channels[ch_name]
-            yield self.reader(channel)
-            yield conn.execute_pubsub('unsubscribe', ch_name)
-        finally:
-            self.redis_pool.release(conn)
+        self.ch_name = 'updates:user:%i' % int(self.user_id)
+        yield self.conn.execute_pubsub('subscribe', self.ch_name)
+        channel = self.conn.pubsub_channels[self.ch_name]
+        yield self.reader(channel)
+
+    @tornado.gen.coroutine
+    def on_close(self):
+        logging.debug('!!!!!!!!!! WS CLOSED !!!!!!!!!!!!!!!')
+        (yield self.conn.execute_pubsub('unsubscribe', self.ch_name))
+        self.redis_pool.release(self.conn)
