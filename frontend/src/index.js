@@ -55,7 +55,10 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-let ws = new wsUpdater(`ws://${window.location.host}/ws`);
+
+let ws = new wsUpdater();
+
+ws.open(`ws://${window.location.host}/ws`);
 
 ws.onmessage = (event) => {
     const obj = JSON.parse(event.data)
