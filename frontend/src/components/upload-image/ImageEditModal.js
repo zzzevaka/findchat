@@ -9,7 +9,6 @@ import {LoaderIcon} from '../Icons';
 import { uploadImage } from '../../actions';
 
 import './image-modal.css';
-// import 'react-image-crop/dist/ReactCrop.css';
 
 
 const INITIAL_CROP = {width: 95, height: 95, x: 2.5, y: 2.5};
@@ -35,17 +34,71 @@ export default class ImageEditModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            crop: props.crop
+            crop: props.crop,
+            imgSize: []
         };
     }
     
     onWindowResize = (e) => this.forceUpdate()
     
     componentDidMount() {
-        window.addEventListener(
-            'resize',
-            this.onWindowResize
-        );
+        this.denyBodyScroll();
+    }
+    
+    componentWillUnmount() {
+        this.allowBodyScroll();
+    }
+    
+    componentDidUpdate() {
+        if (!this.state.imgSize.length) this.getImageSize();
+    }
+    
+    getImageSize() {
+        console.log('hello')
+        if (!this.imageArea) return [];
+        const {uploadedImages, storeKey} = this.props;
+        const img = uploadedImages[storeKey];
+        let imgEl = document.createElement('img');
+        imgEl.onload = () => {
+            const ratio = Math.min(
+                this.imageArea.clientWidth / imgEl.width,
+                this.imageArea.clientHeight / imgEl.height
+            );
+            console.log(
+                ratio,
+                this.imageArea.clientWidth,
+                this.imageArea.clientHeight,
+                imgEl.width,
+                imgEl.height,
+                typeof(this.imageArea.clientWidth),
+                typeof(this.imageArea.clientHeight),
+                typeof(imgEl.width),
+                typeof(imgEl.height),
+            );
+            
+            this.setState({
+                imgSize: [
+                    imgEl.width * ratio,
+                    imgEl.height * ratio
+                ]
+            });
+        }
+        imgEl.setAttribute('src', img.src);
+        //~ const {src, ...rest} = img;
+        //~ console.log(rest);
+    }
+    
+    denyBodyScroll = () => {
+        document.getElementsByTagName('html')[0].classList.add('no-scroll');
+        document.getElementsByTagName('body')[0].classList.add('no-scroll');
+        this.scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+    }
+    
+    allowBodyScroll = () => {
+        document.getElementsByTagName('html')[0].classList.remove('no-scroll');
+        document.getElementsByTagName('body')[0].classList.remove('no-scroll');
+        document.documentElement.scrollTop = this.scrollTop;
+        document.body.scrollTop= this.scrollTop;
     }
 
     render() {
@@ -65,12 +118,11 @@ export default class ImageEditModal extends React.Component {
                 <Modal.Header closeButton>
                     Upload image
                 </Modal.Header>
-                <Modal.Body
-                    style={{
-                        height: `${window.innerHeight - 50}px`
-                    }}
-                >
-                    <div className='image-area'>
+                <Modal.Body>
+                    <div
+                        className='image-area'
+                        ref={e => this.imageArea = e}
+                    >
                         { this._renderImageArea() }
                     </div>
                     <div className='image-footer'>
@@ -95,26 +147,40 @@ export default class ImageEditModal extends React.Component {
     }
 
     _renderImageArea() {
-        const {crop} = this.state;
+        const {crop, imgSize} = this.state;
         const {uploadedImages, storeKey} = this.props;
         const img = uploadedImages[storeKey];
-        if (img.src === 'l') {
+        if (img.src === 'l' || !imgSize.length) {
             return <LoaderIcon />;
         }
+        console.log(imgSize);
         if (crop) {
             return (
-                <ReactCrop
-                    crop={crop || INITIAL_CROP}
-                    src={img.src}
-                    keepSelection={true}
-                    onChange={this._onCrop}
-                />
-            )
+                <div
+                    style={{
+                        width: imgSize[0],
+                        height: imgSize[1],
+                        margin: 'auto'
+                    }}
+                >
+                    <ReactCrop
+                        crop={crop || INITIAL_CROP}
+                        src={img.src}
+                        keepSelection={true}
+                        onChange={this._onCrop}
+                    />
+                </div>
+                    
+            );
         } else {
             return (
                 <Image
                     className='image-preview'
                     src={img.src}
+                    style={{
+                        width: imgSize[0],
+                        height: imgSize[1]
+                    }}
                 />
             )
         }

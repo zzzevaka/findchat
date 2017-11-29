@@ -26,13 +26,14 @@ WebSocketClient.prototype.open = function(url){
 	});
 	this.instance.addEventListener('error',(e)=>{
 		switch (e.code){
-		case 'ECONNREFUSED':
-			this.reconnect(e);
-			break;
-		default:
-			this.onerror(e);
-			break;
-		}
+			
+			case 'ECONNREFUSED':
+				this.reconnect(e);
+				break;
+			default:
+				this.onerror(e);
+				break;
+			}
 	});
 }
 WebSocketClient.prototype.send = function(data,option){

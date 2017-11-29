@@ -45,3 +45,14 @@ class WSUpdates(tornado.websocket.WebSocketHandler):
         logging.debug('!!!!!!!!!! WS CLOSED !!!!!!!!!!!!!!!')
         (yield self.conn.execute_pubsub('unsubscribe', self.ch_name))
         self.redis_pool.release(self.conn)
+
+    @tornado.gen.coroutine
+    def on_message(self, message):
+        logging.debug(message)
+        self.write_message(u"You said: " + message)
+
+    def on_ping(self):
+        logging.debug('ping request')
+    
+    def on_pong(self):
+        logging.debug('ping response')
