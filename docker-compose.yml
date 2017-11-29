@@ -33,8 +33,6 @@ services:
   #
   webapp:
     image: findchat-app
-    # ports:
-    #   - "8080:8080"
     volumes:
       - type: bind
         source: ./backend
@@ -56,7 +54,8 @@ services:
       restart_policy:
         condition: on-failure
     ports:
-      - "4000:80"
+      - "80:80"
+      - "443:443"
     volumes:
       - type: bind
         source: ./htdocs
