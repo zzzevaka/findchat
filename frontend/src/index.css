@@ -101,7 +101,7 @@ body {
 
 /* FORMS */
 
-.input-round input,
+.input-round input[type=text],
 .input-round textarea {
     /*border-radius: 30px;*/
     border: 1px solid #ddd !important;
@@ -110,12 +110,12 @@ body {
     font-size: 0.95em;
 }
 
-.input-round input {
+.input-round input[type=text] {
     padding-left: 20px;
     border-radius: 30px;
 }
 
-.input-round input:focus,
+.input-round input[type=text]:focus,
 .input-round textarea:focus {
     border: 1px solid rgb(249, 73, 182) !important;
 }   
@@ -328,4 +328,12 @@ body {
 
 .icon {
     height: 18px;
+}
+
+svg.icon-mars {
+    fill: #3A9ED1;
+}
+
+svg.icon-venus {
+    fill: #f378ac;
 }

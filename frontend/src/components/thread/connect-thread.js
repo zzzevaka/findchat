@@ -56,7 +56,11 @@ const ConnectedThread = WrappedComponent => {
             const mustBeLoaded = this.state.showPosts + postsPreload;
             if (thread) {
                 if (thread.posts.length < mustBeLoaded && !thread.no_more_posts) {
-                    loadMethod(mustBeLoaded, thread.posts.length, dispatch);
+                    loadMethod(
+                        mustBeLoaded,
+                        thread.posts.length,
+                        dispatch
+                    );
                 }
             }
             else {

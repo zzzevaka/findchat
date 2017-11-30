@@ -64,6 +64,16 @@
     color: #555;
 }
 
+.input-inline h4 {
+    width: auto;
+    vertical-align: middle;
+
+}
+
+.input-inline input[type=radio] {
+    vertical-align: top;
+}
+
 .edit-user-page hr {
     margin: 0;
 }
@@ -112,3 +122,39 @@
   width: 23%;
 }
 
+
+
+
+/* TEST */
+
+.settings-container .form-group {
+    text-align: left;
+    max-width: 350px;
+}
+
+.settings-container .form-group .control-label {
+    text-align: left;
+    font-size: 1.3em;
+    font-weight: normal;
+    margin: 15px 0;
+    padding: 0 10px;
+    color: #555;
+}
+
+.settings-container .form-group-inline .control-label {
+    margin: 15px 0 0 0;
+    padding: 0 20px 0 10px;
+}
+
+.settings-container svg.icon-gender {
+    padding: 0 0.5em 0.2em 0.5em;
+    height: 1.6em;
+}
+
+.settings-container svg.icon-mars {
+    fill: #3A9ED1;
+}
+
+.settings-container svg.icon-venus {
+    fill: #f378ac;
+}

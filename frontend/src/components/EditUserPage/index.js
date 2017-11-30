@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
-import {Grid, Row, Col, FormGroup, ControlLabel, FormControl} from 'react-bootstrap';
+import {Grid, Row, Col, FormGroup, ControlLabel, FormControl, Radio} from 'react-bootstrap';
 import MainMenu, {MobileMenu} from '../Menu';
+import {MarsIcon, VenusIcon} from '../Icons'
 import currentUserId from '../../auth';
 import {loadUsers, updateUser} from '../../actions';
 import API from '../../api';
@@ -94,35 +95,42 @@ class EditUserPage extends Component {
                                 <form
                                     onSubmit={this._onSubmit}
                                 >
-                                    <UsernameFormGroup
-                                        placeholder={user.firstname}
-                                        onChange={this._inputChange}
-                                        value={form.firstname || ''}
-                                    />
-                                    <hr />
-                                    <BirthDateFormGroup
-                                        value={new Date(form.birth_date || user.birth_date)}
-                                        onChange={this._birthChange}
-                                    />
-                                    <hr />
-                                    <LanguagesFormGroup
-                                        value={form.lang || user.lang}
-                                        onChange={this._laguagesChange}
-                                    />
-                                    <hr />
-                                    <AboutFormGroup
-                                        placeholder={user.about}
-                                        onChange={this._inputChange}
-                                        value={form.about}
-                                    />
-                                    <hr />
-                                    <br />
-                                    <button
-                                        className='button-no-style button-submit'
-                                        disabled={!edited}
-                                    >
-                                        Submit
-                                    </button>
+                                    <center>
+                                        <UsernameFormGroup
+                                            placeholder={user.firstname}
+                                            onChange={this._inputChange}
+                                            value={form.firstname || ''}
+                                        />
+                                        <hr />
+                                        <BirthDateFormGroup
+                                            value={new Date(form.birth_date || user.birth_date)}
+                                            onChange={this._birthChange}
+                                        />
+                                        <hr />
+                                        <GenderFormGroup
+                                            value={form.gender || user.gender}
+                                            onChange={this._inputChange}
+                                        />
+                                        <hr />
+                                        <LanguagesFormGroup
+                                            value={form.lang || user.lang}
+                                            onChange={this._laguagesChange}
+                                        />
+                                        <hr />
+                                        <AboutFormGroup
+                                            placeholder={user.about}
+                                            onChange={this._inputChange}
+                                            value={form.about}
+                                        />
+                                        <hr />
+                                        <br />
+                                        <button
+                                            className='button-no-style button-submit'
+                                            disabled={!edited}
+                                        >
+                                            Submit
+                                        </button>
+                                    </center>
                                 </form>
                             </div>
                         </Col>
@@ -171,7 +179,7 @@ class LanguagesFormGroup extends Component {
         const {value, onChange} = this.props;
         return (
                 <FormGroup>
-                    <h4>Languages you want to talk in:</h4>
+                    <ControlLabel>Languages you want to talk in:</ControlLabel>
                     <Select
                         className='search-input'
                         placeholder=''
@@ -196,7 +204,7 @@ class UsernameFormGroup extends Component {
         const {value, onChange, placeholder} = this.props;
         return (
                 <FormGroup className='input-round'>
-                    <h4>Your name:</h4>
+                    <ControlLabel>Your name:</ControlLabel>
                     <FormControl
                         name='firstname'
                         type="text"
@@ -221,7 +229,7 @@ class AboutFormGroup extends Component {
         } = this.props;
         return (
                 <FormGroup className='input-round'>
-                    <h4>Few words about you:</h4>
+                    <ControlLabel>Few words about you:</ControlLabel>
                     <FormControl
                         name='about'
                         componentClass="textarea"
@@ -237,6 +245,38 @@ class AboutFormGroup extends Component {
 }
 
 
+class GenderFormGroup extends Component {
+
+    render() {
+        const {
+            value, onChange
+        } = this.props;
+        return (
+                <FormGroup className='form-group-inline' onChange={onChange}>
+                    <ControlLabel>Gender:</ControlLabel>
+                    <Radio
+                        name="gender"
+                        value='male'
+                        checked={value === 'male'}
+                        inline
+                    >
+                        <MarsIcon className='icon-gender icon-mars' />
+                    </Radio>
+                    <Radio
+                        name="gender"
+                        value='female'
+                        checked={value === 'female'}
+                        inline
+                    >
+                        <VenusIcon className='icon-gender icon-venus' />
+                    </Radio>
+                </FormGroup>
+        );
+    }
+
+}
+
+
 class BirthDateFormGroup extends Component {
 
     render() {
@@ -245,7 +285,7 @@ class BirthDateFormGroup extends Component {
         } = this.props;
         return (
                 <FormGroup>
-                    <h4>Birth date:</h4>
+                    <ControlLabel>Birth date:</ControlLabel>
                     <DateSelect
                         value={value}
                         onChange={onChange}

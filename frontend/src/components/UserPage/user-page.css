@@ -163,6 +163,10 @@
     padding: 0 12px 20px 12px;
 }
 
+.about p > span {
+    display: block;
+}
+
 .about-short p {
     display: none;
     max-height: 1.25em;
@@ -208,6 +212,7 @@
     margin: 0;
     border: none;
     outline: none;
+    display: inline;
 }
 
 .about-opened .about-toggle {
@@ -226,6 +231,10 @@
 
     .about-short .about-toggle {
         box-shadow: -10px 0 22px 10px #fff;
+    }
+
+    .about-singleline .about-toggle {
+        display: none;
     }
 
 }
@@ -317,13 +326,8 @@
 
 /*TEMP*/
 
-svg.icon-male {
-    fill: #3A9ED1;
-    /*width: 20px;*/
+svg.icon-gender {
     height: 1em;
     vertical-align: middle;
     padding: 0 0 0.2em 12px;
-    /*padding: 0 0 0.2em 0;*/
-    /*border: 1px solid black;*/
-    /*margin: auto;*/
 }

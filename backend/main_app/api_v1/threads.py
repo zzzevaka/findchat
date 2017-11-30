@@ -140,6 +140,8 @@ class API_Chats(BaseHandler):
                 ).subquery()
             query = self.db.query(
                 User2Thread, Post
+            ).options(
+                joinedload(Post.content)
             ).join(
                 stmt, and_(
                     User2Thread.id == stmt.c.u2t_id
