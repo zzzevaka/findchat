@@ -33,6 +33,7 @@ class PostModal extends Component {
                         onSubmit={
                             p => dispatch(answerChatOffer(postID, p))
                         }
+                        placeholder='Your answer'
                     />
                 </Modal.Body>
             </Modal>

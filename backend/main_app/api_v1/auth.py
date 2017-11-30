@@ -24,7 +24,7 @@ class API_Login(BaseHandler):
 
     def post(self):
         '''returns user_id'''
-        login = self.get_argument('login')
+        login = self.get_argument('login').lower()
         password = self.get_argument('password')
         try:
             auth = self.db.query(Auth).filter_by(login=login).first()
