@@ -27,19 +27,37 @@ class NewOfferModal extends PureComponent {
 
     render() {
         const {threadID, actions, composer, ...rest} = this.props;
-        // if (!currentUser) return null;
         return (
             <Modal {...rest} dialogClassName='modal-new-offer'>
                 <Modal.Header closeButton>
-                    <AddColorIcon className='title-icon' width={20} height={20} />
-                    <span className='modal-title'>New offer</span>
+                    <AddColorIcon className='title-icon' />
+                    <span className='title-text'>New offer</span>
                 </Modal.Header>
                 <Modal.Body>
-                    <div>
-                        <ul>
-                            <li>Подсказка 1</li>
-                            <li>Подсказка 2</li>
-                            <li>Подсказка 3</li>
+                    <div className='help-block-wrapper'>
+                        <ul className='help-block'>
+                            <li>
+                                <h4 className='help-block__header'>Tooltips:</h4>
+                                <ul className='tooltip-list help-block__content'>
+                                    <li>
+                                        Suggest a topic which may be interesting for another people.
+                                    </li>
+                                    <li>
+                                        Use hashtags and pictures to attract attention to your topic
+                                    </li>
+                                </ul>
+                            </li>
+                            <li className='example'>
+                                <h4 className='help-block__header'>Example:</h4>
+                                <ul className='tooltip-list help-block__content'>
+                                    <li>
+                                        Let's talk about #football ;)
+                                    </li>
+                                    <li>
+                                        Have you seen #game_of_thrones? I realy like this show!
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
                     </div>
                     <ThreadPostComposer

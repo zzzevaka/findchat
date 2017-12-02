@@ -1,5 +1,8 @@
 import React from 'react';
+import classNames from 'classnames';
 import InlineSVG from 'react-svg-inline';
+
+import './icons.css';
 
 const loader = `
     <svg version="1.1" viewBox="0 0 50 50">
@@ -103,14 +106,6 @@ const settings = `
 
 const addColor = `
     <svg viewBox="0 0 16 16">
-        <style>
-            .gradient0{fill:url(#SVGID_1_);}
-            .gradient1{fill:url(#SVGID_2_);}
-            .stop1{stop-color: #9A49BF;}
-            .stop2{stop-color: #A049BC;}
-            .stop3{stop-color: #E146A1;}
-            .stop4{stop-color: #FA4596;}
-        </style>
         <linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="0" y1="8" x2="16" y2="8">
             <stop  class='stop1' offset="0"/>
             <stop  class='stop2' offset="5.611223e-02"/>
@@ -184,12 +179,44 @@ export function SettingsIcon(props) {
     return <InlineSVG {...props} svg={settings} />
 }
 
-export function AddColorIcon(props) {
-    return <InlineSVG {...props} svg={addColor} />
-}
+// export function AddColorIconDe(props) {
+//     return <InlineSVG {...props} svg={addColor} />
+// }
 
 export function CommentColorIcon(props) {
     return <InlineSVG {...props} svg={commentColor} />
+}
+
+export function AddColorIcon({className, ...rest}) {
+    return (
+        <svg
+            className={classNames('icon__add-color', className)}
+            viewBox="0 0 16 16"
+            {...rest}
+        >
+            <linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="0" y1="8" x2="16" y2="8">
+                <stop  className='stop1' offset="0"/>
+                <stop  className='stop2' offset="5.611223e-02"/>
+                <stop  className='stop3' offset="0.6975"/>
+                <stop  className='stop4' offset="1"/>
+            </linearGradient>
+            <linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="3.9545" y1="7.9976" x2="12.0521" y2="7.9976">
+                <stop  className='stop1' offset="0"/>
+                <stop  className='stop2' offset="5.611223e-02"/>
+                <stop  className='stop3' offset="0.6975"/>
+                <stop  className='stop4' offset="1"/>
+            </linearGradient>
+            <g>
+                <path className='gradient0' fill="url(#SVGID_1_)" d="M16,7.9c0.1,4.2-3.3,7.9-7.6,8.1C3.7,16.2,0.2,12.6,0,8.2C-0.1,4.2,3.1,0.1,7.8,0C12.1-0.1,15.9,3.2,16,7.9z
+                    M8,1C4.1,1,1.2,4.1,1,7.7C0.9,11.9,4.3,15,8,15c3.8,0,6.9-3.1,6.9-6.9C15,4.2,11.9,1.1,8,1z"/>
+                <path className='gradient1' fill="url(#SVGID_2_)" d="M8.4,7.6c1,0,1.9,0,2.8,0c0.5,0,0.8,0.2,0.8,0.5c0,0.3-0.3,0.5-0.8,0.5c-0.8,0-1.6,0-2.5,0
+                    c-0.1,0-0.2,0-0.4,0c0,0.8,0,1.7,0,2.5c0,0.1,0,0.2,0,0.4c0,0.4-0.2,0.6-0.5,0.6c-0.3,0-0.5-0.2-0.5-0.6c0-0.8,0-1.6,0-2.4
+                    c0-0.1,0-0.2,0-0.4c-0.9,0-1.7,0-2.5,0c-0.1,0-0.2,0-0.4,0C4.2,8.6,4,8.4,4,8.1c0-0.3,0.2-0.5,0.6-0.5c0.7,0,1.4,0,2,0
+                    c0.3,0,0.5,0,0.8,0c0-0.2,0-0.4,0-0.6c0-0.8,0-1.6,0-2.4c0-0.4,0.2-0.6,0.5-0.6c0.3,0,0.5,0.2,0.5,0.6C8.4,5.6,8.4,6.5,8.4,7.6z"
+                />
+            </g>
+        </svg>
+    )
 }
 
 export function MarsIcon(props) {

@@ -11,6 +11,7 @@ import russianFormatter from 'react-timeago/lib/language-strings/ru';
 import {PhotoSwipeImage} from '../PhotoSwipe';
 import {LoaderIcon, CommentColorIcon} from '../Icons';
 import {UserAvatar} from '../UserPage';
+import {HashtagString} from '../Hashtag';
 
 import connectThread, {mapStateToProps} from './connect-thread';
 import currentUserId from '../../auth';
@@ -113,7 +114,7 @@ export const OfferPost = ({post, author, dispatch}) => {
                 />
             }
             {
-                post.text && <p className='post-text' dangerouslySetInnerHTML={{__html: post.text}} />
+                post.text && <p className='post-text' dangerouslySetInnerHTML={{__html: HashtagString(post.text)}} />
             }            
         </div>
     );
