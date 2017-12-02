@@ -46,14 +46,13 @@ class ChatThread extends Component {
     _onScroll = (e) => {
         this.offsetBottom = e.scrollHeight - e.scrollTop;
         const {thread, showMorePosts} = this.props;
-        if (e.top <= 0.3 && thread.status !== 'loading') {
-            showMorePosts();
-        }
+        // if (e.top === 0 && thread.status !== 'loading') {
+        //     showMorePosts();
+        // }
     }
 
     render() {
-        console.warn('CHAT RENDERING');
-        const {thread, showPosts, dispatch} = this.props;
+        const {thread, showPosts, showMorePosts, dispatch} = this.props;
         const member = thread.members ? thread.members[0] : undefined;
         return (
             <div className='chat-thread'>
@@ -89,6 +88,14 @@ class ChatThread extends Component {
                         padding: '10px'
                     }}>
                         <LoaderIcon />
+                    </div>
+                }
+                {
+                    thread.status !== 'loading' && (!thread.no_more_posts || thread.posts.length >= showPosts) &&
+                    <div className='button-show-more'>
+                    <button onClick={showMorePosts} className='button-no-style'>
+                        Load more
+                    </button>
                     </div>
                 }
                 {

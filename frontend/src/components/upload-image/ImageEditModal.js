@@ -54,7 +54,6 @@ export default class ImageEditModal extends React.Component {
     }
     
     getImageSize() {
-        console.log('hello')
         if (!this.imageArea) return [];
         const {uploadedImages, storeKey} = this.props;
         const img = uploadedImages[storeKey];
@@ -64,18 +63,6 @@ export default class ImageEditModal extends React.Component {
                 this.imageArea.clientWidth / imgEl.width,
                 this.imageArea.clientHeight / imgEl.height
             );
-            console.log(
-                ratio,
-                this.imageArea.clientWidth,
-                this.imageArea.clientHeight,
-                imgEl.width,
-                imgEl.height,
-                typeof(this.imageArea.clientWidth),
-                typeof(this.imageArea.clientHeight),
-                typeof(imgEl.width),
-                typeof(imgEl.height),
-            );
-            
             this.setState({
                 imgSize: [
                     imgEl.width * ratio,
@@ -84,8 +71,6 @@ export default class ImageEditModal extends React.Component {
             });
         }
         imgEl.setAttribute('src', img.src);
-        //~ const {src, ...rest} = img;
-        //~ console.log(rest);
     }
     
     denyBodyScroll = () => {
@@ -153,7 +138,6 @@ export default class ImageEditModal extends React.Component {
         if (img.src === 'l' || !imgSize.length) {
             return <LoaderIcon />;
         }
-        console.log(imgSize);
         if (crop) {
             return (
                 <div
