@@ -292,15 +292,53 @@ body {
 }
 
 
+/* FIXED BUTTONS */
+
+.fixed-buttons-area {
+    position: fixed;
+    z-index: 1000;
+    bottom: calc(1% + 50px);
+    right: 5%;
+}
+
+.fixed-buttons-area button {
+    display: block;
+    text-align: center;
+    margin: 10px 0;
+}
+
+.fixed-buttons-area svg {
+    width: 40px;
+    height: 40px;
+}
+
+.fixed-buttons-area button.new-offer-button {
+    /*
+        display: none не работает на мобльном
+        пропадает иконка в меню
+    */
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+@media screen and (min-width: 768px) {
+
+    .fixed-buttons-area svg {
+        width: 50px;
+        height: 50px;
+    }
+
+    .fixed-buttons-area button.new-offer-button {
+        height: auto;
+        visibility: visible;
+    }
+
+}
+
 /* SCROLL BODY UP */
 
 .button-scroll-body-up {
-    position: fixed;
-    bottom: calc(50px + 1%);
-    right: 1%;
-    width: 50px;
-    height: 50px;
-    z-index: 1000;
     visibility: visible;
     opacity: 1;
     transition: all .5s linear;

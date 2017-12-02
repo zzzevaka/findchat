@@ -117,14 +117,6 @@ class UserPage extends Component {
                 </div>
                 <div className='user-buttons'>
                     {isMyPage && <button
-                        className='button-no-style button-new-offer'
-                        onClick={() => {showModal('modalType=new_chat_offer')}}
-                        style={{borderRight: '1px solid #ddd'}}
-                    >
-                        <img src='/svg/add_color.svg' />
-                            New offer
-                    </button>}
-                    {isMyPage && <button
                         className='button-no-style'
                         onClick={() => {showModal('modalType=new_photo')}}
                     >

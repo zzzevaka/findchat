@@ -2,13 +2,16 @@ import React from 'react';
 import {Link, browserHistory} from 'react-router';
 import classNames from 'classnames';
 
+const EXCLUDE_SYMBOLS = '!@#\$%\^&\*\(\)\.,\?\+-=\/{}|\" ';
+const HASHTAG_REGEX = new RegExp(`#([^${EXCLUDE_SYMBOLS}]+)`, 'gm');
+
 function hashtagLink(tag) {
     return `/search/chat_offers?tags=${tag}`;
 }
 
 export function HashtagString(string, className) {
     return string.replace(
-        /#(\w+)/gm,
+        HASHTAG_REGEX,
         (h,w) => `<a href="#" class="hashtag">${w}</a>`
     )
 }

@@ -240,12 +240,12 @@
 }
 
 .user-buttons {
-    background: #fff;
     max-width: 620px;
     margin: 8px auto 0 auto;
     height: 48px;
     display: flex;
     padding: 0;
+    background: #fff;
 }
 
 .button-new-offer {
@@ -274,7 +274,6 @@
     line-height: 38px;
     font-size: 0.9em;
     border-bottom: 1px solid #eee;
-    /*border: 1px solid rgb(249, 73, 182);*/
 }
 
 .user-buttons img {
@@ -284,7 +283,7 @@
 
 /* SWITCH THREAD TYPE */
 
-.thread-type-switch {z
+.thread-type-switch {
     margin-top: 8px;
     background: none;
     display: block;
@@ -320,8 +319,6 @@
     max-width: 620px;
     margin: auto;
 }
-
-
 
 
 /*TEMP*/

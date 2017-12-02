@@ -18,10 +18,10 @@ import {Link} from 'react-router';
 
 import Notifications from 'react-notification-system-redux';
 
-import { closeModal } from '../utils';
+import { closeModal, showModal } from '../utils';
 import currentUserId from '../auth';
 
-import {UpArrow, LoaderIcon} from './Icons';
+import {UpArrow, AddColorIcon, LoaderIcon} from './Icons';
 
 import 'react-select/dist/react-select.css';
 
@@ -70,7 +70,10 @@ class ChatApp extends Component {
     return (
         <div style={{height: '100%'}}>
             <PhotoSwipeDummy />
-            <ScrollBodyUpButton />
+            <div className='fixed-buttons-area'>
+                <ScrollBodyUpButton />
+                <NewOfferButton />
+            </div>
             <Notifications notifications={store.notifications}/>
             {this.props.children}
             <Modals {...this.props} />
@@ -78,6 +81,18 @@ class ChatApp extends Component {
     )
   }
 };
+
+
+function NewOfferButton() {
+    return (
+        <button
+            onClick={() => showModal('modalType=new_chat_offer')}
+            className='button-no-style new-offer-button'
+        >
+            <AddColorIcon />
+        </button>
+    );
+}
 
 
 class ScrollBodyUpButton extends Component {
