@@ -8,7 +8,7 @@ import ChatApp, {ModalDummy} from './components/ChatApp.react';
 import UserPage from './components/UserPage';
 import ChatPage from './components/ChatPage';
 import ChatPostList from './components/ChatPage/post-list';
-import SearchingPage from './components/SearchPage';
+import SearchPage from './components/SearchPage';
 import SearchChatOffers from './components/SearchPage/SearchChatOffers';
 import SearchPeople from './components/SearchPage/SearchPeople';
 import SettingsPage from './components/SettingsPage';
@@ -39,7 +39,7 @@ ReactDOM.render(
                 to={currentUserId() ? `user/${currentUserId()}` : 'login'}
             />
             <Route path='user/:userID' component={UserPage} /> 
-            <Route path='search' component={SearchingPage}>
+            <Route path='search' component={SearchPage}>
                 <Route path="chat_offers" component={SearchChatOffers} />
                 <Route path="people" component={SearchPeople} />
             </Route>

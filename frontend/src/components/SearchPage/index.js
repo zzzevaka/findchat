@@ -11,12 +11,16 @@ import './search-page.css';
 export default class SearchPage extends Component {
 
     render() {
-        const showOffers = true
+
+        console.log(
+            'url',
+            this.props.params
+        )
 
         return (
             <div className='search-page'>
                 <div className='top-fixed-bar'>
-                    <SearchFiler />
+                    <SearchFiler {...this.props} />
                 </div>
                 <MobileMenu />
                 <Grid fluid className='search-page-grid main-container'>

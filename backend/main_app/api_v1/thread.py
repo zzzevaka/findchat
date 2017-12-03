@@ -6,7 +6,7 @@ import tornado.web
 from tornado.escape import json_decode, json_encode
 
 
-from sqlalchemy import and_, or_, func, types, distinct
+from sqlalchemy import and_, or_, func, types, distinct, text
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import contains_eager, joinedload
 from sqlalchemy.orm.session import make_transient
@@ -327,7 +327,10 @@ class API_ThreadChatOffers(BaseHandler):
         limit = self.get_argument('limit', None)
         offset = self.get_argument('offset', None)
         search_filter = json.loads(self.get_argument('filter'))
-        tags = search_filter['tags']
+        tag = None
+        if search_filter['tags']:
+            tag = search_filter['tags'][0]
+        logging.debug(tag)
         for_export = {
             'posts': {},
             'threads': {
@@ -348,9 +351,8 @@ class API_ThreadChatOffers(BaseHandler):
             filter(PostThread.type == THREAD_TYPE['CHAT_OFFER']).\
             filter(Post.is_current()).\
             filter(Post.id.notin_(user_answered))
-            # order_by(Post.id.desc())
-        if tags:
-            request = request.join(Post.hashtags).filter(Hashtag.name.in_(tags))
+        if tag:
+            request = request.join(Post.hashtags).filter(text("hashtags.name % '{}'".format(tag)))
         request.order_by(Post.id.desc())
         request.limit(limit)
         request.offset(offset)

@@ -5,9 +5,30 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
-const MAX_VALUES = 4;
+const MAX_VALUES = 1;
 
 class SearchFiler extends Component {
+
+    componentDidMount() {
+        this.getTagsFromURL();
+    }
+
+    componentDidUpdate(pProps) {
+        if (this.props.location !== pProps.location) {
+            this.getTagsFromURL();
+        }
+    }
+
+    getTagsFromURL() {
+        const {location, filter, actions} = this.props;
+        const tag = location.query.tags;
+        if (!tag) return;
+        if (filter.tags.indexOf(tag) === -1) {
+            actions.updateSearchFilter({
+                tags: [tag]
+            });
+        }
+    }
 
     shouldOptionCreate({keyCode}) {
         return [13,62].indexOf(keyCode) !== -1;
@@ -17,7 +38,7 @@ class SearchFiler extends Component {
         const {actions} = this.props;
         if (values.split(',').length > MAX_VALUES) return;
         actions.updateSearchFilter({
-            tags: values ? values.split(',').map(v => v.toLowerCase()) : []
+            tags: values ? values.split(',').map(v => v) : []
         });
     }
 
@@ -27,11 +48,14 @@ class SearchFiler extends Component {
         };
     }
 
+    onInputChange = value => {
+        return value.replace(/ /g, '_').toLowerCase();
+    }
+
     render() {
 
         const {filter, actions} = this.props;
         const selectFilter = filter.tags.map(v => ({label: v, value: v}));
-
         return (
             <Creatable
                 options={[]}
@@ -40,6 +64,7 @@ class SearchFiler extends Component {
                 placeholder={<img src='/svg/search_color.svg' />}
                 onChange={this.onChange}
                 shouldKeyDownEventCreateNewOption={this.shouldOptionCreate}
+                onInputChange={this.onInputChange}
                 menuRenderer={() => {}}
                 inputProps={this.getInputProps()}
                 noResultsText=''
