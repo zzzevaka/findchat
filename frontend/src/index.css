@@ -101,21 +101,23 @@ body {
 
 /* FORMS */
 
-.input-round input[type=text],
+.input-round input[type="text"],
+.input-round input[type="password"],
 .input-round textarea {
-    /*border-radius: 30px;*/
     border: 1px solid #ddd !important;
     outline: none !important;
     box-shadow: 0 0 0 30px rgb(255, 255, 255) inset !important;
     font-size: 0.95em;
 }
 
-.input-round input[type=text] {
+.input-round input[type="text"],
+.input-round input[type="password"] {
     padding-left: 20px;
     border-radius: 30px;
 }
 
-.input-round input[type=text]:focus,
+.input-round input[type="text"]:focus,
+.input-round input[type="password"]:focus,
 .input-round textarea:focus {
     border: 1px solid rgb(249, 73, 182) !important;
 }   

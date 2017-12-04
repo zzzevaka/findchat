@@ -97,7 +97,7 @@ class LoginPage extends PureComponent {
                 <Notifications notifications={notifications} />
                 <Grid fluid className='login-page main-container'>
                     <Row>
-                        <ToggleArea smOffset={2} sm={4} hidden={showForm}>
+                        <ToggleArea sm={6} hidden={showForm}>
                             <div className='toggle-area-wrapper'>
                                 <div className='label-area slogan'>
                                     <Link className='find-link' to='/search/chat_offers'>Find</Link>
@@ -105,12 +105,12 @@ class LoginPage extends PureComponent {
                                 </div>
                             </div>
                         </ToggleArea>
-                        <ToggleArea sm={4} hidden={!showForm}>
+                        <ToggleArea sm={6} hidden={!showForm}>
                             <div className='toggle-area-wrapper'>
                                 <div className='label-area form-wrapper'>
                                     <div className='form-header'>
-                                        <img src='/img/icons/logo.png' />
-                                        <h3>FindChat</h3>
+                                        <img className='logo' src='/svg/logo_color.svg' />
+                                        <img className='site-name' src='/svg/findchat.svg' />
                                     </div>
                                     {renderForm} 
                                 </div>
