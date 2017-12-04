@@ -1,4 +1,5 @@
 import React, {PureComponent} from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {Grid, Row, Col, FormGroup, FormControl, Glyphicon} from 'react-bootstrap';
 import classNames from 'classnames';
 import {browserHistory, Link} from 'react-router';
@@ -100,8 +101,28 @@ class LoginPage extends PureComponent {
                         <ToggleArea sm={6} hidden={showForm}>
                             <div className='toggle-area-wrapper'>
                                 <div className='label-area slogan'>
-                                    <Link className='find-link' to='/search/chat_offers'>Find</Link>
-                                    <span>your chat...</span>
+                                    <ReactCSSTransitionGroup
+                                        transitionName="slogan"
+                                        transitionAppear={true}
+                                        transitionEnter={false}
+                                        transitionLeave={false}
+                                    >
+                                        <p
+                                            key='slogan-wave-1'
+                                            className='slogan-wave-1'
+                                        >
+                                            <Link className='find-link' to='/search/chat_offers'>Find</Link>
+                                            &nbsp;intresting topics.
+                                        </p>
+                                        <p
+                                            key='slogan-wave-2'
+                                            className='slogan-wave-2'
+                                        >Suggest yours.</p>
+                                        <p
+                                            key='slogan-wave-3'
+                                            className='slogan-wave-3'
+                                        >Have fun ;)</p>
+                                    </ReactCSSTransitionGroup>
                                 </div>
                             </div>
                         </ToggleArea>
@@ -208,22 +229,23 @@ class LoginForm extends PureComponent {
                         />
                         <FormControl.Feedback />
                     </FormGroup>
-                </form>
+                
                 <div className='buttons'>
-                    <button className='button-no-style' onClick={this.submit}>
+                    <button className='button-no-style' onClick={this.submit} type="submit">
                         <img src='/img/icons/enter.png' />login
                     </button>
                     <span>or</span>
-                    <button className='button-no-style'>
+                    <button className='button-no-style' type="button">
                         <img src='/img/icons/vk.png' />
                     </button>
-                    <button className='button-no-style'>
+                    <button className='button-no-style' type="button">
                         <img src='/img/icons/fb.png' />
                     </button>
-                    <button className='button-no-style'>
+                    <button className='button-no-style' type="button">
                         <img src='/img/icons/tv.png' />
                     </button>
                 </div>
+                </form>
             </div>
         );
     }
