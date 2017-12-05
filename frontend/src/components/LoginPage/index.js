@@ -45,6 +45,7 @@ class LoginPage extends PureComponent {
                     <div>
                         <LoginForm dispatch={dispatch} />
                         <div className='links'>
+                            <span  style={{display: 'none'}}>
                             <button
                                 className='button-no-style link-style'
                                 onClick={this.switchToRegistration}
@@ -54,6 +55,8 @@ class LoginPage extends PureComponent {
                                 className='button-no-style link-style'
                                 onClick={this.switchToResetPassword}
                             >Forgot password</button>
+                            </span>
+                            Site under active developing. Registration will be opened soon.
                         </div>
                     </div>
                 );
@@ -139,7 +142,7 @@ class LoginPage extends PureComponent {
                         </ToggleArea>
                     </Row>
                 </Grid>
-                <div className='footer gradient'>
+                <div className='footer hidden-md-up'>
                 {
                     showForm
                         ? <button onClick={this.togglePage}>Back</button>
@@ -229,11 +232,11 @@ class LoginForm extends PureComponent {
                         />
                         <FormControl.Feedback />
                     </FormGroup>
-                
                 <div className='buttons'>
-                    <button className='button-no-style' onClick={this.submit} type="submit">
-                        <img src='/img/icons/enter.png' />login
-                    </button>
+                    <FormGroup className='input-round'>
+                        <FormControl type='submit' value='Login via email'/>
+                    </FormGroup>
+                    <span style={{display: 'none'}}>
                     <span>or</span>
                     <button className='button-no-style' type="button">
                         <img src='/img/icons/vk.png' />
@@ -244,6 +247,7 @@ class LoginForm extends PureComponent {
                     <button className='button-no-style' type="button">
                         <img src='/img/icons/tv.png' />
                     </button>
+                    </span>
                 </div>
                 </form>
             </div>

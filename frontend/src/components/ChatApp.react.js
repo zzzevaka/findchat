@@ -19,7 +19,7 @@ import {Link} from 'react-router';
 import Notifications from 'react-notification-system-redux';
 
 import { closeModal, showModal } from '../utils';
-import currentUserId from '../auth';
+import currentUserId, {loginRequired} from '../auth';
 
 import {UpArrow, AddColorIcon, LoaderIcon} from './Icons';
 
@@ -83,7 +83,7 @@ class ChatApp extends Component {
 };
 
 
-function NewOfferButton() {
+const NewOfferButton = loginRequired(() => {
     return (
         <button
             onClick={() => showModal('modalType=new_chat_offer')}
@@ -92,7 +92,7 @@ function NewOfferButton() {
             <AddColorIcon />
         </button>
     );
-}
+});
 
 
 class ScrollBodyUpButton extends Component {

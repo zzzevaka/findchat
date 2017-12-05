@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {Link} from 'react-router';
 import classNames from 'classnames';
 import {ProfileIcon, MessageIcon, SearchIcon, SettingsIcon, AddColorIcon} from '../Icons';
-import currentUserId from '../../auth';
+import currentUserId, {loginRequired} from '../../auth';
 import {getModalUrl} from '../../utils';
 import './menu.css';
 
@@ -20,7 +20,8 @@ function MenuLink({children, className, ...rest}) {
     )
 }
 
-function Menu({unreadedPosts}) {
+let Menu = function({unreadedPosts}) {
+
     return (
         <ul className='main-menu'>
             <li>
@@ -49,7 +50,7 @@ function Menu({unreadedPosts}) {
     );
 }
 
-export const MobileMenu = connect(mapStateToProps)(({unreadedPosts}) => {
+let MobileMenu = function({unreadedPosts}) {
     return (
         <div className='mobile-main-menu'>
             <MenuLink to={`/user/${currentUserId()}`}
@@ -77,7 +78,17 @@ export const MobileMenu = connect(mapStateToProps)(({unreadedPosts}) => {
             </MenuLink>
         </div>
     )
-});
+};
+
+let NotLoginMenu = function() {
+    return (
+        <div className='footer gradient'>
+        <MenuLink to={'/login'}>
+            Sign In / Sign Up
+        </MenuLink>
+        </div>
+    )
+}
 
 
 function mapStateToProps(state) {
@@ -86,4 +97,13 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(Menu);
+// loginRequired
+Menu = loginRequired(Menu);
+MobileMenu = loginRequired(MobileMenu, NotLoginMenu);
+
+// connect to store
+Menu = connect(mapStateToProps)(Menu);
+MobileMenu = connect(mapStateToProps)(MobileMenu);
+
+export {MobileMenu};
+export default Menu;

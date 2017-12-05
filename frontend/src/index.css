@@ -18,6 +18,14 @@ body {
 
 }
 
+@media screen and (min-width: 768px) {
+
+    .hidden-md-up {
+        display: none;
+    }
+
+}
+
 body {
     background: #fafafa;
     font-family: 'Open Sans', sans-serif;
@@ -111,6 +119,7 @@ body {
 }
 
 .input-round input[type="text"],
+.input-round input[type="submit"],
 .input-round input[type="password"] {
     padding-left: 20px;
     border-radius: 30px;
