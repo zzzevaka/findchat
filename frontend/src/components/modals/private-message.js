@@ -18,7 +18,6 @@ export default function PrivateMessageModal ({userID, actions: {sendPostToUser}}
                 <PostComposer
                     id={`private_to_${userID}`}
                     onSubmit={post => sendPostToUser(userID, post)}
-                    focus
                 />
             </Modal.Body>
         </Modal>

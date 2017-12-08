@@ -142,8 +142,8 @@ export default class ImageEditModal extends React.Component {
             return (
                 <div
                     style={{
-                        width: imgSize[0],
-                        height: imgSize[1],
+                        //width: imgSize[0],
+                        //height: imgSize[1],
                         margin: 'auto'
                     }}
                 >
@@ -162,8 +162,8 @@ export default class ImageEditModal extends React.Component {
                     className='image-preview'
                     src={img.src}
                     style={{
-                        width: imgSize[0],
-                        height: imgSize[1]
+                        //width: imgSize[0],
+                        //height: imgSize[1]
                     }}
                 />
             )

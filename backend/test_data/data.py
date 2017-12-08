@@ -15,9 +15,9 @@ users = [
     },
     {
         "id": 3,
-        "login": "max@gmail.com",
-        "name": "Maxim Vladov",
-        "birthdate": datetime(1977, 5, 14),
+        "login": "danicacom@findchat.io",
+        "name": "Dasha Nikolasha",
+        "birthdate": datetime(1992, 2, 11),
         "avatar": "avatars/m1.jpg"
     },
     {
