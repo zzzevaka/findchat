@@ -58,6 +58,7 @@ class LoginPage extends PureComponent {
                             </span>
                             Site under active developing. Registration will be opened soon.
                         </div>
+                        <a hfre='/api_v1/auth/google'>google</a>
                     </div>
                 );
                 break;
