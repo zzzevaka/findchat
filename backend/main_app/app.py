@@ -16,17 +16,19 @@ from .api_v1.threads import API_Threads, API_Chats
 from .api_v1.thread import API_Thread, API_ThreadChatOffers
 from .api_v1.post_like import API_PostLike, API_PostLikeBrief
 from .api_v1.ws_handler import WSUpdates
-# from .api_v1.chat_offers import API_ChatOffer, API_ReplyChatOffer
 from .api_v1.search import API_SearchUsers
 from .api_v1.thread import API_ThreadPeople
 from .api_v1.image import API_Image
 from .api_v1.language import API_Language
+
+from .auth.google import GoogleOAuth2Handler
 
 class MainApp(Application):
     
     def __init__(self, db_engine, redis, redis_pool=None, **kwargs):
         # routes
         routes = [
+            (r'/auth/google', GoogleOAuth2Handler),
             (r'/registration', API_Registration),
             (r'/login', API_Login),
             (r'/logout', API_Logout),
