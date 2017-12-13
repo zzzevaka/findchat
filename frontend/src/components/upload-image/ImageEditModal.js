@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { findDOMNode } from 'react-dom';
-import { Modal, Image, Button, Glyphicon } from 'react-bootstrap';
+import { Modal, Glyphicon } from 'react-bootstrap';
 import ReactCrop from 'react-image-crop';
+import Cropper from 'react-cropper';
+import '../../../node_modules/cropperjs/dist/cropper.css';
 
 import {LoaderIcon} from '../Icons';
 import { uploadImage } from '../../actions';
@@ -15,7 +17,7 @@ const INITIAL_CROP = {width: 95, height: 95, x: 2.5, y: 2.5};
 
 
 export default class ImageEditModal extends React.Component {
-    
+
     static propTypes = {
         storeKey: PropTypes.oneOfType([
                 PropTypes.string,
@@ -23,20 +25,13 @@ export default class ImageEditModal extends React.Component {
             ]).isRequired,
         onCommit: PropTypes.func,
         onCancel: PropTypes.func,
-        crop: PropTypes.object
+        crop: PropTypes.object,
+        cropRatio: PropTypes.number,
     }
     
     static defaultProps = {
         onCommit: () => {},
         onCancel: () => {},
-    }
-    
-    constructor(props) {
-        super(props);
-        this.state = {
-            crop: props.crop,
-            imgSize: []
-        };
     }
     
     onWindowResize = (e) => this.forceUpdate()
@@ -48,31 +43,7 @@ export default class ImageEditModal extends React.Component {
     componentWillUnmount() {
         this.allowBodyScroll();
     }
-    
-    componentDidUpdate() {
-        if (!this.state.imgSize.length) this.getImageSize();
-    }
-    
-    getImageSize() {
-        if (!this.imageArea) return [];
-        const {uploadedImages, storeKey} = this.props;
-        const img = uploadedImages[storeKey];
-        let imgEl = document.createElement('img');
-        imgEl.onload = () => {
-            const ratio = Math.min(
-                this.imageArea.clientWidth / imgEl.width,
-                this.imageArea.clientHeight / imgEl.height
-            );
-            this.setState({
-                imgSize: [
-                    imgEl.width * ratio,
-                    imgEl.height * ratio
-                ]
-            });
-        }
-        imgEl.setAttribute('src', img.src);
-    }
-    
+
     denyBodyScroll = () => {
         document.getElementsByTagName('html')[0].classList.add('no-scroll');
         document.getElementsByTagName('body')[0].classList.add('no-scroll');
@@ -90,100 +61,115 @@ export default class ImageEditModal extends React.Component {
         const {uploadedImages, storeKey} = this.props;
         const img = uploadedImages[storeKey];
         if (!img) return null;
-        const {crop} = this.state;
         return (
             <Modal
                 show={true}
                 keyboard={true}
                 onHide={this._cancel.bind(this)}
                 animation={false}
-                backdrop={crop ? 'static' : true}
                 dialogClassName='modal-edit-image'
             >
-                <Modal.Header closeButton>
-                    Upload image
-                </Modal.Header>
-                <Modal.Body>
-                    <div
-                        className='image-area'
-                        ref={e => this.imageArea = e}
-                    >
-                        { this._renderImageArea() }
-                    </div>
-                    <div className='image-footer'>
-                        <Glyphicon
-                            className='button-no-style button-submit'
-                            onClick={this._commit.bind(this)}
-                            glyph='ok'
-                        />
-                        {
-                            !this.props.crop  && (
-                                <Glyphicon
-                                    className='button-resize'
-                                    glyph='resize-small'
-                                    onClick={this._toggleCrop}
-                                />
-                            )
-                        }
-                    </div>
-                </Modal.Body>
+                <div className='image-area'>
+                    { this._renderImageArea() }
+                </div>
             </Modal>
         )
     }
 
     _renderImageArea() {
-        const {crop, imgSize} = this.state;
-        const {uploadedImages, storeKey} = this.props;
+        const {uploadedImages, storeKey, cropRatio} = this.props;
         const img = uploadedImages[storeKey];
-        if (img.src === 'l' || !imgSize.length) {
+        if (img.src === 'l') {
             return <LoaderIcon />;
         }
-        if (crop) {
-            return (
-                <div
-                    style={{
-                        //width: imgSize[0],
-                        //height: imgSize[1],
-                        margin: 'auto'
-                    }}
+        return [
+            <Cropper
+                className='image-cropper'
+                ref={e => this.cropper = e}
+                autoCrop={cropRatio ? true : false}
+                dragMode='move'
+                aspectRatio={cropRatio}
+                crop={e => console.log(e)}
+                autoCropArea={1}
+                src={img.src}
+                autoCrop={cropRatio ? true : false}
+                background={false}
+            />,
+            <div className='image-tools'>
+                <button
+                    className='button-no-style'
+                    onClick={() => this.cropper.setDragMode('move')}
                 >
-                    <ReactCrop
-                        crop={crop || INITIAL_CROP}
-                        src={img.src}
-                        keepSelection={true}
-                        onChange={this._onCrop}
-                    />
-                </div>
-                    
-            );
-        } else {
-            return (
-                <Image
-                    className='image-preview'
-                    src={img.src}
-                    style={{
-                        //width: imgSize[0],
-                        //height: imgSize[1]
-                    }}
-                />
-            )
+                    <i class="fa fa-arrows fa" />
+                </button>
+                <button
+                    className='button-no-style'
+                    onClick={this._toggleCrop}
+                >
+                    <i class="fa fa-crop fa" />
+                </button>
+                <button
+                    className='button-no-style'
+                    onClick={() => this.cropper.zoom(0.1)}
+                >
+                    <i class="fa fa-search-plus fa" />
+                </button>
+                <button
+                    className='button-no-style'
+                    onClick={() => this.cropper.zoom(-0.1)}
+                >
+                    <i class="fa fa-search-minus fa" />
+                </button>
+                <button
+                    className='button-no-style'
+                    onClick={() => this.cropper.rotate(-90)}
+                >
+                    <i class="fa fa-rotate-left" />
+                </button>
+                <button
+                    className='button-no-style'
+                    onClick={() => this.cropper.rotate(90)}
+                >
+                    <i class="fa fa-rotate-right" />
+                </button>
+                <button
+                    className='button-no-style'
+                    onClick={this._reset}
+                >
+                    <i class="fa fa-refresh fa" />
+                </button>
+                <div className='delimeter' />
+                <button
+                    className='button-no-style button-close'
+                    onClick={this._reset}
+                >
+                    <i class="fa fa-close fa" />
+                </button>
+                <button
+                    className='button-no-style button-commit'
+                    onClick={this._reset}
+                >
+                    <i class="fa fa-check fa" />
+                </button>
+            </div>
+        ];
+    }
+
+    _reset = () => {
+        console.log(this.cropper.cropper.dragBox.dataset.action)
+        this.cropper.reset();
+        if (!this.props.cropRatio) {
+            this.cropper.clear();
         }
     }
 
-    // for right ReactCrop initial state
-    // _onImageLoaded(perc, img, pixel) {
-    //     this._onCrop(perc, pixel);
-    // }
-
-    _onCrop = (crop) => {
-        console.log(crop);
-        this.setState({crop: crop});
-    }
-    
     _toggleCrop = () => {
-        this.setState({
-            crop: this.state.crop ? null : INITIAL_CROP         
-        });
+        if (this.cropper.cropper.dragBox.dataset.action === 'crop') {
+            if (!this.props.cropRatio) this.cropper.clear();
+        }
+        else {
+            this.cropper.setDragMode('crop');
+        }
     }
 
     _uploadToServer() {

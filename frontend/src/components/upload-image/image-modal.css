@@ -1,6 +1,6 @@
 .modal-edit-image {
-    height: 100%;
-    width: 100%;
+    height: 100% !important;
+    width: 100% !important;
     margin: 0 !important;
 }
 
@@ -9,85 +9,58 @@
     width: 100%;
 }
 
+.modal-edit-image .image-area {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: #333;
+}
+
+.modal-edit-image .image-tools {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.image-tools button,
+.image-tools .delimeter
+ {
+    height: 30px;
+    width: 30px;
+    color: #fff;
+    margin: 5px;
+}
+
+.image-tools .button-close {
+    color: red;
+}
+
+.image-tools .button-commit {
+    color: green;
+}
+
+.image-cropper {
+    width: 100%;
+    height: calc(100% - 40px);
+}
 
 @media screen and (min-width: 768px) {
-    
-    .modal-edit-image {
-        height: 90vh;
-        width: 800px;
-        margin-top: 5vh !important;
-        margin-left: calc(50vw - 400px) !important;
+
+    .image-cropper {
+        height: 100%;
     }
-    
-    .modal-edit-image .modal-content {
-        height: 90vh;
-        width: 800px;
+
+    .modal-edit-image .image-tools {
+        bottom: 4%;
+        left: calc(50% - 200px);
+        width: auto;
     }
-    
-}
 
-
-.modal-edit-image .modal-body {
-    background: #222;
-}
-
-.modal-edit-image .modal-body .image-footer {
-    height: 50px;
-    background: #fff;
-    position: relative;
-    flex-shrink: 0;
-}
-
-.modal-edit-image .button-resize {
-    position: absolute;
-    right: 55px;
-    top: calc(100% - 35px);
-    height: 20px;
-    width: 20px;
-    font-size: 20px;
-    cursor: pointer;
-}
-
-.modal-edit-image .button-submit {
-    position: absolute;
-    right: 15px;
-    top: calc(100% - 35px);
-    height: 20px;
-    width: 20px;
-    font-size: 20px;
-    cursor: pointer;
-    cursor: pointer;
-}
-
-.modal-edit-image .modal-body .image-area {
-    height: calc(100% - 50px);
-    position: relative;
-    display: flex;
-}
-
-.modal-edit-image .modal-body .image-area .icon-loader {
-    margin: auto;
-}
-
-.modal-edit-image .modal-body .image-preview
-{
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    max-height: 100%;
-    max-width: 100%;
-}
-
-.modal-edit-image .modal-body .ReactCrop {
-    height: 100%;
-    width: 100%;
-
-}
-.modal-edit-image .modal-body .ReactCrop__image
-{
-    height: 100%;
-    width: 100%;
 }
