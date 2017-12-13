@@ -44,21 +44,6 @@ class LoginPage extends PureComponent {
                 renderForm = (
                     <div>
                         <LoginForm dispatch={dispatch} />
-                        <div className='links'>
-                            <span  style={{display: 'none'}}>
-                            <button
-                                className='button-no-style link-style'
-                                onClick={this.switchToRegistration}
-                            >Sign Up</button>
-                            <span>/</span>
-                            <button
-                                className='button-no-style link-style'
-                                onClick={this.switchToResetPassword}
-                            >Forgot password</button>
-                            </span>
-                            Site under active developing. Registration will be opened soon.
-                        </div>
-                        <a href='/api_v1/auth/google'>google</a>
                     </div>
                 );
                 break;
@@ -138,6 +123,11 @@ class LoginPage extends PureComponent {
                                         <img className='site-name' src='/svg/findchat.svg' />
                                     </div>
                                     {renderForm} 
+                                    <div className='links' style={{height: '80px', marginTop: '20px', textAlign: 'center'}}>
+                                        <a href="#" className='link-no-style'>Terms of use</a>
+                                        <span>/</span>
+                                        <a href="#" className='link-no-style'>Privacy policy</a>
+                                    </div>
                                 </div>
                             </div>
                         </ToggleArea>
@@ -170,90 +160,23 @@ export function ToggleArea({hidden, className, ...rest}) {
 } 
 
 
-class LoginForm extends PureComponent {
-
-    constructor() {
-        super();
-        this.state = {
-            login: {value: '', validation: null},
-            password: {value: '', validation: null},
-        };
-    }
-
-    submit = e => {
-        e && e.preventDefault();
-        let {login, password} = this.state;
-        let xhr = api.login(login.value, password.value);
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState != 4) return;
-            if (xhr.status === 200) {
-                this.setState({errorMsg: 'success'});
-                const user_id = JSON.parse(xhr.responseText).user_id;
-                browserHistory.push('/user/' + user_id);
-            }
-            else {
-                this.props.dispatch(
-                    Notifications.error({
-                        position: 'tr',
-                        message: 'Incorrect login or password',
-                    })
-                );
-            }
-        }
-    }
-
-    _inputChange = ({target: {name, value}}) => {
-        this.setState({
-            [name]: {...this.state[name], value: value}
-        });
-    }
-
-    render() {
-        const {login, password} = this.state;
-        return (
-            <div className='login-form'> 
-                <form onSubmit={this.submit}>
-                    <FormGroup validationState={login.validation} className='input-round'>
-                        <FormControl
-                            name='login'
-                            type="text"
-                            placeholder='Email'
-                            value={login.value}
-                            onChange={this._inputChange}
-                        />
-                        <FormControl.Feedback />
-                    </FormGroup>
-                    <FormGroup validationState={password.validation} className='input-round'>
-                        <FormControl
-                            type="password"
-                            name="password"
-                            value={password.value}
-                            onChange={this._inputChange}
-                            placeholder="Password"
-                        />
-                        <FormControl.Feedback />
-                    </FormGroup>
-                <div className='buttons'>
-                    <FormGroup className='input-round'>
-                        <FormControl type='submit' value='Login via email'/>
-                    </FormGroup>
-                    <span style={{display: 'none'}}>
-                    <span>or</span>
-                    <button className='button-no-style' type="button">
-                        <img src='/img/icons/vk.png' />
-                    </button>
-                    <button className='button-no-style' type="button">
-                        <img src='/img/icons/fb.png' />
-                    </button>
-                    <button className='button-no-style' type="button">
-                        <img src='/img/icons/tv.png' />
-                    </button>
-                    </span>
-                </div>
-                </form>
+export function LoginForm() {
+    return (
+        <div className='login-form'> 
+            <div className='buttons'>
+                <span>Join us:</span>
+                <a href='/auth/vk' className='link-no-style'>
+                    <img src='/svg/vk.svg' />
+                </a>
+                <a href='/auth/google' className='link-no-style'>
+                    <img src='/svg/google_plus.svg' />
+                </a>
+                <a href='/auth/facebook' className='link-no-style'>
+                    <img src='/svg/fb.svg' />
+                </a>
             </div>
-        );
-    }
+        </div>
+    );
 }
 
 

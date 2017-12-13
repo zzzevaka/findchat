@@ -257,12 +257,13 @@ export function UserOptions({isMyPage}) {
         );
         items.push(
             <MenuItem key='settings' onClick={() => browserHistory.push('/settings')}>
-                    Settings
+                Settings
             </MenuItem>
         );
         items.push(
-            <MenuItem key='logout' onClick={() => browserHistory.push('/logout')}>
-            Logout</MenuItem>
+            <MenuItem key='logout' onClick={() => window.location.href= '/auth/logout'}>
+                Logout
+            </MenuItem>
         );
     }
     return (

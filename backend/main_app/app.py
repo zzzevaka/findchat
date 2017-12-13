@@ -21,7 +21,8 @@ from .api_v1.thread import API_ThreadPeople
 from .api_v1.image import API_Image
 from .api_v1.language import API_Language
 
-from .auth.google import GoogleOAuth2Handler
+from .auth.google import GoogleOAuth2Handler, FacebookOAuth2Handler, VKOAuth2Handler
+from .auth.logout import AuthLogout
 
 class MainApp(Application):
     
@@ -29,6 +30,9 @@ class MainApp(Application):
         # routes
         routes = [
             (r'/auth/google', GoogleOAuth2Handler),
+            (r'/auth/facebook', FacebookOAuth2Handler),
+            (r'/auth/vk', VKOAuth2Handler),
+            (r'/auth/logout', AuthLogout),
             (r'/registration', API_Registration),
             (r'/login', API_Login),
             (r'/logout', API_Logout),
@@ -71,6 +75,18 @@ class MainApp(Application):
         load_translations(dirname(__file__))
         kwargs['static_path'] = '/htdocs/static'
         kwargs['template_path'] = '/htdocs'
+        kwargs['google_oauth'] = {
+            'key': '1094125325491-q218o10gg8u5t1um8uu5n0pp5lbdl67n.apps.googleusercontent.com',
+            'secret': '1-e2uL5QIiPI_dmrUOHXTgYa',
+        }
+        kwargs['facebook_oauth'] = {
+            'key': '230915264114582',
+            'secret': 'b5756f8140f15fa5766c5ac81b49fe78',
+        }
+        kwargs['vk_oauth'] = {
+            'key': '6296091',
+            'secret': 'X4VeXF7Lcg2lKKpkHXaD',
+        }
         #~ kwargs['debug'] = True
         kwargs['login_url'] = '/login'
         kwargs['cookie_secret'] = '1o928kIQ92918ikuqYqiwk'

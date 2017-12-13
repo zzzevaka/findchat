@@ -21,8 +21,8 @@ class Auth(BaseModel):
     __tablename__ = 'auth'
 
     id = Column('auth_id', Integer, primary_key=True)
-    login = Column(String(MAX_LOGIN_LENGTH), nullable=False, index=True)
-    password = Column(LargeBinary, nullable=False)
+    login = Column(String(MAX_LOGIN_LENGTH), index=True)
+    password = Column(LargeBinary)
     change_auth_id = Column(Integer, index=True)
     change_time = Column(DateTime, default=datetime.utcnow())
     user_id = Column(Integer, ForeignKey('users.user_id'), nullable=False)
@@ -50,5 +50,33 @@ class Auth(BaseModel):
     @staticmethod
     def is_valid_password(val):
         return bool(PASSWORD_REGEXP.match(val))
-    
 
+
+class GoogleOAuth2(BaseModel):
+
+    __tablename__ = 'auth_google'
+    
+    user_id = Column(String(100), primary_key=True)
+    auth_id = Column(Integer, ForeignKey('auth.auth_id'), nullable=False)
+
+    auth = relationship('Auth', backref='auth_google')
+
+
+class FacebookOAuth2(BaseModel):
+
+    __tablename__ = 'auth_facebook'
+    
+    user_id = Column(String(100), primary_key=True)
+    auth_id = Column(Integer, ForeignKey('auth.auth_id'), nullable=False)
+
+    auth = relationship('Auth', backref='auth_facebook')
+
+
+class VKOAuth2(BaseModel):
+
+    __tablename__ = 'auth_vk'
+    
+    user_id = Column(String(100), primary_key=True)
+    auth_id = Column(Integer, ForeignKey('auth.auth_id'), nullable=False)
+
+    auth = relationship('Auth', backref='auth_vk')
