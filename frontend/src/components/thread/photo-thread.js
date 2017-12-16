@@ -16,6 +16,9 @@ import currentUserId from '../../auth';
 import './photo-thread.css';
 
 
+import UploadImageButton from '../upload-image';
+
+
 class PhotoThread extends Component {
 
     _onScroll = e => {
@@ -74,6 +77,11 @@ const PhotoThreadItem = pure(
             {'post-item-deleted': post.status === 'deleted'}
         );
 
+        const onClick = () => {
+            // console.log(this.uploader.getWrappedInstance().set);
+            // this.uploader.getWrappedInstance().setFile(new File(`/img/${post.content.full}`));
+        };
+
         return (
             <div
                 className={classes}
@@ -90,6 +98,14 @@ const PhotoThreadItem = pure(
                 </div>
                 <UserAvatar thumbnail={author.thumbnail} />
                 <div className='post-footer'>
+                    <button onClick={onClick}>lala</button>
+                    <UploadImageButton
+                        ref={e => this.uploader = e}
+                        className='button-add-photo'
+                        onSuccess={() => {}}
+                    >
+                        <img src='/svg/photo_color.svg' />
+                    </UploadImageButton>
                     <PostTime datetime={post.datetime} />
                     <div className='post-option'>
                         <DropdownTools>

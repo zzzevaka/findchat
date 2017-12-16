@@ -236,6 +236,7 @@ class Modals extends Component {
             }
 
             case 'new_photo': {
+                const {avatar} = location.query;
                 const user = store.users[currentUserId()];
                 if (!user || !user.offer_thread_id) return null;
                 return (
@@ -245,6 +246,7 @@ class Modals extends Component {
                         animation={true}
                         title='New Photo'
                         threadID={user.photo_thread_id}
+                        cropRatio={avatar ? 1 : null}
                     />
                 );
             }

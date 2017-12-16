@@ -50,8 +50,11 @@ export class FileChoiseButton extends React.Component {
     }
     
     static defaultProps = {
-        icon: "/img/camera.png",
         acceptFormats: "image/*",
+    }
+
+    setFile() {
+        alert('setfile');
     }
         
     render() {
@@ -62,6 +65,7 @@ export class FileChoiseButton extends React.Component {
                     {children}
                 </label>
                 <input
+                    ref={e => this.input = e}
                     id={this.id}
                     type="file"
                     accept={acceptFormats}

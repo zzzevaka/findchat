@@ -8,7 +8,6 @@ import Cropper from 'react-cropper';
 import '../../../node_modules/cropperjs/dist/cropper.css';
 
 import {LoaderIcon} from '../Icons';
-import { uploadImage } from '../../actions';
 
 import './image-modal.css';
 
@@ -33,9 +32,7 @@ export default class ImageEditModal extends React.Component {
         onCommit: () => {},
         onCancel: () => {},
     }
-    
-    onWindowResize = (e) => this.forceUpdate()
-    
+
     componentDidMount() {
         this.denyBodyScroll();
     }
@@ -65,7 +62,7 @@ export default class ImageEditModal extends React.Component {
             <Modal
                 show={true}
                 keyboard={true}
-                onHide={this._cancel.bind(this)}
+                onHide={this._cancel}
                 animation={false}
                 dialogClassName='modal-edit-image'
             >
@@ -89,7 +86,6 @@ export default class ImageEditModal extends React.Component {
                 autoCrop={cropRatio ? true : false}
                 dragMode='move'
                 aspectRatio={cropRatio}
-                crop={e => console.log(e)}
                 autoCropArea={1}
                 src={img.src}
                 autoCrop={cropRatio ? true : false}
@@ -141,15 +137,15 @@ export default class ImageEditModal extends React.Component {
                 <div className='delimeter' />
                 <button
                     className='button-no-style button-close'
-                    onClick={this._reset}
+                    onClick={this._cancel}
                 >
                     <i class="fa fa-close fa" />
                 </button>
                 <button
                     className='button-no-style button-commit'
-                    onClick={this._reset}
+                    onClick={this._commit}
                 >
-                    <i class="fa fa-check fa" />
+                    <i className="fa fa-check fa" />
                 </button>
             </div>
         ];
@@ -172,23 +168,12 @@ export default class ImageEditModal extends React.Component {
         }
     }
 
-    _uploadToServer() {
-        const {uploadedImages, dispatch, storeKey} = this.props;
-        const {crop} = this.state;
-        dispatch(
-            uploadImage(storeKey, {
-                src: uploadedImages[storeKey].src,
-                crop: crop
-            })
-        );
-    }
-
-    _commit() {
-        this._uploadToServer();
-        this.props.onCommit(this.props.storeKey);
+    _commit = () => {
+        const {storeKey, onCommit} = this.props;
+        onCommit(storeKey, this.cropper.getCroppedCanvas());
     }
     
-    _cancel() {
+    _cancel = () => {
         this.props.onCancel();
     }
 }

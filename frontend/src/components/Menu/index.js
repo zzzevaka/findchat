@@ -83,8 +83,8 @@ let MobileMenu = function({unreadedPosts}) {
 let NotLoginMenu = function() {
     return (
         <div className='footer gradient'>
-        <MenuLink to={'/login'}>
-            Sign In / Sign Up
+        <MenuLink to={'/login?showForm=1'}>
+            Join
         </MenuLink>
         </div>
     )

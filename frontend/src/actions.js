@@ -501,8 +501,7 @@ export function updateUploadImages(uploadImages) {
 
 
 export function uploadImgSource(storeKey, file) {
-    return dispatch => 
-    {
+    return dispatch => {
         dispatch(updateUploadImages({[storeKey]: {src: 'l'}}));
         let fr = new FileReader();
         fr.onloadend = () => {
@@ -527,6 +526,14 @@ export function uploadImage(storeKey, img) {
                         result: JSON.parse(xhr.responseText).img
                     }
                 }));
+            }
+            else {
+                dispatch(
+                    Notifications.error({
+                        position: 'tr',
+                        message: 'мы все умрем',
+                    })
+                );
             }
         }
     }

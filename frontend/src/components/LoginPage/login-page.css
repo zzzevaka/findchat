@@ -6,46 +6,63 @@
     background: #fff;
 }
 
-.login-page {
+.login-page-wrapper > .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 70px;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+    z-index: 1000;
+    background: #fff;
+    display: flex;
+}
+
+.login-page-wrapper > .header .logo {
+    text-align: center;
+    margin: auto;
+}
+
+.login-page-wrapper > .header .logo .logo-icon {
+    width: 44px;
+    height: 44px;
+    margin-right: 16px;
+}
+
+.login-page-wrapper > .header .logo .logo-title {
+    height: 25px;
+}
+
+.login-page-grid {
     height: 100%;
     margin: auto;
     flex-grow: 1;
 }
 
-.login-page .row {
+.login-page-grid .col-form,
+.login-page-grid .col-slogan {
+    display: flex;
+    height: calc(100% - 50px);
+    transition: all 0.3s ease-out;
+}
+
+.login-page-grid .col-hidden-up {
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+}
+
+@media screen and (min-width: 768px) {
+    .login-page-grid .col-hidden-up {
+        height: calc(100% - 50px);
+        opacity: 1;
+        overflow: auto;
+    }
+}
+
+.login-page-grid .row {
     height: 100%;
     overflow-y: hidden;
-}
-
-.login-page span.joinus {
-    color: #999;
-}
-
-.toggle-area {
-    transition: all .3s ease-out;
-    overflow: hidden;
-    height: 100%;
-    margin-top: 0;
-    opacity: 1;
-}
-
-.toggle-area-wrapper {
-    height: calc(100% - 50px);
-    overflow: auto;
-    display: flex;
-}
-
-.toggle-area-hidden {
-    height: 0% !important;
-    opacity: 0;
-}
-
-.label-area {
-    margin: auto;
-}
-
-.form-area {
-    margin: auto;
 }
 
 .footer {
@@ -67,7 +84,15 @@
     background-image: -ms-linear-gradient(top left,rgb(249, 73, 182) -0.2%,rgb(255, 139, 139) 101.7%);
 }
 
-.footer button,
+@media screen and (min-width: 768px) {
+
+    .footer {
+        font-size: 1.3em;
+    }
+
+}
+
+.footer i,
 .footer a {
     margin: auto;
     outline: none !important;
@@ -119,112 +144,46 @@
     vertical-align: middle;  
 }
 
-.form-wrapper {
-    height: 100%;
+.slogan,
+.login-form {
+    margin: auto;
+}
+
+.login-form .header {
+    height: 1em;
+    font-size: 2.2em;
     width: 100%;
-    min-height: 360px;
-    max-width: 320px;
-    /*padding-top: 10%;*/
-    overflow: auto;
-    display: flex;
-    flex-direction: column;
-    /*flex-wrap: wrap;*/
-    justify-content: center;
-}
-
-.form-header {
-    height: 80px;
     text-align: center;
+    margin: 0 0 1em 0;
 }
 
-.form-header .logo {
-    width: 44px;
-    height: 44px;
-    margin-right: 16px;
-}
-
-.form-header .site-name {
-    height: 25px;
-}
-
-
-
-.form-wrapper .input-round {
-    width: 82%;
-    margin: 20px 9%;
+.login-form .link-terms {
+    height: 2.2em;
+    margin: 1.8em 0 0.4em 0;
 }
 
 .buttons {
-    height: 70px;
-    padding-top: 21px;
     text-align: center;
 }
 
 .buttons a {
-    margin: 0 8px;
+    margin: 0 1.2em;
 }
 
 .buttons a img {
-    height: 30px;
+    height: 40px;
 }
 
-.buttons .input-round {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-}
-
-.input-round input[type="submit"] {
-    border: 1px solid rgb(249, 73, 182) !important;
-}
-
-.links {
-    height: 30px;
-    text-align: center;
+.link-terms {
     font-size: 0.9em;
+    color: #777;
 }
 
-.buttons span,
-.links span {
-    margin: 0 8px;
+.link-terms > a {
+    margin: 0;
+    color: inherit;
 }
 
-@media screen and (min-width: 768px) {
-
-    .toggle-area-hidden {
-        height: 100% !important;
-        opacity: 1;
-    }
-
-    .form-header {
-        margin-top: 20px;
-    }
-
-    .form-wrapper .input-round {
-        margin: 20px 9%;
-        width: 82%;
-    }
-
-    .footer {
-        font-size: 1.3em;
-    }
-
-}
-
-
-.notification {
-    /*width: 150px !important;*/
-    border: 1px solid #222 !important;;
-    border-radius: 4px !important;
-    background: #fff !important;
-    box-shadow: none !important;
-    font-family: 'Open Sans', sans-serif !important;
-}
-
-.notification-dismiss {
-    background-color: #fff !important;
-    color: #666 !important;
-}
-
-.notification-error {
-    border: 1px solid #FF5252 !important;
+.link-terms > span {
+    margin: 8px;
 }

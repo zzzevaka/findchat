@@ -31,6 +31,7 @@ export class NewPostPhotoModal extends PureComponent {
             threadID,
             actions,
             title,
+            cropRatio,
             ...rest} = this.props;
         return (
             <Modal {...rest} dialogClassName='modal-new-post-photo'>
@@ -78,6 +79,7 @@ export class NewPostPhotoModal extends PureComponent {
             <UploadImageButton
                 className='button-add-photo'
                 onSuccess={this.imageUploaded}
+                cropRatio={this.props.cropRatio}
             >
                 <img src='/svg/photo_color.svg' />
              </UploadImageButton>

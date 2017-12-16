@@ -2,6 +2,7 @@
     height: 100% !important;
     width: 100% !important;
     margin: 0 !important;
+    overflow: hidden;
 }
 
 .modal-edit-image .modal-content {

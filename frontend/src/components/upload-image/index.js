@@ -5,7 +5,7 @@ import shortid from 'shortid';
 import { FileChoiseButton } from '../Buttons.react';
 import ImageEditModal from './ImageEditModal';
 
-import { uploadImgSource } from '../../actions';
+import { uploadImgSource, uploadImage } from '../../actions';
 import Notifications from 'react-notification-system-redux';
 
 
@@ -22,7 +22,8 @@ class UploadImageButton extends Component {
     static propTypes = {
         maxFileSize: PropTypes.number.isRequired,
         elevationMessage: PropTypes.string.isRequired,
-        notificationPostion: PropTypes.string.isRequired
+        notificationPostion: PropTypes.string.isRequired,
+        cropRatio: PropTypes.number,
     }
 
     static defaultProps = {
@@ -37,14 +38,18 @@ class UploadImageButton extends Component {
     }
 
     _onFileChanged = e => {
+        e.preventDefault();
+        this.setFile(e.target.files[0]);
+        e.target.value = '';
+    }
+
+    setFile = file => {
         const {
             maxFileSize,
             elevationMessage,
             notificationPostion,
             dispatch
         } = this.props;
-        const file = e.target.files[0];
-
         if (file.size > maxFileSize) {
             dispatch(
                 Notifications.error({
@@ -57,12 +62,17 @@ class UploadImageButton extends Component {
             dispatch(uploadImgSource(id, file));
             this.setState({storeKey: id});
         }
-        e.target.value = '';
     }
 
-    _onCommit(storeKey) {
-        this.props.onSuccess(storeKey);
+    _onCommit(storeKey, canvas) {
+        const {dispatch, onSuccess} = this.props;
+        onSuccess(storeKey);        
         this._onCancel();
+        dispatch(
+            uploadImage(storeKey, {
+                src: canvas.toDataURL('image/jpeg', 0.6),
+            })
+        )
     }
 
     _onCancel() {
@@ -83,7 +93,10 @@ class UploadImageButton extends Component {
 
         return (
             <div {...rest}>
-                <FileChoiseButton onChange={this._onFileChanged}>
+                <FileChoiseButton
+                    ref={e => this.button = e}
+                    onChange={this._onFileChanged}
+                >
                     {this.props.children}
                 </FileChoiseButton>
                 {
@@ -91,7 +104,7 @@ class UploadImageButton extends Component {
                     storeKey={storeKey}
                     onCommit={this._onCommit.bind(this)}
                     onCancel={this._onCancel.bind(this)}
-                    crop={this.props.crop}
+                    cropRatio={this.props.cropRatio}
                     uploadedImages={uploadedImages}
                     dispatch={dispatch}
                     />
@@ -108,4 +121,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(UploadImageButton);
+export default connect(mapStateToProps, null, null, {withRef: true})(UploadImageButton);
