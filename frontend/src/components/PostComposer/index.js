@@ -6,8 +6,8 @@ import classNames from 'classnames';
 import { Image, Glyphicon } from 'react-bootstrap';
 import ContentEditable from 'react-contenteditable';
 import EmojiPicker, {emojiImage, Emoji} from '../emoji-picker/emojiPicker';
-import UploadImageButton from '../upload-image';
-
+import ImageUploader from '../upload-image';
+import { FileChoiseButton } from '../Buttons.react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
@@ -20,7 +20,7 @@ const ENTER_KEY_CODE = 13;
 const UPLOADING = 'u';
 const INITIAL_STATE = {
     text: '',
-    imagesID: [],
+    image: undefined,
     showEmojiPicker: false
 }
 
@@ -61,35 +61,23 @@ class PostComposer extends PureComponent {
         }
     }
 
-    getUploadedImages() {
-        const {imagesObj} = this.props.composer;
-        return imagesObj;
-    }
-
     renderUploadedImages() {
-        const images = this.getUploadedImages();
+        const {image} = this.props.composer;
+        if (!image) return null;
         return (
-            <div className='attach-preview' style={{display: images.length ? 'block' : 'none'}}>
+            <div key={image.key} className='attach-preview' style={{display: image ? 'block' : 'none'}}>
                 {
-                    images.map(i => {
-                        if (!i) return null;
-                        if (i.result === 'l') {
-                            return <LoaderIcon />;
-                        }
-                        else {
-                            return (
-                                <div className='attach-preview-item'>
-                                    <Image key={i} src={'/img/' + i.result.preview} />
-                                    <button
-                                        className='button-no-style attach-preview-delete'
-                                        onClick={e => this.uploadImageRemove(i.id)}
-                                    >
-                                        <Glyphicon glyph='remove' />
-                                    </button>
-                                </div>
-                            );
-                        }
-                    })
+                    image.status === 'l'
+                        ? <LoaderIcon />
+                        : <div className='attach-preview-item'>
+                                <Image src={'/img/' + image.preview} />
+                                <button
+                                    className='button-no-style attach-preview-delete'
+                                    onClick={e => this.uploadImageRemove(image.id)}
+                                >
+                                    <Glyphicon glyph='remove' />
+                                </button>
+                            </div>
                 }
             </div>
         );
@@ -103,7 +91,6 @@ class PostComposer extends PureComponent {
             onSubmit,
             keepState,
             focus,
-            uploadImages,
             placeholder,
             allowImage,
             allowEmoji,
@@ -118,7 +105,7 @@ class PostComposer extends PureComponent {
                 className={
                     classNames(
                         'post-composer',
-                        {'post-composer-image': allowImage && !composer.imagesID.length},
+                        {'post-composer-image': allowImage && !composer.image},
                         className
                     )
                 }
@@ -126,12 +113,19 @@ class PostComposer extends PureComponent {
             >
                 {showImagePreview && this.renderUploadedImages()}
                 <div className='post-composer-main post'>
-                    <UploadImageButton
+                    <FileChoiseButton
                         className='glyph-button button-image'
-                        onSuccess={this.uploadImageCommit}
+                        onChange={this._onImgFileChanged}
                     >
                         <img src='/svg/photo.svg' />
-                    </UploadImageButton>
+                    </FileChoiseButton>
+                    <ImageUploader
+                        ref={e => this.imgUploader = e}
+                        onSuccess={this.uploadImageCommit}
+                        onUploadStart={this.uploadImageCommit}
+                    >
+                        <img src='/svg/photo.svg' />
+                    </ImageUploader>
                     <ContentEditable
                         ref={e => this.textarea = e}
                         onFocus={this._hideEmojiPicker}
@@ -181,11 +175,10 @@ class PostComposer extends PureComponent {
 
     _onSubmit = () => {
         const {onSubmit, composer} = this.props;
-        const {text, imagesObj} = composer;
-        if (!(text || imagesObj.length)) return; 
+        const {text, image} = composer;
         onSubmit({
             text: text,
-            content_id: imagesObj.length ? imagesObj[0].result.id : null,
+            content_id: image ? image.id : null,
         });
         this._updateInStore(INITIAL_STATE);
     }
@@ -196,18 +189,20 @@ class PostComposer extends PureComponent {
         });
     }
 
-    uploadImageRemove = imgID => {
-        const {composer} = this.props;
+    uploadImageRemove = key => {
         this._updateInStore({
-            imagesID: composer.imagesID.filter(id => id !== imgID)
+            image: undefined
         });
     }
 
-    uploadImageCommit = imgID => {
-        const {composer} = this.props;
+    uploadImageCommit = img => {
         this._updateInStore({
-            imagesID: composer.imagesID.concat(imgID)
+            image: img
         });
+    }
+
+    _onImgFileChanged = e => {
+        this.imgUploader._onFileChanged(e);
     }
 
     _showEmojiPicket = () => {
@@ -237,9 +232,7 @@ class PostComposer extends PureComponent {
 
 
 function mapStateToProps(state, {id}) {
-    const {postComposers, uploadImages} = state;
-    let composer = {...INITIAL_STATE, ...postComposers[id]};
-    composer.imagesObj = composer.imagesID.map(i => ({...uploadImages[i], id: i}) );
+    let composer = {...INITIAL_STATE, ...state.postComposers[id]};
     return { composer: composer };    
 }
 

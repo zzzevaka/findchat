@@ -72,7 +72,6 @@ class API_Post(BaseHandler, HashTagInterface):
                     cls=alchemy_encoder(),
                     check_circular=False
                 )
-                logging.debug(for_export)
                 self.finish(for_export)
             # a post isn't found
             else:

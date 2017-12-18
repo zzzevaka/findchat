@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 import { findDOMNode } from 'react-dom';
 import { Modal, Glyphicon } from 'react-bootstrap';
-import ReactCrop from 'react-image-crop';
 import Cropper from 'react-cropper';
 import '../../../node_modules/cropperjs/dist/cropper.css';
 
@@ -12,16 +12,9 @@ import {LoaderIcon} from '../Icons';
 import './image-modal.css';
 
 
-const INITIAL_CROP = {width: 95, height: 95, x: 2.5, y: 2.5};
-
-
 export default class ImageEditModal extends React.Component {
 
     static propTypes = {
-        storeKey: PropTypes.oneOfType([
-                PropTypes.string,
-                PropTypes.number
-            ]).isRequired,
         onCommit: PropTypes.func,
         onCancel: PropTypes.func,
         crop: PropTypes.object,
@@ -55,8 +48,7 @@ export default class ImageEditModal extends React.Component {
     }
 
     render() {
-        const {uploadedImages, storeKey} = this.props;
-        const img = uploadedImages[storeKey];
+        const {img, storeKey} = this.props;
         if (!img) return null;
         return (
             <Modal
@@ -74,14 +66,14 @@ export default class ImageEditModal extends React.Component {
     }
 
     _renderImageArea() {
-        const {uploadedImages, storeKey, cropRatio} = this.props;
-        const img = uploadedImages[storeKey];
+        const {img, cropRatio, cropperClassName} = this.props;
         if (img.src === 'l') {
             return <LoaderIcon />;
         }
         return [
             <Cropper
-                className='image-cropper'
+                key='crpr'
+                className={classNames('image-cropper', cropperClassName)}
                 ref={e => this.cropper = e}
                 autoCrop={cropRatio ? true : false}
                 dragMode='move'
@@ -91,55 +83,55 @@ export default class ImageEditModal extends React.Component {
                 autoCrop={cropRatio ? true : false}
                 background={false}
             />,
-            <div className='image-tools'>
+            <div className='image-tools' key='tls'>
                 <button
                     className='button-no-style'
                     onClick={() => this.cropper.setDragMode('move')}
                 >
-                    <i class="fa fa-arrows fa" />
+                    <i className="fa fa-arrows fa" />
                 </button>
                 <button
                     className='button-no-style'
                     onClick={this._toggleCrop}
                 >
-                    <i class="fa fa-crop fa" />
+                    <i className="fa fa-crop fa" />
                 </button>
                 <button
                     className='button-no-style'
                     onClick={() => this.cropper.zoom(0.1)}
                 >
-                    <i class="fa fa-search-plus fa" />
+                    <i className="fa fa-search-plus fa" />
                 </button>
                 <button
                     className='button-no-style'
                     onClick={() => this.cropper.zoom(-0.1)}
                 >
-                    <i class="fa fa-search-minus fa" />
+                    <i className="fa fa-search-minus fa" />
                 </button>
                 <button
                     className='button-no-style'
                     onClick={() => this.cropper.rotate(-90)}
                 >
-                    <i class="fa fa-rotate-left" />
+                    <i className="fa fa-rotate-left" />
                 </button>
                 <button
                     className='button-no-style'
                     onClick={() => this.cropper.rotate(90)}
                 >
-                    <i class="fa fa-rotate-right" />
+                    <i className="fa fa-rotate-right" />
                 </button>
                 <button
                     className='button-no-style'
                     onClick={this._reset}
                 >
-                    <i class="fa fa-refresh fa" />
+                    <i className="fa fa-refresh fa" />
                 </button>
                 <div className='delimeter' />
                 <button
                     className='button-no-style button-close'
                     onClick={this._cancel}
                 >
-                    <i class="fa fa-close fa" />
+                    <i className="fa fa-close fa" />
                 </button>
                 <button
                     className='button-no-style button-commit'
@@ -152,7 +144,6 @@ export default class ImageEditModal extends React.Component {
     }
 
     _reset = () => {
-        console.log(this.cropper.cropper.dragBox.dataset.action)
         this.cropper.reset();
         if (!this.props.cropRatio) {
             this.cropper.clear();
@@ -169,8 +160,7 @@ export default class ImageEditModal extends React.Component {
     }
 
     _commit = () => {
-        const {storeKey, onCommit} = this.props;
-        onCommit(storeKey, this.cropper.getCroppedCanvas());
+        this.props.onCommit(this.cropper.getCroppedCanvas());
     }
     
     _cancel = () => {

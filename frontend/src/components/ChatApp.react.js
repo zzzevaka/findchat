@@ -197,7 +197,7 @@ class ScrollBodyUpButton extends Component {
 class Modals extends Component {
 
     render() {
-        const {store, location} = this.props;
+        const {store, actions, location} = this.props;
         const {modalType} = location.query;
         switch (modalType) {
 
@@ -246,7 +246,11 @@ class Modals extends Component {
                         animation={true}
                         title='New Photo'
                         threadID={user.photo_thread_id}
-                        cropRatio={avatar ? 1 : null}
+                        cropRatio={avatar && 1}
+                        submitAction={
+                            avatar ? actions.addAvatarPost : actions.addPost
+                        }
+                        cropperClassName={avatar && 'avatar-cropper'}
                     />
                 );
             }

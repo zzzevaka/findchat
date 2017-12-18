@@ -21,8 +21,6 @@
 .modal-post .post-composer {
     position: absolute;
     bottom: 0;
-    /*width: 600px !important;*/
-    /*margin-left: calc(50vw - 300px);*/
     background: #fff;
     border: none !important;
     border-bottom: 1px solid #ddd !important;

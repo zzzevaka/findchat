@@ -214,22 +214,36 @@ export function addPost(post, composerKey) {
             ))
         }
         let xhr = api.addPost(post);
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState != 4) return;
-            if (xhr.status === 200) {
-                const {posts, threads, unreaded_posts} = JSON.parse(xhr.responseText);
-                dispatch(loadThreadSuccess(
-                    threads,
-                    posts,
-                    {},
-                ));
-                if (composerKey) {
-                    dispatch(updatePostComposers(
-                        {[composerKey]: { status: 'success' }}
-                    ))
+        return new Promise((resolve, error) => {
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState != 4) return;
+                if (xhr.status === 200) {
+                    const {posts, new_post_id, threads, unreaded_posts} = JSON.parse(xhr.responseText);
+                    dispatch(loadThreadSuccess(
+                        threads,
+                        posts,
+                        {},
+                    ));
+                    if (composerKey) {
+                        dispatch(updatePostComposers(
+                            {[composerKey]: { status: 'success' }}
+                        ))
+                    }
+                    resolve(posts[new_post_id]);
                 }
             }
-        }
+        })
+    }
+}
+
+export function addAvatarPost(post) {
+    return dispatch => {
+        dispatch(addPost(post)).then(post => {
+            dispatch(updateUser({
+                avata_post: post.id,
+                thumbnail: post.content.preview
+            }));
+        });
     }
 }
 
@@ -267,21 +281,21 @@ export function revivePost(postID) {
 }
 
 
-export function addAvatarPost(post) {
-    return (dispatch, getState) => {
-        const user_id = getCookie('current_user_id');
-        const user = getState().users[user_id];
-        if (!user || !post.content_id) return;
-        let xhr = api.addPost({thread_id: user.photo_thread_id, ...post});
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState != 4) return;
-            if (xhr.status === 200) {
-                const {new_post_id} = JSON.parse(xhr.responseText);
-                dispatch(updateUser({id: user.id, avatar_id: new_post_id}));
-            }
-        }
-    }
-}
+// export function addAvatarPost(post) {
+//     return (dispatch, getState) => {
+//         const user_id = getCookie('current_user_id');
+//         const user = getState().users[user_id];
+//         if (!user || !post.content_id) return;
+//         let xhr = api.addPost({thread_id: user.photo_thread_id, ...post});
+//         xhr.onreadystatechange = function() {
+//             if (xhr.readyState != 4) return;
+//             if (xhr.status === 200) {
+//                 const {new_post_id} = JSON.parse(xhr.responseText);
+//                 dispatch(updateUser({id: user.id, avatar_id: new_post_id}));
+//             }
+//         }
+//     }
+// }
 
 
 export function updatePostLikesSuccess(likes) {

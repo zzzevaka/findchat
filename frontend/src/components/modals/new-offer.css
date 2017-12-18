@@ -20,6 +20,7 @@
 
 .modal-new-post-photo .button-add-photo {
     margin: auto;
+    width: 60px;
     padding-bottom: 20px !important;
     padding: 0;
 }
@@ -37,6 +38,7 @@
 
 .modal-new-post-photo .icon-loader {
     margin: auto;
+    width: 45px;
 }
 
 .modal-new-post-photo .image-preview img {

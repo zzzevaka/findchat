@@ -1,82 +1,91 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import shortid from 'shortid';
 
 import { FileChoiseButton } from '../Buttons.react';
 import ImageEditModal from './ImageEditModal';
 
-import { uploadImgSource, uploadImage } from '../../actions';
-import Notifications from 'react-notification-system-redux';
-
-
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import * as actions from '../../actions';
+import API from '../../api';
 
 const MAX_FILE_SIZE = 10485760;
 const ELEVATION_MSG = 'the file is too large';
 const NOTIFICATION_POS = 'tr';
 
-class UploadImageButton extends Component {
+export default class ImageUloader extends PureComponent {
     
     static propTypes = {
         maxFileSize: PropTypes.number.isRequired,
         elevationMessage: PropTypes.string.isRequired,
         notificationPostion: PropTypes.string.isRequired,
         cropRatio: PropTypes.number,
+        onSuccess: PropTypes.func.isRequired,
+        onUploadStart: PropTypes.func.isRequired,
     }
 
     static defaultProps = {
         maxFileSize: MAX_FILE_SIZE,
         elevationMessage: ELEVATION_MSG,
         notificationPostion: NOTIFICATION_POS,
+        onSuccess: () => {},
+        onUploadStart: () => {}
     }
 
     constructor() {
         super();
-        this.state = {};
+        this.api = new API('/api_v1');
+        this.state = {
+            img: undefined
+        };
     }
 
     _onFileChanged = e => {
         e.preventDefault();
-        this.setFile(e.target.files[0]);
-        e.target.value = '';
-    }
-
-    setFile = file => {
         const {
             maxFileSize,
             elevationMessage,
             notificationPostion,
-            dispatch
         } = this.props;
+        const file = e.target.files[0];
         if (file.size > maxFileSize) {
-            dispatch(
-                Notifications.error({
-                    position: notificationPostion,
-                    message: elevationMessage
-                })
-            );
-        } else {
-            const id = shortid.generate();
-            dispatch(uploadImgSource(id, file));
-            this.setState({storeKey: id});
+            // to do
+        }
+        this.setState({
+            img: {src: 'l'}
+        });
+        let fr = new FileReader();
+        fr.onloadend = () => {
+            this.setSrc(fr.result);
+        }
+        fr.readAsDataURL(file);
+        e.target.value = '';
+    }
+
+    setSrc = src => {
+        this.setState({
+            img: {src: src}
+        });
+    }
+
+    _onCommit = canvas => {
+        const {onSuccess, onUploadStart} = this.props;
+        const key = shortid.generate();
+        onUploadStart({key: key, status: 'l'});
+        this._onCancel();
+        let xhr = this.api.uploadImage({
+            src: canvas.toDataURL('image/jpeg', 0.6),
+        });
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState !== 4) return;
+            if (xhr.status == 200) {
+                onSuccess({...JSON.parse(xhr.responseText).img, key: key, status: 's'});
+            }
         }
     }
 
-    _onCommit(storeKey, canvas) {
-        const {dispatch, onSuccess} = this.props;
-        onSuccess(storeKey);        
-        this._onCancel();
-        dispatch(
-            uploadImage(storeKey, {
-                src: canvas.toDataURL('image/jpeg', 0.6),
-            })
-        )
-    }
-
-    _onCancel() {
-        this.setState({storeKey: undefined});
+    _onCancel = () => {
+        this.setState({
+            img: undefined
+        });
     }
 
     render() {
@@ -84,41 +93,22 @@ class UploadImageButton extends Component {
             maxFileSize,
             elevationMessage,
             notificationPostion,
-            dispatch,
-            uploadedImages,
             onSuccess,
+            cropRatio,
             ...rest
         } = this.props;
-        const {storeKey} = this.state;
+        const {img} = this.state;
+
+        if (!img) return null;
 
         return (
-            <div {...rest}>
-                <FileChoiseButton
-                    ref={e => this.button = e}
-                    onChange={this._onFileChanged}
-                >
-                    {this.props.children}
-                </FileChoiseButton>
-                {
-                storeKey && <ImageEditModal
-                    storeKey={storeKey}
-                    onCommit={this._onCommit.bind(this)}
-                    onCancel={this._onCancel.bind(this)}
-                    cropRatio={this.props.cropRatio}
-                    uploadedImages={uploadedImages}
-                    dispatch={dispatch}
-                    />
-                }
-            </div>
-        )
+            <ImageEditModal
+                onCommit={this._onCommit}
+                onCancel={this._onCancel}
+                cropRatio={cropRatio}
+                img={img}
+                {...rest}
+            />
+        );
     }
 }
-
-function mapStateToProps(state) {
-    return {
-        uploadedImages: state.uploadImages,
-        dispatch: state.dispatch
-    };
-}
-
-export default connect(mapStateToProps, null, null, {withRef: true})(UploadImageButton);

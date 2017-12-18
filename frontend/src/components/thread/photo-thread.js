@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {browserHistory, Link} from 'react-router';
+import {MenuItem} from 'react-bootstrap';
 import classNames from 'classnames';
 import {pure} from 'recompose';
 import { Scrollbars } from 'react-custom-scrollbars';
-import {DropdownTools, DeletePostMenuItem, SetAsAvatarMenuItem} from '../Menu/dropdown-tools';
+import {DropdownTools, DeletePostMenuItem} from '../Menu/dropdown-tools';
 import {PhotoSwipeImage} from '../PhotoSwipe';
 import {LoaderIcon} from '../Icons';
 import {UserAvatar} from '../UserPage';
@@ -12,11 +13,12 @@ import connectThread, {mapStateToProps} from './connect-thread';
 
 import {getModalUrl} from '../../utils';
 import currentUserId from '../../auth';
+import {updateUser} from '../../actions';
 
 import './photo-thread.css';
 
 
-import UploadImageButton from '../upload-image';
+import ImageUploader from '../upload-image';
 
 
 class PhotoThread extends Component {
@@ -77,10 +79,12 @@ const PhotoThreadItem = pure(
             {'post-item-deleted': post.status === 'deleted'}
         );
 
-        const onClick = () => {
-            // console.log(this.uploader.getWrappedInstance().set);
-            // this.uploader.getWrappedInstance().setFile(new File(`/img/${post.content.full}`));
-        };
+        const onSuccess = img => {
+            dispatch(updateUser({
+                thumbnail: img.preview,
+                avatar_post: post.id
+            }));
+        }
 
         return (
             <div
@@ -98,19 +102,25 @@ const PhotoThreadItem = pure(
                 </div>
                 <UserAvatar thumbnail={author.thumbnail} />
                 <div className='post-footer'>
-                    <button onClick={onClick}>lala</button>
-                    <UploadImageButton
-                        ref={e => this.uploader = e}
-                        className='button-add-photo'
-                        onSuccess={() => {}}
+                    <ImageUploader
+                        ref={e => this.imgUploader = e}
+                        cropRatio={1}
+                        onSuccess={onSuccess}
+                        cropperClassName='avatar-cropper'
                     >
                         <img src='/svg/photo_color.svg' />
-                    </UploadImageButton>
+                    </ImageUploader>
                     <PostTime datetime={post.datetime} />
                     <div className='post-option'>
                         <DropdownTools>
                             { currentUserId() == author.id && DeletePostMenuItem(post, dispatch) }
-                            { currentUserId() == author.id && SetAsAvatarMenuItem(post, dispatch) }
+                            { currentUserId() == author.id &&
+                                <MenuItem
+                                    onClick={() => this.imgUploader.setSrc(`/img/${post.content.full}`)}
+                                >
+                                    Set as avatar
+                                </MenuItem>
+                            }
                         </DropdownTools>
                     </div>
                 </div>

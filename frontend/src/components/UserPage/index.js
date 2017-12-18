@@ -92,6 +92,14 @@ class UserPage extends Component {
                                 avatarID={user.avatar_id}
                                 threadID={user.photo_thread_id}
                             />
+                            <div className='button-new-avatar'>
+                                <button
+                                    className='button-no-style'
+                                    onClick={() => showModal('modalType=new_photo&avatar=1')}
+                                >
+                                    <i className='fa fa-plus' />
+                                </button>
+                            </div>
                         </Col>
                         <Col sm={6} className='col-user-info'>
                             <div className='user-info'>

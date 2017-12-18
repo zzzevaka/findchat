@@ -407,3 +407,10 @@ svg.icon-venus {
 .hashtag:before {
     content: '#';
 }
+
+
+
+.avatar-cropper .cropper-view-box,
+.avatar-cropper .cropper-face {
+    border-radius: 50%;
+}

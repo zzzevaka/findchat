@@ -2,9 +2,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import {Modal, Image, Glyphicon} from 'react-bootstrap';
-import ThreadPostComposer from '../PostComposer/ThreadPostComposer';
+import PostComposer from '../PostComposer';
 import {OfferPost} from '../thread/offer-thread';
-import UploadImageButton from '../upload-image';
+import ImageUploader from '../upload-image';
+import { FileChoiseButton } from '../Buttons.react';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -17,8 +18,7 @@ import './new-offer.css';
 
 const INITIAL_STATE = {
     text: '',
-    imagesID: [],
-    imagesObj: [],
+    images: [],
     showEmojiPicker: false,
 }
 
@@ -32,7 +32,9 @@ export class NewPostPhotoModal extends PureComponent {
             actions,
             title,
             cropRatio,
-            ...rest} = this.props;
+            cropperClassName,
+            ...rest
+        } = this.props;
         return (
             <Modal {...rest} dialogClassName='modal-new-post-photo'>
                 <Modal.Header closeButton>
@@ -41,33 +43,48 @@ export class NewPostPhotoModal extends PureComponent {
                 </Modal.Header>
                 <Modal.Body>
                     { this.renderUploadedImages() }
-                    <ThreadPostComposer
+                    <ImageUploader
+                        ref={e => this.imgUploader = e}
+                        onSuccess={this.imageUploaded}
+                        onUploadStart={this.imageUploaded}
+                        cropRatio={this.props.cropRatio}
+                        cropperClassName={cropperClassName}
+                    />
+                    <PostComposer
                         ref={e => this.composer = e}
-                        threadID={threadID}
+                        id={`thread${threadID}`}
                         showImagePreview={false}
                         placeholder={PHOTO_PLACEHOLDER}
                         allowImage={false}
-                        onSubmit={this.props.onHide}
+                        onSubmit={this.onSubmit}
                     />
                 </Modal.Body>
             </Modal>
         );
     }
 
+    onSubmit = post => {
+        const {threadID, submitAction, onHide, location} = this.props;
+        submitAction(
+            {thread_id: threadID, ...post},
+            `thread${threadID}`
+        );
+        onHide();
+    }
+
     renderUploadedImages() {
-        const images = this.props.composer.imagesObj;
-        console.log(images);
-        if (images.length) {
-            if (images[0].result !== 'l') {
+        const {image} = this.props.composer;
+        if (image) {
+            if (image.status !== 'l') {
                 return (
-                    <div className='image-preview'>
+                    <div key={image.key} className='image-preview'>
                         <button
                             className='button-no-style attach-preview-delete'
-                            onClick={e => this.getComposerInstance().uploadImageRemove(images[0].id)}
+                            onClick={e => this.getComposerInstance().uploadImageRemove(image.id)}
                         >
                             <Glyphicon glyph='remove' />
                         </button>
-                        <Image src={ '/img/' + images[0].result.full } />
+                        <Image src={ '/img/' + image.full } />
                     </div>
                 );
             }
@@ -76,34 +93,34 @@ export class NewPostPhotoModal extends PureComponent {
             }
         }
         return (
-            <UploadImageButton
+             <FileChoiseButton
+                key='fbtn'
+                onChange={this._onFileChanged}
                 className='button-add-photo'
-                onSuccess={this.imageUploaded}
-                cropRatio={this.props.cropRatio}
-            >
+             >
                 <img src='/svg/photo_color.svg' />
-             </UploadImageButton>
+            </FileChoiseButton>
         );
     }
 
-    getComposerInstance() {
-        return this.composer.getWrappedInstance().getWrappedComposer();
+    _onFileChanged = e => {
+        this.imgUploader._onFileChanged(e);
     }
 
-    imageUploaded = v => {
-        this.getComposerInstance().uploadImageCommit(v);
+    getComposerInstance() {
+        return this.composer.getWrappedInstance();
+    }
+
+    imageUploaded = img => {
+        this.getComposerInstance().uploadImageCommit(img);
     }
 
 }
 
 function mapStateToProps(state, {threadID}) {
-    const {postComposers, uploadImages, users} = state;
-    // const currentUser = users[currentUserId()];
-    // if (!currentUser) return {};
+    const {postComposers, users} = state;
     let c = {...INITIAL_STATE, ...postComposers['thread' + threadID] };
-    c.imagesObj = c.imagesID.map(i => ({...uploadImages[i], id: i}) );
     return {
-        // currentUser: currentUser,
         composer: c
     };
 }
