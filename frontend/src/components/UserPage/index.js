@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Grid, Row, Col, Image, Glyphicon, MenuItem} from 'react-bootstrap';
 import classNames from 'classnames';
-import {browserHistory, Link} from 'react-router';
+import {Link, withRouter} from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -9,9 +9,7 @@ import MainMemu, {MobileMenu} from '../Menu';
 import {MarsIcon, VenusIcon, MessageIcon} from '../Icons'
 import {DropdownTools} from '../Menu/dropdown-tools';
 
-
 import * as Actions from '../../actions';
-import {showModal, getModalUrl} from '../../utils';
 import currentUserId from '../../auth';
 import { ChatOfferThread, PhotoThread } from '../thread';
 
@@ -41,8 +39,8 @@ class UserPage extends Component {
     }
 
     loadUser() {
-        const {user, actions, params} = this.props;
-        !user && actions.loadUsers(params.userID);
+        const {user, actions, match} = this.props;
+        !user && actions.loadUsers(match.params.userID);
     }
 
     showPhotos = () => {
@@ -66,12 +64,12 @@ class UserPage extends Component {
     }
 
     render() {
-        const {user, params} = this.props;
+        const {user, match, history, location} = this.props;
         if (!user) return null;
         const isMyPage = currentUserId() == user.id;  
         const {showPhotos} = this.state;
         return (
-            <div className='user-page' key={params.userID}>
+            <div className='user-page' key={match.params.userID}>
                 <div className='top-fixed-bar'>
                     <div className='company_title'>
                         <img src='/svg/logo_color.svg' className='logo' />
@@ -92,14 +90,14 @@ class UserPage extends Component {
                                 avatarID={user.avatar_id}
                                 threadID={user.photo_thread_id}
                             />
-                            <div className='button-new-avatar'>
+                            {isMyPage && <div className='button-new-avatar'>
                                 <button
                                     className='button-no-style'
-                                    onClick={() => showModal('modalType=new_photo&avatar=1')}
+                                    onClick={() => history.push(`${match.url}?modalType=new_photo&avatar=1`)}
                                 >
                                     <i className='fa fa-plus' />
                                 </button>
-                            </div>
+                            </div>}
                         </Col>
                         <Col sm={6} className='col-user-info'>
                             <div className='user-info'>
@@ -126,14 +124,14 @@ class UserPage extends Component {
                 <div className='user-buttons'>
                     {isMyPage && <button
                         className='button-no-style'
-                        onClick={() => {showModal('modalType=new_photo')}}
+                        onClick={() => {history.push(location.pathname + '?modalType=new_photo')}}
                     >
                         <img src='/svg/photo_color.svg' />
                         New photo
                     </button>}
                     {!isMyPage && <button
                         className='button-no-style'
-                        onClick={() => {showModal(`modalType=private_message_composer&userID=${user.id}`)}}
+                        onClick={() => {history.push(location.pathname + `?modalType=private_message_composer&userID=${user.id}`)}}
                     >
                         <img src='/svg/message_color.svg' />
                             Message
@@ -173,10 +171,10 @@ class UserPage extends Component {
 
 }
 
-function mapStateToProps({users}, {params}) {
+function mapStateToProps({users}, {match}) {
 
     return {
-        user: users[params.userID]
+        user: users[match.params.userID]
     };
   }
   
@@ -254,17 +252,18 @@ export function UserAvatar({thumbnail}) {
     );
 }
 
-export function UserOptions({isMyPage}) {
+let UserOptions = ({isMyPage, history}) => {
     // user browserHistory.push instead Link to avoid error: "cannot appear as a descendant..."
     let items = [];
+    let browserHistory = [];
     if (isMyPage) {
         items.push(
-            <MenuItem key='edit_page'onClick={() => browserHistory.push('/edit_user')}>
+            <MenuItem key='edit_page' onClick={() => history.push('/edit_user')}>
                 Edit my info
             </MenuItem>
         );
         items.push(
-            <MenuItem key='settings' onClick={() => browserHistory.push('/settings')}>
+            <MenuItem key='settings' onClick={() => history.push('/settings')}>
                 Settings
             </MenuItem>
         );
@@ -282,3 +281,7 @@ export function UserOptions({isMyPage}) {
         </div>
     );
 }
+
+UserOptions = withRouter(UserOptions);
+
+export {UserOptions};

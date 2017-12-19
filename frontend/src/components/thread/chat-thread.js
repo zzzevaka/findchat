@@ -1,7 +1,7 @@
 import React, {Component, PureComponent} from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import {Image, Glyphicon} from 'react-bootstrap';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import classNames from 'classnames';
 import {pure} from 'recompose';
 
@@ -14,7 +14,6 @@ import {LoaderIcon} from '../Icons';
 import {UserAvatar} from '../UserPage';
 
 import {setThreadAsReaded} from '../../actions';
-import {getModalUrl} from '../../utils';
 import currentUserId from '../../auth';
 
 const COMPOSER_PLACEHOLDER = 'Your message';

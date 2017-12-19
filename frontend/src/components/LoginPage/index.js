@@ -2,20 +2,21 @@ import React, {PureComponent} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {Grid, Row, Col, FormGroup, FormControl, Glyphicon} from 'react-bootstrap';
 import classNames from 'classnames';
-import {browserHistory, Link} from 'react-router';
+import { withRouter, Link } from 'react-router-dom';
 import API from '../../api';
+import {parseHistorySearch} from '../../utils';
 
 import './login-page.css';
 
 const api = new API('/api_v1');
 
 
-export default class LoginPage extends PureComponent {
+class LoginPage extends PureComponent {
 
     constructor(props) {
         super(props);
         this.state = {
-            showForm: props.location.query.showForm ? true : false
+            showForm: parseHistorySearch(props.history).showForm ? true : false
         };
     }
 
@@ -107,6 +108,8 @@ export default class LoginPage extends PureComponent {
     }
 
 }
+
+export default withRouter(LoginPage);
 
 export function LoginForm() {
     return (

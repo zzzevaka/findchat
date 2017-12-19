@@ -21,9 +21,10 @@ class SearchPage extends Component {
     render() {
         return (
             <UserThread
-                ref={e => this.thread = e}
+                wrappedComponentRef={e => this.thread = e}
                 threadID={USERS_THREAD}
                 filter={this.props.filter}
+                match={this.props.match}
                 loadMethod={this.usersLoad}
                 placeholder={USERS_PLACEHOLDER}
             />

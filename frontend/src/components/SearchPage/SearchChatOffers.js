@@ -22,7 +22,7 @@ class SearchChatOffers extends Component {
     render() {
         return (
             <ChatOfferThread
-                ref={e => this.thread = e}
+                wrappedComponentRef={e => this.thread = e}
                 threadID={OFFERS_THREAD}
                 filter={this.props.filter}
                 loadMethod={this.loadOffers}

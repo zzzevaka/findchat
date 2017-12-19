@@ -2,7 +2,7 @@ import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {Image, Glyphicon} from 'react-bootstrap';
 import {DropdownTools, DeletePostMenuItem} from '../Menu/dropdown-tools';
-import {browserHistory, Link} from 'react-router';
+import {withRouter, Link} from 'react-router-dom';
 import classNames from 'classnames';
 import {pure} from 'recompose';
 import TimeAgo from 'react-timeago';
@@ -15,7 +15,6 @@ import {HashtagString} from '../Hashtag';
 
 import connectThread, {mapStateToProps} from './connect-thread';
 import currentUserId from '../../auth';
-import {getModalUrl} from '../../utils';
 
 import './offer-thread.css';
 
@@ -41,10 +40,19 @@ class ChatOfferThread extends Component {
     }
 
     render() {
-        const {thread, showPosts, placeholder, dispatch}= this.props;
+        const {thread, showPosts, placeholder, history, dispatch}= this.props;
         return (
             <div className='offer-thread'>
-                { thread.posts.slice(0, showPosts).map(p => <OfferPostWrapper {...p} key={p.post.id} dispatch={dispatch} />) }
+                {
+                    thread.posts.slice(0, showPosts).map(p => 
+                        <OfferPostWrapper
+                            history={history}
+                            key={p.post.id}
+                            {...p}
+                            dispatch={dispatch}
+                        />
+                    )
+                }
                 {
                     thread.status === 'loading' && <div style={{
                         textAlign: 'center',
@@ -65,14 +73,15 @@ class ChatOfferThread extends Component {
 
 }
 
-export const OfferPostWrapper = pure(  
+export const OfferPostWrapper = pure(
     (props) => {
+        console.log(props.history);
         return (
             <div className='post-offer-wrapper'>
                 <OfferPost {...props} />
                 <div className='button-area'>
                     <Link
-                        to={getModalUrl(`modalType=chat_offer&postID=${props.post.id}`)}
+                        to={props.history.location.pathname + `?modalType=chat_offer&postID=${props.post.id}`}
                         className='link-no-style button-answer'>
                         <CommentColorIcon />
                         <span className='button-text'>ANSWER</span>

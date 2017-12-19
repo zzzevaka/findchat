@@ -10,7 +10,6 @@ import { FileChoiseButton } from '../Buttons.react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as Actions from '../../actions';
-import {closeModal} from '../../utils';
 import {LoaderIcon} from '../Icons';
 
 

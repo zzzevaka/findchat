@@ -1,22 +1,10 @@
-import { browserHistory, Link } from 'react-router';
+// import { browserHistory, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import qs from 'qs';
 
-// export function parseHastags(string) {
-//   const re = /#\w+/g;
-//   return string.replace(re, <Link>{$&}<<Link>);
-// }
-
-export function showModal(query) {
-  browserHistory.push(
-    `${browserHistory.getCurrentLocation().pathname}?${query}`
-  );
-}
-
-export function getModalUrl(query) {
-  return `${browserHistory.getCurrentLocation().pathname}?${query}`;
-}
-
-export function closeModal() {
-  browserHistory.push(browserHistory.getCurrentLocation().pathname);
+export function parseHistorySearch(history) {
+  const {search} = history.location;
+  return qs.parse(search.substring(search.startsWith('?') ? 1 : 0));
 }
 
 export function uniqueArray(arr) {

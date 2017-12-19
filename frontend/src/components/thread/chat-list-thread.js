@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router';
+import {NavLink} from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
 import connectThread, {mapStateToPropsChatList} from './connect-thread';
 import {UserAvatar} from '../UserPage';
@@ -42,7 +42,7 @@ class ChatListThread extends Component {
 const ChatListItem = ({chat, unreadedPosts}) => {
     if (!chat.member) return null;
     return (
-        <Link className='chat-list-item link-no-style' activeClassName='chat-list-item-active' to={`/chats/${chat.id}`}>
+        <NavLink className='chat-list-item link-no-style' activeClassName='chat-list-item-active' to={`/chats/${chat.id}`}>
             <UserAvatar thumbnail={chat.member.thumbnail }/>
             <p>
                 <span className='author-name'>{chat.member.firstname}</span>
@@ -53,7 +53,7 @@ const ChatListItem = ({chat, unreadedPosts}) => {
                         <span className='unreaded-posts'>{unreadedPosts}</span>
                 }
             </p>
-        </Link>
+        </NavLink>
     );
 }
 

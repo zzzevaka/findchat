@@ -1,5 +1,5 @@
 import API from './api';
-import {getCookie, closeModal} from './utils';
+import {getCookie} from './utils';
 import shortid from 'shortid';
 import {THREAD_TYPE} from './constants/threadType';
 import arrayFrom from 'array-from';
@@ -19,7 +19,7 @@ import {
     UPDATE_UNREADED_POSTS,
     UPDATE_AUTH
 } from './constants/ActionTypesConstants';
-import { browserHistory } from 'react-router';
+// import { browserHistory } from 'react-router';
 
 import Notifications from 'react-notification-system-redux';
 import React, { Component, PropTypes } from 'react';
@@ -200,7 +200,7 @@ export function getPost(postID) {
             if (xhr.readyState != 4) return;
             if (xhr. status === 200) {
                 const {posts, users} = JSON.parse(xhr.responseText);
-                dispatch(loadThreadSuccess({}, posts));
+                dispatch(loadThreadSuccess({}, posts, users));
             }    
         }
     }
@@ -371,7 +371,6 @@ export function answerChatOffer(offerID, post) {
         let xhr = api.answerChatOffer(offerID, post);
         xhr.onreadystatechange = () => {
             if (xhr.readyState !== 4) return;
-            closeModal();
             if (xhr.status == 200) {
                 dispatch(
                     Notifications.info({
@@ -412,7 +411,7 @@ export function sendPostToUser(userID, post) {
         xhr.onreadystatechange = () => {
             if (xhr.readyState !== 4) return;
             if (xhr.status == 200) {
-                browserHistory.push(`/chats/${JSON.parse(xhr.responseText).thread_id}`);
+                // browserHistory.push(`/chats/${JSON.parse(xhr.responseText).thread_id}`);
             }
         }
     }
@@ -424,7 +423,7 @@ export function addThreadFromOffer(offerID) {
         xhr.onreadystatechange = () => {
             if (xhr.readyState !== 4) return;
             if (xhr.status == 200) {
-                browserHistory.push(`/chats/${JSON.parse(xhr.responseText).thread_id}`);
+                // browserHistory.push(`/chats/${JSON.parse(xhr.responseText).thread_id}`);
                 // const body = JSON.parse(xhr.responseText);
                 // dispatch(
                 //     loadThreadSuccess(body.threads, body.posts)

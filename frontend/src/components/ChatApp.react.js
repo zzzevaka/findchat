@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import SideBarWrapper, {SideBarButton} from './SideBar';
+// import SideBarWrapper, {SideBarButton} from './SideBar';
 import { Modal, Grid, Row, Col, Glyphicon, Button } from 'react-bootstrap';
 import classNames from 'classnames';
 import { Scrollbars } from 'react-custom-scrollbars';
-import { browserHistory, hashHistory } from 'react-router';
+import { withRouter } from 'react-router-dom';
+import qs from 'qs';
 import {NewPostPhotoModal, PrivateMessageModal, NewOfferModal} from './modals';
 import PostModal from './modals/post-modal';
 import {PhotoSwipeDummy} from './PhotoSwipe';
@@ -14,11 +15,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as Actions from '../actions';
 
-import {Link} from 'react-router';
-
 import Notifications from 'react-notification-system-redux';
 
-import { closeModal, showModal } from '../utils';
+import { parseHistorySearch } from '../utils';
 import currentUserId, {loginRequired} from '../auth';
 
 import {UpArrow, AddColorIcon, LoaderIcon} from './Icons';
@@ -65,34 +64,50 @@ function getScrolledBody() {
 
 class ChatApp extends Component { 
 
-  render() {
-    const { store, actions } = this.props;
-    return (
-        <div style={{height: '100%'}}>
-            <PhotoSwipeDummy />
-            <div className='fixed-buttons-area'>
-                <ScrollBodyUpButton />
-                <NewOfferButton />
+    _hashtagClicked = e => {
+        if (e.target.classList.contains('hashtag')) {
+            e.preventDefault();            
+            const {history} = this.props;
+            history.push(`/search/chat_offers?tags=${e.target.innerHTML}`)
+        }
+    }
+
+    componentDidMount() {
+        document.addEventListener('click', this._hashtagClicked, false);
+    }
+
+    render() {
+        const { store, actions, match, history } = this.props;
+        return (
+            <div style={{height: '100%'}}>
+                <PhotoSwipeDummy />
+                <div className='fixed-buttons-area'>
+                    <ScrollBodyUpButton />
+                    <NewOfferButton />
+                </div>
+                <Notifications notifications={store.notifications}/>
+                {this.props.children}
+                <Modals {...this.props} />
             </div>
-            <Notifications notifications={store.notifications}/>
-            {this.props.children}
-            <Modals {...this.props} />
-        </div>
-    )
-  }
+        )
+    }
 };
 
 
-const NewOfferButton = loginRequired(() => {
+let NewOfferButton = ({history}) => {
     return (
         <button
-            onClick={() => showModal('modalType=new_chat_offer')}
+            onClick={() => history.push(history.location.pathname + '?modalType=new_chat_offer')}
             className='button-no-style new-offer-button'
         >
             <AddColorIcon />
         </button>
     );
-});
+};
+
+NewOfferButton = loginRequired(NewOfferButton);
+NewOfferButton = withRouter(NewOfferButton);
+
 
 
 class ScrollBodyUpButton extends Component {
@@ -194,31 +209,39 @@ class ScrollBodyUpButton extends Component {
 }
 
 
-class Modals extends Component {
+let Modals  = class extends Component {
+
+    closeModal = () => {
+        const {history} = this.props;
+        history.push(history.location.pathname);
+    }
 
     render() {
-        const {store, actions, location} = this.props;
-        const {modalType} = location.query;
+        const {store, actions, history} = this.props;
+        const queryParams = parseHistorySearch(history);
+        const {modalType} = queryParams;
         switch (modalType) {
 
             case 'chat_offer': {
-                const {postID} = location.query;
+                const {postID} = queryParams;
                 return (
                     <PostModal
                         show={true}
                         postID={Number(postID)}
                         animation={true}
-                        onHide={closeModal}
+                        onHide={this.closeModal}
                         PostComponent={'PostChatOfferModal'}
                     />
                 );
             }
 
             case 'private_message_composer': {
-                const {userID} = location.query;
+                const {userID} =queryParams;
                 return <PrivateMessageModal
+                    show={true}
                     userID={userID}
-                    {...this.props}
+                    onSubmit={actions.sendPostToUser}
+                    onHide={this.closeModal}
                 />
             }
 
@@ -228,7 +251,7 @@ class Modals extends Component {
                 return (
                     <NewOfferModal
                         show={true}
-                        onHide={closeModal}
+                        onHide={this.closeModal}
                         animation={true}
                         threadID={user.offer_thread_id}
                     />
@@ -236,13 +259,13 @@ class Modals extends Component {
             }
 
             case 'new_photo': {
-                const {avatar} = location.query;
+                const {avatar} = queryParams;
                 const user = store.users[currentUserId()];
                 if (!user || !user.offer_thread_id) return null;
                 return (
                     <NewPostPhotoModal
                         show={true}
-                        onHide={closeModal}
+                        onHide={this.closeModal}
                         animation={true}
                         title='New Photo'
                         threadID={user.photo_thread_id}
@@ -263,6 +286,8 @@ class Modals extends Component {
 
 }
 
+Modals = withRouter(Modals);
+
 function mapStateToProps(state) {
   return {store: state}
 }
@@ -273,4 +298,4 @@ function mapDispatchToProps(dispatch) {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChatApp);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChatApp));

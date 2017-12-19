@@ -66,16 +66,11 @@ class EditUserPage extends Component {
                 () => this.setState(this.getDefaultState())
             )
         );
-        // this.setState({
-        //     form: {},
-        //     edited: false
-        // });
     }
 
     render() {
         const {user} = this.props;
         const { form, edited } = this.state;
-        console.log(form);
         if (!user) return null;
         return (
             <div className='edit-user-page'>
@@ -257,15 +252,16 @@ class GenderFormGroup extends Component {
                     <Radio
                         name="gender"
                         value='male'
-                        checked={value === 'male'}
+                        defaultChecked={value === 'male'}
                         inline
+                        defaultChecked
                     >
                         <MarsIcon className='icon-gender icon-mars' />
                     </Radio>
                     <Radio
                         name="gender"
                         value='female'
-                        checked={value === 'female'}
+                        defaultChecked={value === 'female'}
                         inline
                     >
                         <VenusIcon className='icon-gender icon-venus' />

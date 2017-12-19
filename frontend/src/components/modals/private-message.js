@@ -1,14 +1,13 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import PostComposer from '../PostComposer';
-import {closeModal} from '../../utils';
 
 import './private-message.css';
 
 
-export default function PrivateMessageModal ({userID, actions: {sendPostToUser}}) {
+export default function PrivateMessageModal ({userID, onSubmit, ...rest}) {
     return (
-        <Modal show={true} onHide={closeModal} dialogClassName='modal-private-message'>
+        <Modal dialogClassName='modal-private-message' {...rest}>
             <Modal.Header closeButton>
                 New message
             </Modal.Header>
@@ -17,7 +16,7 @@ export default function PrivateMessageModal ({userID, actions: {sendPostToUser}}
                 </div>
                 <PostComposer
                     id={`private_to_${userID}`}
-                    onSubmit={post => sendPostToUser(userID, post)}
+                    onSubmit={post => onSubmit(userID, post)}
                 />
             </Modal.Body>
         </Modal>

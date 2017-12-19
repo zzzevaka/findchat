@@ -1,9 +1,12 @@
 import React, {Component} from 'react';
 import {Grid, Row, Col, Modal} from 'react-bootstrap';
+import {Route, Switch} from 'react-router-dom';
 import classNames from 'classnames';
 import PostList from './post-list';
 import MainMenu, {MobileMenu} from '../Menu';
-import ThreadList from './thread-list'
+import ThreadList from './thread-list';
+import ChatPostList from './post-list';
+
 
 import './chat-page.css';
 
@@ -47,7 +50,7 @@ export default class ChatPage extends Component {
                         <ThreadList />
                     </Col>
                     <Col sm={6} className='col-post-list'>
-                        {this.props.children || <PostList />}
+                        <Route path="/chats/:threadID?" component={ChatPostList} />
                     </Col>
                 </Row>
             </Grid>

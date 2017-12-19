@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {Link} from 'react-router';
 import { Scrollbars } from 'react-custom-scrollbars';
 import {loadChats} from '../../actions';
 import getCurrentUserId from '../../auth';

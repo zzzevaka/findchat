@@ -5,11 +5,11 @@ import {loadThread} from '../../actions';
 export default class ChatPostList extends PureComponent {
 
     loadMethod = (limit, offset, dispatch) => dispatch(
-        loadThread(this.props.params.threadID, limit, offset)
+        loadThread(this.props.match.params.threadID, limit, offset)
     )
 
     render() {
-        const {params} = this.props;
+        const {params} = this.props.match;
         const threadID = params ? params.threadID : null;
         return (
             <div className='chat-post-list' key={`chat_${threadID || 'empty'}`}>

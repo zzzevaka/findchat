@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {Link} from 'react-router';
+import {Link, NavLink, withRouter} from 'react-router-dom';
 import classNames from 'classnames';
 import {ProfileIcon, MessageIcon, SearchIcon, SettingsIcon, AddColorIcon} from '../Icons';
 import currentUserId, {loginRequired} from '../../auth';
-import {getModalUrl} from '../../utils';
+// import {getModalUrl} from '../../utils';
 import './menu.css';
 
 function MenuLink({children, className, ...rest}) {
@@ -14,9 +14,9 @@ function MenuLink({children, className, ...rest}) {
         className
     );
     return (
-        <Link className={classes} activeClassName='menu-link-active' {...rest}>
+        <NavLink className={classes} activeClassName='menu-link-active' {...rest}>
             {children}
-        </Link>
+        </NavLink>
     )
 }
 
@@ -50,11 +50,10 @@ let Menu = function({unreadedPosts}) {
     );
 }
 
-let MobileMenu = function({unreadedPosts}) {
+let MobileMenu = function({unreadedPosts, history}) {
     return (
         <div className='mobile-main-menu'>
-            <MenuLink to={`/user/${currentUserId()}`}
-            >
+            <MenuLink to={`/user/${currentUserId()}`}>
                 <ProfileIcon />
             </MenuLink>
             <MenuLink to='/chats'>
@@ -65,7 +64,7 @@ let MobileMenu = function({unreadedPosts}) {
                 }
             </MenuLink>
             <MenuLink
-                to={getModalUrl('modalType=new_chat_offer')}
+                to={history.location.pathname + '?modalType=new_chat_offer'}
                 className='link-new-offer'
             >
                 <AddColorIcon />
@@ -104,6 +103,11 @@ MobileMenu = loginRequired(MobileMenu, NotLoginMenu);
 // connect to store
 Menu = connect(mapStateToProps)(Menu);
 MobileMenu = connect(mapStateToProps)(MobileMenu);
+
+// connect to router
+Menu = withRouter(Menu);
+MobileMenu = withRouter(MobileMenu);
+
 
 export {MobileMenu};
 export default Menu;

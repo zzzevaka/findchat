@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {browserHistory} from 'react-router';
+import {browserHistory} from 'react-router-dom';
 import {Grid, Row, Col, FormGroup, ControlLabel, FormControl} from 'react-bootstrap';
 import MainMenu, {MobileMenu} from '../Menu';
 import {SettingsIcon, LoaderIcon} from '../Icons';

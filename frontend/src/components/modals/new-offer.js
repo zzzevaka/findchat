@@ -11,7 +11,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as Actions from '../../actions';
 import currentUserId from '../../auth';
-import {closeModal} from '../../utils';
 
 import './new-offer.css';
 
@@ -26,9 +25,9 @@ const INITIAL_STATE = {
 class NewOfferModal extends PureComponent {
 
     render() {
-        const {threadID, actions, composer, ...rest} = this.props;
+        const {threadID, actions, composer, onHide, ...rest} = this.props;
         return (
-            <Modal {...rest} dialogClassName='modal-new-offer'>
+            <Modal {...rest} onHide={onHide} dialogClassName='modal-new-offer'>
                 <Modal.Header closeButton>
                     <AddColorIcon className='title-icon' />
                     <span className='title-text'>New offer</span>
@@ -66,7 +65,7 @@ class NewOfferModal extends PureComponent {
                         showImagePreview={true}
                         placeholder='Type right here'
                         allowImage={true}
-                        onSubmit={closeModal}
+                        onSubmit={onHide}
                     />
                 </Modal.Body>
             </Modal>

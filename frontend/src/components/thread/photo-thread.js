@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {browserHistory, Link} from 'react-router';
+import {browserHistory, Link} from 'react-router-dom';
 import {MenuItem} from 'react-bootstrap';
 import classNames from 'classnames';
 import {pure} from 'recompose';
@@ -11,7 +11,6 @@ import {UserAvatar} from '../UserPage';
 import {PostTime} from './offer-thread';
 import connectThread, {mapStateToProps} from './connect-thread';
 
-import {getModalUrl} from '../../utils';
 import currentUserId from '../../auth';
 import {updateUser} from '../../actions';
 

@@ -9,6 +9,12 @@ import './post-modal.css';
 
 class PostModal extends Component {
     
+    onSubmit = (p) => {
+        const {dispatch, postID, onHide} = this.props;
+        dispatch(answerChatOffer(postID, p));
+        onHide();
+    }
+
     componentDidMount() {
         const {post, postID, dispatch} = this.props;
         if (!post) dispatch(getPost(postID));
@@ -30,9 +36,7 @@ class PostModal extends Component {
                         />
                     </div>
                     <PostComposer
-                        onSubmit={
-                            p => dispatch(answerChatOffer(postID, p))
-                        }
+                        onSubmit={this.onSubmit}
                         placeholder='Your answer'
                     />
                 </Modal.Body>

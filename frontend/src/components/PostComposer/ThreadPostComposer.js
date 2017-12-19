@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import {addPost} from '../../actions';
 
 import PostComposer from './index';
-import {closeModal} from '../../utils';
 
 
 function getComposerIdByThread(threadID) {

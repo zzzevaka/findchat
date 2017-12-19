@@ -4,6 +4,7 @@ import Select, {Creatable} from 'react-select';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
+import {parseHistorySearch} from '../../utils';
 
 const MAX_VALUES = 1;
 
@@ -20,8 +21,8 @@ class SearchFiler extends Component {
     }
 
     getTagsFromURL() {
-        const {location, filter, actions} = this.props;
-        const tag = location.query.tags;
+        const {history, filter, actions} = this.props;
+        const tag = parseHistorySearch(history)['tags'];
         if (!tag) return;
         if (filter.tags.indexOf(tag) === -1) {
             actions.updateSearchFilter({

@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {withRouter} from 'react-router-dom';
 import { connect } from 'react-redux';
 import {loadThread, flushThread} from '../../actions';
 import { createSelector } from 'reselect';
 import getCurrentUserId from '../../auth';
 
 
-const ConnectedThread = WrappedComponent => {
+let ConnectedThread = WrappedComponent => {
 
     return class extends Component {
         
@@ -109,9 +110,9 @@ const ConnectedThread = WrappedComponent => {
 
 export default function connectThread() {
 
-    return WrappedComponent => connect.apply(null, arguments)(
+    return WrappedComponent => withRouter(connect.apply(null, arguments)(
         ConnectedThread(WrappedComponent)
-    );
+    ));
 
 }
 
