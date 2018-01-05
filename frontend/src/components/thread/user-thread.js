@@ -1,33 +1,21 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import classNames from 'classnames';
+import {ThreadLoaderIcon, ThreadPlaceholder, InfiniteThread} from './thread-interface';
 import {UserAvatar} from '../UserPage';
+import InfiniteScroll from '../infinite-scroll';
+import {followUser, unfollowUser} from '../../actions';
 
 import connectThread, {mapStateToPropsUsers} from './connect-thread';
 
 
 class UserThread extends Component {
 
-    _onScroll = e => {
-        if ((window.innerHeight + window.scrollY) / document.body.offsetHeight > 0.8) {
-            const {thread, showMorePosts} = this.props;
-            if (thread.status !== 'loading') showMorePosts();
-        }
-        
-    }
-
-    componentDidMount() {
-        window.addEventListener('scroll', this._onScroll);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('scroll', this._onScroll);
-    }
-
     render() {
         const {thread, showPosts, placeholder, dispatch} = this.props;
         return (
             <div className='user-thread'>
+                <InfiniteThread {...this.props} />
                 {
                     thread.posts.slice(0, showPosts).map(
                         user => user 
@@ -39,35 +27,60 @@ class UserThread extends Component {
                             : null
                     )
                 }
+                <ThreadLoaderIcon thread={thread} />
+                <ThreadPlaceholder thread={thread} placeholder={placeholder} />
             </div>
         );
     }
 
 }
 
-export function UserThreadItem({user}) {
+function UserThreadItem({user, match, dispatch}) {
     if (!user) return null;
     return (
-        <Link
-            to={`/user/${user.id}`}
-            className='link-no-style post-item post-user-item'
-        >
-            <UserAvatar thumbnail={user.thumbnail} />
-            <span className='author-name'>{user.firstname}</span>
-            <br />
-            <span className='lang'>
-            {
-                user.lang && user.lang.join(', ')
-            }
-            </span>
-            <br />
-            <div className='hashtags'>
-            {
-                user.hashtags && user.hashtags.map(v => <span key={v} className='hashtag'>{`#${v}`}</span>)
-            }
+        <div className='post-item post-user-item'>
+            <Link
+                to={`/user/${user.id}`}
+                className='link-no-style'
+            >
+                <UserAvatar thumbnail={user.thumbnail} />
+                <span className='author-name'>{user.firstname}</span>
+                <br />
+                <span className='lang'>
+                {
+                    user.lang && user.lang.join(', ')
+                }
+                </span>
+                <br />
+                <div className='hashtags'>
+                {
+                    user.hashtags && user.hashtags.map(v => <span key={v} className='hashtag'>{`#${v}`}</span>)
+                }
+                </div>
+            </Link>
+            <div className='buttons'>
+                {
+                    user.current_user_follows
+                        ? <button
+                            className='button-no-style button'
+                            onClick={() => dispatch(unfollowUser(user.id)) }
+                        >Unfollow</button>
+                        : <button
+                            className='button-no-style button'
+                            onClick={() => dispatch(followUser(user.id)) }
+                        >Follow</button>
+                }
+                <Link
+                    to={`${match.url}?modalType=private_message_composer&userID=${user.id}`}
+                    className='link-no-style button'
+                >Message</Link>
             </div>
-        </Link>
+        </div>
     )
 }
+
+UserThreadItem = withRouter(UserThreadItem);
+
+export {UserThreadItem};
 
 export default connectThread(mapStateToPropsUsers, null, null, {withRef: true})(UserThread);

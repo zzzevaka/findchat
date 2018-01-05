@@ -8,11 +8,11 @@ from tornado.escape import json_decode, json_encode
 
 from sqlalchemy import and_, or_, func, types, distinct, text
 from sqlalchemy.dialects import postgresql
-from sqlalchemy.orm import contains_eager, joinedload
+from sqlalchemy.orm import contains_eager, joinedload, aliased
 from sqlalchemy.orm.session import make_transient
 
 
-from ..models.user import User, DEFAULT_USER_ID
+from ..models.user import User, FollowUser, DEFAULT_USER_ID
 from ..models.post import Post, PostAnswer, POST_TYPE
 from ..models.thread import PostThread, User2Thread, IgnoredPosts, THREAD_TYPE
 from ..models.post_like import PostLike
@@ -182,9 +182,9 @@ class API_Thread(BaseHandler):
                     list(for_export['posts'].keys()),
                     reverse=True
                 )
-            if len(posts) < int(limit or 0):
+            if len(posts) <= int(limit or 0):
                 for_export['threads'][thread_id]['no_more_posts'] = True
-                # dict -> json
+            # dict -> json
             for_export = json.dumps(
                 for_export,
                 cls=alchemy_encoder(),
@@ -392,6 +392,7 @@ class API_ThreadPeople(BaseHandler):
         }
         request = self.db.query(
             User,
+            FollowUser.dst_user_id,
             func.count().label('total'),
             func.array_agg(
                 distinct(Language.name),
@@ -402,6 +403,14 @@ class API_ThreadPeople(BaseHandler):
                 type_=postgresql.ARRAY(types.String, as_tuple=True)
             )
         )
+        request = request.outerjoin(
+                        FollowUser,
+                        and_(
+                            User.id == FollowUser.dst_user_id,
+                            FollowUser.src_user_id == self.current_user,
+                            FollowUser.is_current()
+                        )
+                    )
         request = request.outerjoin(Language, User._languages)
         request = request.outerjoin(Hashtag, User.hashtags)
         if ('lang' in search_filter and search_filter['lang']):
@@ -416,18 +425,19 @@ class API_ThreadPeople(BaseHandler):
         #     query = query.join(User.hashtags).filter(
         #         Hashtag.name.in_(search_filter['tags'])
         #     )
-        request = request.group_by(User.id)
+        request = request.group_by(User.id, FollowUser.dst_user_id)
         request = request.order_by('total DESC')
         request.limit(limit)
         request.offset(offset)
 
         result = request.all()
-        for user, total, languages, hashtags in result:
+        for user, curr_user_follows, total, languages, hashtags in result:
             for_export['threads']['search_users']['posts'].append(user.id)
             for_export['users'][user.id] = {
                 **user.export_dict,
                 'lang': [i for i in languages if i],
                 'hashtags': [i for i in hashtags if i],
+                'current_user_follows': bool(curr_user_follows)
             }
 
         if len(result) < int(limit or 1):
@@ -438,3 +448,80 @@ class API_ThreadPeople(BaseHandler):
                 check_circular=False
             )
         self.finish(for_export)
+
+
+class API_ThreadNews(BaseHandler):
+    
+    def get(self):
+        '''
+            get posts* of authors which current_user follows
+
+            *photo_thread and chat_offers
+        '''
+        limit = self.get_argument('limit', None)
+        offset = self.get_argument('offset', None)
+        for_export = {
+            'posts': {},
+            'threads': {
+                'news': {
+                    'id': 'news',
+                    'posts': [],
+                }
+            },
+            'users': {},
+        }
+        result = self.db.query(
+                Post, PostThread.type
+            ).join(
+                User2Thread, Post.thread_id == User2Thread.thread_id
+            ).join(
+                PostThread, Post.thread_id == PostThread.id
+            ).join(
+                FollowUser, and_(
+                    Post.author_id == FollowUser.dst_user_id,
+                    FollowUser.src_user_id == self.current_user,
+                    FollowUser.is_current()
+                )
+            ).outerjoin(
+                PostContent, Post.content_id == PostContent.id
+            ).options(
+                joinedload(Post.content)
+            ).options(
+                joinedload(Post._author)
+            ).filter(
+                Post.is_current()
+            ).filter(
+                User2Thread.user_id == DEFAULT_USER_ID
+            ).order_by(
+                Post.id.desc()
+            ).distinct(
+            ).limit(
+                limit
+            ).offset(
+                offset
+            ).all()
+        # a thread is found
+        if len(result):
+            for (p, thread_type) in result:
+                # get the posts as dict
+                for_export['posts'][p.id] = {
+                    'thread_type': thread_type,
+                    **p.export_dict
+                }
+                for_export['users'][p.author_id] = p._author.export_dict
+            # replace thread.posts on array of id
+            for_export['threads']['news']['posts'] = sorted(
+                list(for_export['posts'].keys()),
+                reverse=True
+            )
+        if len(result) <= int(limit or 0):
+            for_export['threads']['news']['no_more_posts'] = True
+        # dict -> json
+        for_export = json.dumps(
+            for_export,
+            cls=alchemy_encoder(),
+            check_circular=False,
+        )
+        logging.debug(for_export)
+        self.finish(for_export)
+    

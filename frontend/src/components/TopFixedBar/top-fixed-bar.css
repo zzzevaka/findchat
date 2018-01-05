@@ -1,0 +1,56 @@
+.top-fixed-bar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 50px;
+    border-bottom: 1px solid #ddd;
+    background: #fff;
+    display: flex;
+    z-index: 1;
+}
+
+.company-title {
+    margin: auto;
+    text-align: center;
+}
+
+.company-title .logo {
+    height: 24px;
+    margin-right: 12px;
+}
+
+.company-title .logo-name {
+    height: 15px;
+}
+
+.user-title {
+    margin: auto;
+    text-align: center;
+    display: flex;
+}
+
+.user-title .avatar {
+    margin-right: 1em; 
+}
+
+.user-title p {
+    margin: auto;
+    font-size: 1.6em;
+}
+
+@media screen and (min-width: 768px) {
+
+    .top-fixed-bar {
+        height: 60px;
+    }
+
+    .company-title .logo{
+        height: 30px;
+    }
+
+    .company-title .logo-name {
+        height: 20px;
+    }
+
+}

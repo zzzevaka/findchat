@@ -4,3 +4,5 @@ export {default as PhotoThread} from './photo-thread';
 export {default as ChatThread} from './chat-thread';
 export {default as UserThread} from './user-thread';
 export {default as ChatListThread} from './chat-list-thread';
+export {default as FollowingThread} from './following-thread';
+export {default as NewsThread} from './news-thread';

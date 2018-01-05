@@ -2,6 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { CSSTransitionGroup } from 'react-transition-group';
 import { Provider } from 'react-redux';
 import ChatApp, {ModalDummy} from './components/ChatApp.react';
 // import UserPage from './components/UserPage.react';
@@ -14,10 +15,12 @@ import SearchPeople from './components/SearchPage/SearchPeople';
 import SettingsPage from './components/SettingsPage';
 import EditUserPage from './components/EditUserPage';
 import LoginPage from './components/LoginPage';
+import FollowPage from './components/FollowPage';
+import NewsPage from './components/NewsPage';
 import * as Actions from './actions';
 import configureStore from './store/configureStore';
-import { BrowserRouter, Route, Switch, Link, Redirect } from 'react-router-dom';
-import ScrollMemory from 'react-router-scroll-memory';
+import { BrowserRouter, withRouter, Route, Switch, Link, Redirect } from 'react-router-dom';
+import ScrollMemory from './react-router-scroll-memory';
 // import { useScroll } from 'react-router-scroll';
 import currentUserId from './auth';
 
@@ -26,11 +29,10 @@ import wsUpdater from './wsUpdater';
 import './index.css';
 
 
-const store = configureStore();
+import AnimationExample from './animation';
 
-// const scrollBehavior = useScroll((prevRouterProps, { location }) => (
-//   prevRouterProps && location.pathname !== prevRouterProps.location.pathname
-// ));
+
+const store = configureStore(window.__INITIAL_STATE__);
 
 const IndexRedirect = () => {
     return (
@@ -39,23 +41,74 @@ const IndexRedirect = () => {
     );
 }
 
+// ScrollMemory.componentWillReceiveProps = () => {
+//     alert('next');
+// }
+
+class Wrapp extends React.Component {
+
+    componentDidUpdate() {
+        // this.scrollMemory && alert(this.scrollMemory.url)
+        console.log(<ScrollMemory />)
+    }
+
+    render = () => null
+
+}
+
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
         <ChatApp>
-            <ScrollMemory />
-            <Route exact path='/' component={IndexRedirect} />
-            <Route path='/user/:userID' component={UserPage} /> 
-            <Route path='/search' component={SearchPage} />
-            <Route path='/chats' component={ChatPage} />
-            <Route path='/settings' component={SettingsPage} />
-            <Route path='/edit_user' component={EditUserPage} />
-            <Route path='/login' component={LoginPage} />
+            <Route
+                exact path='/'
+                component={IndexRedirect}
+            />
+            {true && <ScrollMemory compareOnlyPathname />}
+            <Switch>
+                <Route
+                    path='/user/:userID/follow'
+                    component={FollowPage}
+                />
+                <Route
+                    path='/user/:userID'
+                    component={UserPage}
+                /> 
+                <Route
+                    path='/search'
+                    component={SearchPage}
+                />
+                <Route
+                    path='/news'
+                    component={NewsPage}
+                />
+                <Route
+                    path='/chats'
+                    component={ChatPage}
+                />
+                <Route
+                    path='/settings'
+                    component={SettingsPage}
+                />
+                <Route
+                    path='/edit_user'
+                    component={EditUserPage}
+                />
+                <Route
+                    path='/login'
+                    component={LoginPage}
+                />
+            </Switch>
         </ChatApp>
     </BrowserRouter>
   </Provider>,
   document.getElementById('root')
 );
+
+// ReactDOM.render(
+//     <AnimationExample />,
+//     document.getElementById('root')
+// );
 
 let ws = new wsUpdater();
 

@@ -55,26 +55,6 @@ class ChatThread extends Component {
         const member = thread.members ? thread.members[0] : undefined;
         return (
             <div className='chat-thread'>
-            <div className='top-fixed-bar'>
-                { member &&
-                    <div className='chat-member-title'>
-                        <Link
-                            to={`/user/${member.id}`}
-                            className='link-no-style'
-                        >
-                            <UserAvatar thumbnail={member.thumbnail} />
-                            <span>{member.firstname}</span>
-                        </Link>
-                    </div>
-
-                }
-                <Link
-                    to='/chats'
-                    className='link-no-style link-to-chats'
-                >
-                    <img src='/svg/message.svg' />
-                </Link>
-            </div>
             <Scrollbars
                 ref = {e => this.scrollbar = e}
                 className='post-list'

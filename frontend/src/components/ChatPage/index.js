@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
+import { CSSTransitionGroup } from 'react-transition-group';
 import {Grid, Row, Col, Modal} from 'react-bootstrap';
 import {Route, Switch} from 'react-router-dom';
 import classNames from 'classnames';
 import PostList from './post-list';
-import MainMenu, {MobileMenu} from '../Menu';
+import MainMenu from '../Menu';
 import ThreadList from './thread-list';
 import ChatPostList from './post-list';
 
@@ -33,14 +34,10 @@ export default class ChatPage extends Component {
             {'show-chat-list': showChatList}
         );
         return (
-            <div className='chat-page' style={{height: window.innerHeight}}>
-                {showChatList && <MobileMenu />}
-                <div className='top-fixed-bar'>
-                    <div className='company_title'>
-                        <img src='/svg/logo_color.svg' className='logo' />
-                        <img src='/svg/findchat.svg' className='logo_name'/>
-                    </div>
-                </div>
+            <div
+                className='chat-page'
+                style={{height: window.innerHeight}}
+            >
             <Grid fluid className={gridClasses}>
                 <Row>
                     <Col sm={2} className='col-menu'>
@@ -50,7 +47,10 @@ export default class ChatPage extends Component {
                         <ThreadList />
                     </Col>
                     <Col sm={6} className='col-post-list'>
-                        <Route path="/chats/:threadID?" component={ChatPostList} />
+                        <Route
+                            path="/chats/:threadID?"
+                            component={ChatPostList}
+                        />
                     </Col>
                 </Row>
             </Grid>

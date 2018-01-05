@@ -69,10 +69,11 @@
     border-bottom: 1px solid #ddd;
     padding: 20px 20px 20px 80px;
     position: relative;
+    transition: background-color .7s ease-in-out;
 }
 
 .chat-list-item-active {
-    background: #fafafa;
+    background: #EEE;
 }
 
 .chat-list-item .avatar {
@@ -119,6 +120,8 @@
 
 .chat-post-list {
     height: 100%;
+    width: 100%;
+    position: relative;
     background: #fff;
     /* padding: 8px; */
     border: 1px solid #ddd;
@@ -182,3 +185,37 @@
     }
 
 }
+
+
+/* chat-post-list-animation*/
+
+/*.chat-post-list-animation-wrap {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.chat-post-list-animation-appear,
+.chat-post-list-animation-enter {
+    opacity: 0;
+    width: 100%;
+    position: absolute;
+    z-index: 2;
+}
+
+.chat-post-list-animation-appear.chat-post-list-animation-appear-active,
+.chat-post-list-animation-enter.chat-post-list-animation-enter-active {
+    opacity: 1;
+    transition: opacity .7s ease-out;
+}
+
+.chat-post-list-animation-leave {
+    opacity: 1;
+    width: 100%;
+    position: absolute;
+}
+
+.chat-post-list-animation-leave.chat-post-list-animation-leave-active {
+    opacity: 0;
+    transition: opacity .7s ease-out;
+}*/

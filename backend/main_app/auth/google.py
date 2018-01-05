@@ -149,6 +149,7 @@ class VKOAuth2Handler(BaseAuthHandler,
                     client_secret=self.settings['vk_oauth']['secret'],
                     code=self.get_argument("code")
                 )
+                logging.debug(oauth2_user)
                 self.auth_by_user_id(str(oauth2_user['user_id']))
             else:
                 yield self.authorize_redirect(
@@ -176,7 +177,6 @@ class VKOAuth2Handler(BaseAuthHandler,
         http.fetch(
             self._oauth_request_token_url(**args),
             functools.partial(self._on_access_token, callback),
-
         )
 
     def _on_access_token(self, future, response):

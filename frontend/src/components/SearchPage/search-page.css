@@ -1,4 +1,4 @@
-.search-page .top-fixed-bar {
+.search-page-top-fixed-bar {
     position: absolute;
 }
 
@@ -8,7 +8,7 @@
 
 @media screen and (min-width: 768px) {
 
-    .search-page .top-fixed-bar {
+    .search-page-top-fixed-bar {
         position: fixed;
     }
 

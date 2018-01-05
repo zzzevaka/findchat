@@ -340,6 +340,36 @@ export default class API {
         return xhr;
     }
 
+    getUserFollowers(userID) {
+        let xhr = this.XHR();
+        xhr.withCredentials = true;
+        xhr.open('GET', `${this.uri}/user/${userID}/followers`);
+        xhr.send();
+        return xhr;
+    }
+
+    getUserFollowing(userID) {
+        let xhr = this.XHR();
+        xhr.withCredentials = true;
+        xhr.open('GET', `${this.uri}/user/${userID}/following`);
+        xhr.send();
+        return xhr;
+    }
+
+    followUser(userID) {
+        let xhr = this.XHR();
+        xhr.open('POST', `${this.uri}/user/${userID}/follow`);
+        xhr.send();
+        return xhr;
+    }
+
+    unfollowUser(userID) {
+        let xhr = this.XHR();
+        xhr.open('DELETE', `${this.uri}/user/${userID}/follow`);
+        xhr.send();
+        return xhr;
+    }
+
 }
 
 

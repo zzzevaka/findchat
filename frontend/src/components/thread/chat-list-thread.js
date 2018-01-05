@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {NavLink} from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
 import connectThread, {mapStateToPropsChatList} from './connect-thread';
+import {ThreadLoaderIcon, ThreadPlaceholder} from './thread-interface';
 import {UserAvatar} from '../UserPage';
 
 
@@ -22,17 +23,18 @@ class ChatListThread extends Component {
                 className='chat-list'
                 onScrollFrame={this._onScroll}
             >
-            {
-                // chats.map(c => <ChatListItem key={c.id} chat={c} />)
-                thread.posts.slice(0, showPosts).map(chat => 
-                    <ChatListItem
-                        unreadedPosts={unreadedPosts.threads[chat.id]}
-                        chat={chat}
-                        key={chat.id}
-                        dispatch={dispatch}
-                    />
-                )
-            }
+                {
+                    thread.posts.slice(0, showPosts).map(chat => 
+                        <ChatListItem
+                            unreadedPosts={unreadedPosts.threads[chat.id]}
+                            chat={chat}
+                            key={chat.id}
+                            dispatch={dispatch}
+                        />
+                    )
+                }
+                <ThreadLoaderIcon thread={thread} />
+                <ThreadPlaceholder thread={thread} placeholder={placeholder} />
             </Scrollbars>
         );
     }

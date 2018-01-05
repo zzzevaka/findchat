@@ -89,6 +89,7 @@ PhotoSwipeImage.onClick = e => {
     const options = {
         shareEl: false,
         fullscreenEl: false,
+        history: false,
         getThumbBoundsFn: () =>  ({x: rect.left, y: rect.top + pageYScroll, w: rect.width}),
     }
     const items = [

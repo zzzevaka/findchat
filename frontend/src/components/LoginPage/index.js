@@ -57,12 +57,6 @@ class LoginPage extends PureComponent {
         const {showForm} = this.state;
         return (
             <div className='login-page-wrapper'>
-                <div className='header'>
-                    <div className='logo'>
-                        <img className='logo-icon' src='/svg/logo_color.svg' />
-                        <img className='logo-title' src='/svg/findchat.svg' />
-                    </div>
-                </div>
                 <Grid fluid className='login-page-grid main-container'>
                     <Row>
                         <Col sm={6} className={classNames('col-slogan', {'col-hidden-up': showForm})}>

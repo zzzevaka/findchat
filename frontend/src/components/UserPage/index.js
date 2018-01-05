@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import {Grid, Row, Col, Image, Glyphicon, MenuItem} from 'react-bootstrap';
 import classNames from 'classnames';
-import {Link, withRouter} from 'react-router-dom';
+import {NavLink, Link, Route, Switch, withRouter} from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import MainMemu, {MobileMenu} from '../Menu';
+import {TopFixedBarDummy} from '../TopFixedBar';
 import {MarsIcon, VenusIcon, MessageIcon} from '../Icons'
 import {DropdownTools} from '../Menu/dropdown-tools';
 
@@ -22,33 +23,13 @@ const PHOTO_PLACEHOLDER = 'There are no photos yet ;(';
 
 class UserPage extends Component {
 
-    constructor() {
-        super();
-        this.state = {
-            showPhotos: false
-        }
-    }
-
-    shouldComponentUpdate(nProps, nState) {
-        if (this.state !== nState) return true;
-        return this.props.user !== nProps.user;
-    }
-
     componentDidMount() {
         this.loadUser();
     }
 
     loadUser() {
         const {user, actions, match} = this.props;
-        !user && actions.loadUsers(match.params.userID);
-    }
-
-    showPhotos = () => {
-        this.setState({'showPhotos': true});
-    }
-
-    showOffers = () => {
-        this.setState({'showPhotos': false});
+        actions.loadUsers(match.params.userID);
     }
 
     chatOfferLoad = (limit, offset, dispatch) => {
@@ -63,23 +44,67 @@ class UserPage extends Component {
         );
     }
 
+    renderThread() {
+        const {user, match} = this.props;
+        if (!user.offer_thread_id) return null;
+        const isMyPage = currentUserId() == user.id; 
+        return (
+            <Switch>
+                <Route path={`${match.url}/photos`} render={() => (
+                    <PhotoThread
+                        threadID={user.photo_thread_id}
+                        loadMethod={this.photosLoad}
+                        placeholder={PHOTO_PLACEHOLDER}
+                        isMyPage={isMyPage}
+                    />
+                )} />
+                <Route path={`${match.url}`} render={() => (
+                    <ChatOfferThread
+                        threadID={user.offer_thread_id}
+                        loadMethod={this.chatOfferLoad}
+                        placeholder={OFFER_PLACEHOLDER}
+                    />                
+                )} />
+            </Switch>
+        )
+    }
+    
+    renderFollowButton() {
+        const {user, actions} = this.props;
+        if (user.current_user_follows) {
+            return (
+                <button
+                    className='button-no-style'
+                    onClick={() => actions.unfollowUser(user.id)}
+                >
+                    <img src='/svg/like_color.svg' />
+                    Unfollow
+                </button>
+            );
+        }
+        else {
+            return (
+                <button
+                    className='button-no-style'
+                    onClick={() => actions.followUser(user.id)}
+                >
+                    <img src='/svg/like_color.svg' />
+                    Follow
+                </button>
+            ); 
+        }
+    }
+
     render() {
         const {user, match, history, location} = this.props;
         if (!user) return null;
         const isMyPage = currentUserId() == user.id;  
-        const {showPhotos} = this.state;
         return (
             <div className='user-page' key={match.params.userID}>
-                <div className='top-fixed-bar'>
-                    <div className='company_title'>
-                        <img src='/svg/logo_color.svg' className='logo' />
-                        <img src='/svg/findchat.svg' className='logo_name'/>
-                    </div>
-                </div>
                 <MobileMenu />
                 <div className='user-info-background'>
                 <Grid fluid className='user-page-grid main-container'>
-                    <UserOptions  isMyPage={isMyPage} />
+                    <UserOptions  isMyPage={isMyPage} user={user} />
                     <Row>
                         <Col sm={2} className='col-menu'>
                             <MainMemu />
@@ -122,13 +147,6 @@ class UserPage extends Component {
                 </Grid>
                 </div>
                 <div className='user-buttons'>
-                    {isMyPage && <button
-                        className='button-no-style'
-                        onClick={() => {history.push(location.pathname + '?modalType=new_photo')}}
-                    >
-                        <img src='/svg/photo_color.svg' />
-                        New photo
-                    </button>}
                     {!isMyPage && <button
                         className='button-no-style'
                         onClick={() => {history.push(location.pathname + `?modalType=private_message_composer&userID=${user.id}`)}}
@@ -136,45 +154,62 @@ class UserPage extends Component {
                         <img src='/svg/message_color.svg' />
                             Message
                     </button>}
+                    {!isMyPage && this.renderFollowButton()}
                 </div>
                 <div className='thread-type-switch'>
-                    <button
-                        className={classNames('button-no-style', {'thread-active': !showPhotos})}
+                    <NavLink
+                        exact
+                        to={`${match.url}`}
+                        className='link-no-style'
+                        activeClassName='thread-active'
                         onClick={this.showOffers}
-                    >Chat Offers</button>
+                    >Chat Offers</NavLink>
                     <span>/</span>
-                    <button
-                        className={classNames('button-no-style', {'thread-active': showPhotos})}
-                        onClick={this.showPhotos}
-                    >Photos</button>
+                    <NavLink
+                        to={`${match.url}/photos`}
+                        className='link-no-style'
+                        activeClassName='thread-active'
+                        onClick={this.showOffers}
+                    >Photos</NavLink>
                 </div>
                 <div className='thread-area'>
-                    { user.offer_thread_id && !showPhotos &&
-                        <ChatOfferThread
-                            threadID={user.offer_thread_id}
-                            loadMethod={this.chatOfferLoad}
-                            placeholder={OFFER_PLACEHOLDER}
-                        />
-                    }
-                    { user.photo_thread_id && showPhotos &&
-                        <PhotoThread
-                            threadID={user.photo_thread_id}
-                            loadMethod={this.photosLoad}
-                            placeholder={PHOTO_PLACEHOLDER}
-                        />
-                    }
+                    {this.renderThread()}
                 </div>
             </div>
-
         )
     }
 
 }
 
-function mapStateToProps({users}, {match}) {
 
+function UserPageTopFixedBar({user, children}) {
+    return (
+        <TopFixedBarDummy>
+            {
+                user &&
+                    <Link
+                        to={`/user/${user.id}`}
+                        className='link-no-style user-title'
+                    >
+                        <UserAvatar thumbnail={user.thumbnail} />
+                        <p>{user.firstname}</p>
+                    </Link>
+            }
+            {children}
+        </TopFixedBarDummy>
+    );
+}
+
+
+function mapStateToProps({users}, props) {
+    let {userID, match} = props;
+    if (!userID) {
+        if (match) {
+            userID = match.params.userID;
+        }
+    }
     return {
-        user: users[match.params.userID]
+        user: users[userID]
     };
   }
   
@@ -185,6 +220,9 @@ function mapStateToProps({users}, {match}) {
       };
 
   }
+
+UserPageTopFixedBar = connect(mapStateToProps)(UserPageTopFixedBar);
+export {UserPageTopFixedBar};
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserPage);  
 
@@ -252,27 +290,25 @@ export function UserAvatar({thumbnail}) {
     );
 }
 
-let UserOptions = ({isMyPage, history}) => {
+let UserOptions = ({isMyPage, user, history}) => {
     // user browserHistory.push instead Link to avoid error: "cannot appear as a descendant..."
     let items = [];
     let browserHistory = [];
-    if (isMyPage) {
-        items.push(
-            <MenuItem key='edit_page' onClick={() => history.push('/edit_user')}>
-                Edit my info
-            </MenuItem>
-        );
-        items.push(
-            <MenuItem key='settings' onClick={() => history.push('/settings')}>
-                Settings
-            </MenuItem>
-        );
-        items.push(
-            <MenuItem key='logout' onClick={() => window.location.href= '/auth/logout'}>
-                Logout
-            </MenuItem>
-        );
-    }
+    isMyPage && items.push(
+        <MenuItem key='edit_page' onClick={() => history.push('/edit_user')}>
+            Edit profile
+        </MenuItem>
+    );
+    items.push(
+        <MenuItem key='followers' onClick={() => history.push(`/user/${user.id}/follow`)}>
+            Followers
+        </MenuItem>
+    );
+    isMyPage && items.push(
+        <MenuItem key='logout' onClick={() => window.location.href= '/auth/logout'}>
+            Logout
+        </MenuItem>
+    );
     return (
         <div className='user-option'>
             <DropdownTools className='button-no-style'>

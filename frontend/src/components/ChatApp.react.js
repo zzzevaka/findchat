@@ -1,15 +1,21 @@
+import 'react-select/dist/react-select.css';
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
+import { CSSTransitionGroup } from 'react-transition-group'
 // import SideBarWrapper, {SideBarButton} from './SideBar';
 import { Modal, Grid, Row, Col, Glyphicon, Button } from 'react-bootstrap';
 import classNames from 'classnames';
 import { Scrollbars } from 'react-custom-scrollbars';
-import { withRouter } from 'react-router-dom';
+import { Switch, Route, withRouter } from 'react-router-dom';
 import qs from 'qs';
-import {NewPostPhotoModal, PrivateMessageModal, NewOfferModal} from './modals';
+import {NewPostPhotoModal,
+        PrivateMessageModal,
+        NewOfferModal} from './modals';
 import PostModal from './modals/post-modal';
 import {PhotoSwipeDummy} from './PhotoSwipe';
+import {MobileMenu} from './Menu';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -21,46 +27,11 @@ import { parseHistorySearch } from '../utils';
 import currentUserId, {loginRequired} from '../auth';
 
 import {UpArrow, AddColorIcon, LoaderIcon} from './Icons';
+import {TopFixedBarDefault} from './TopFixedBar';
+import {UserPageTopFixedBar} from './UserPage';
+import {SearchFilterTopFixedBar} from './SearchPage';
+import {ChatTopFixedBar} from './ChatPage/post-list';
 
-import 'react-select/dist/react-select.css';
-
-
-function scrollTo(element, to, duration) {
-    var start = element.scrollTop,
-        change = to - start,
-        currentTime = 0,
-        increment = 20;
-        
-    var animateScroll = function(){        
-        currentTime += increment;
-        var val = Math.easeInOutQuad(currentTime, start, change, duration);
-        element.scrollTop = val;
-        if(currentTime < duration) {
-            setTimeout(animateScroll, increment);
-        }
-    };
-    animateScroll();
-}
-
-//t = current time
-//b = start value
-//c = change in value
-//d = duration
-Math.easeInOutQuad = function (t, b, c, d) {
-  t /= d/2;
-	if (t < 1) return c/2*t*t + b;
-	t--;
-	return -c/2 * (t*(t-2) - 1) + b;
-};
-
-function getScrolledBody() {
-    if (document.body.scrollTop) {
-        return document.body;
-    }
-    else if (document.documentElement.scrollTop) {
-        return document.documentElement;
-    }
-}
 
 class ChatApp extends Component { 
 
@@ -85,6 +56,17 @@ class ChatApp extends Component {
                     <ScrollBodyUpButton />
                     <NewOfferButton />
                 </div>
+                <Switch>
+                    <Route path='/user/:userID/follow' component={UserPageTopFixedBar} />
+                    <Route path='/chats/:threadID' component={ChatTopFixedBar} />
+                    <Route path='/search' component={SearchFilterTopFixedBar} />
+                    <Route path='/' component={TopFixedBarDefault} />
+                </Switch>
+                <Switch>
+                    <Route path='/chats/:chatID' render={() => null} />
+                    <Route path='/login' render={() => null} />
+                    <Route path='/' component={MobileMenu} />
+                </Switch>
                 <Notifications notifications={store.notifications}/>
                 {this.props.children}
                 <Modals {...this.props} />
@@ -141,9 +123,9 @@ class ScrollBodyUpButton extends Component {
             currentTime = 0,
             increment = 20;
             
-        let animateScroll = function(){        
+        let animateScroll = () => {        
             currentTime += increment;
-            var val = Math.easeInOutQuad(currentTime, start, change, duration);
+            var val = this.easeInOutQuad(currentTime, start, change, duration);
             element.scrollTop = val;
             if(currentTime < duration) {
                 setTimeout(animateScroll, increment);
@@ -160,6 +142,7 @@ class ScrollBodyUpButton extends Component {
         t /= d/2;
         if (t < 1) return c/2*t*t + b;
         t--;
+        return -c/2 * (t*(t-2) - 1) + b;
     }
 
     onScroll = () => {
@@ -183,7 +166,7 @@ class ScrollBodyUpButton extends Component {
         const el = document.documentElement.scrollTop
             ? document.documentElement
             : document.body;
-        scrollTo(
+        this.scrollTo(
             el,
             0,
             this.props.duration
@@ -216,6 +199,15 @@ let Modals  = class extends Component {
         history.push(history.location.pathname);
     }
 
+    pushHistory = (url) => this.props.history.push(url)
+
+    onPrivateMessageSubmit = (userID, post) => {
+        const {actions, history} = this.props;
+        actions.sendPostToUser(userID, post).then(
+            threadID => history.push(`/chats/${threadID}`)
+        );
+    }
+
     render() {
         const {store, actions, history} = this.props;
         const queryParams = parseHistorySearch(history);
@@ -240,7 +232,7 @@ let Modals  = class extends Component {
                 return <PrivateMessageModal
                     show={true}
                     userID={userID}
-                    onSubmit={actions.sendPostToUser}
+                    onSubmit={this.onPrivateMessageSubmit}
                     onHide={this.closeModal}
                 />
             }
@@ -265,7 +257,9 @@ let Modals  = class extends Component {
                 return (
                     <NewPostPhotoModal
                         show={true}
-                        onHide={this.closeModal}
+                        onHide={
+                            () => this.pushHistory(`/user/${currentUserId()}/photos`)
+                        }
                         animation={true}
                         title='New Photo'
                         threadID={user.photo_thread_id}

@@ -31,6 +31,7 @@ export class NewPostPhotoModal extends PureComponent {
             actions,
             title,
             cropRatio,
+            submitAction,
             cropperClassName,
             ...rest
         } = this.props;

@@ -10,11 +10,12 @@ from main_app.utils.email import email
 
 import tornado.web
 
+from sqlalchemy import and_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import joinedload
 
 from ..models.basemodel import STRFTIME_FORMAT, alchemy_encoder
-from ..models.user import User, DEFAULT_USER_ID
+from ..models.user import User, FollowUser, DEFAULT_USER_ID
 from ..models.thread import PostThread, User2Thread
 from ..models.language import Language
 
@@ -47,7 +48,14 @@ class API_Users(BaseHandler):
         except ValuerError:
             raise tornado.web.HTTPError(409)
         query = self.db.query(
-                User
+                User, FollowUser.dst_user_id
+            ).outerjoin(
+                FollowUser,
+                and_(
+                    User.id == FollowUser.dst_user_id,
+                    FollowUser.src_user_id == self.current_user,
+                    FollowUser.is_current()
+                )
             ).options(
                 joinedload(User._languages)
             ).filter(User.id.in_(users_id))
@@ -55,10 +63,13 @@ class API_Users(BaseHandler):
         for_export = {
             'users': {}
         }
-        for u in result:
-            for_export['users'][u.id] = u.export_dict
-            for_export['users'][u.id]['lang'] = [l.name for l in u._languages]
-            for_export['users'][u.id]['age'] = u.age
+        for (u, current_user_follows) in result:
+            for_export['users'][u.id] = {
+                'lang': [l.name for l in u._languages],
+                'age': u.age,
+                'current_user_follows': bool(current_user_follows),
+                **u.export_dict
+            }
         for_export = json.dumps(
             for_export,
             cls=alchemy_encoder(),

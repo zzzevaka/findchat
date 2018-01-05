@@ -151,14 +151,50 @@ export function loadUsers(userID) {
             if (xhr.readyState !== 4) return;
             
             if (xhr.status === 200) {
-                const body = JSON.parse(xhr.responseText)
-                dispatch(loadUsersSuccess(body.users))
+                const body = JSON.parse(xhr.responseText);
+                dispatch(loadUsersSuccess(body.users));
             } else {
                 // dispatch(loadUsersError(ids))
             }
         };
         xhr.send();
-        
+    }
+}
+
+export function getUserFollowing(userID, limit, offset) {
+    return dispatch => {
+        dispatch(loadThreadRequest([`user_following_${userID}`,]));    
+        let xhr = api.getUserFollowing(userID, limit, offset)
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState !== 4) return;
+            if (xhr.status === 200) {
+                const body = JSON.parse(xhr.responseText);
+                console.log(body);
+                dispatch(loadThreadSuccess(
+                    body.threads,
+                    body.posts,
+                    body.users,
+                ));
+            }
+        }
+    }
+}
+
+export function getUserFollowers(userID, limit, offset) {
+    return dispatch => {
+        dispatch(loadThreadRequest([`user_followers_${userID}`,]));
+        let xhr = api.getUserFollowers(userID, limit, offset)
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState !== 4) return;
+            if (xhr.status === 200) {
+                const body = JSON.parse(xhr.responseText);
+                dispatch(loadThreadSuccess(
+                    body.threads,
+                    body.posts,
+                    body.users,
+                ));
+            }
+        }
     }
 }
 
@@ -408,12 +444,15 @@ export function answerChatOffer(offerID, post) {
 export function sendPostToUser(userID, post) {
     return dispatch => {
         let xhr = api.sendPostToUser(userID, post);
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState !== 4) return;
-            if (xhr.status == 200) {
-                // browserHistory.push(`/chats/${JSON.parse(xhr.responseText).thread_id}`);
-            }
-        }
+        return new Promise((resolve, error) => {
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState !== 4) return;
+                if (xhr.status == 200) {
+                    console.log(xhr.responseText, userID, post);
+                    return resolve(JSON.parse(xhr.responseText).thread_id);
+                }
+            }            
+        });
     }
 }
 
@@ -446,16 +485,12 @@ export function loadChats(limit, offset) {
                     posts: Object.keys(body.threads).map(id => id),
                     no_more_posts: Object.keys(body.threads).length < limit
                 };
-                // chatListThread.posts = chatListThread.posts.sort((a,b) => {
-                //     return body.threads[a].posts[0].id < body.threads[b].posts[0].id ? 1 :-1;
-                // })
                 dispatch(loadThreadSuccess(
                     {chat_list: chatListThread, ...body.threads},
                     body.posts,
                     body.users,
                     () => {},
                 ));
-                // dispatch(loadUsersSuccess(body.users));
             }
         }
     }
@@ -552,13 +587,6 @@ export function uploadImage(storeKey, img) {
     }
 }
 
-// export function toggleSideBar() {
-//     return {
-//         type: TOGGLE_SIDEBAR
-//     };
-// }
-
-
 export function updateUnreadedPostsFull(unreadedPosts) {
     return {
         type: UPDATE_UNREADED_POSTS.FULL,
@@ -608,6 +636,55 @@ export function setThreadAsReaded(threadID) {
         }
     }
 }
+
+
+export function followUser(userID) {
+    return dispatch => {
+        let xhr = api.followUser(userID);
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState != 4) return;
+            if (xhr.status === 200) {
+                dispatch(
+                    loadUsersSuccess({
+                        [userID]: {
+                            current_user_follows: true
+                        }
+                    })
+                )
+            }
+        }
+    }
+}
+
+export function unfollowUser(userID) {
+    return dispatch => {
+        let xhr = api.unfollowUser(userID);
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState != 4) return;
+            if (xhr.status === 200) {
+                dispatch(
+                    loadUsersSuccess({
+                        [userID]: {
+                            current_user_follows: false
+                        }
+                    })
+                )
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 export function updateAuth(auth) {
     return {

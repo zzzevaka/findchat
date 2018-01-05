@@ -12,8 +12,9 @@ import {PhotoSwipeImage} from '../PhotoSwipe';
 import {LoaderIcon, CommentColorIcon} from '../Icons';
 import {UserAvatar} from '../UserPage';
 import {HashtagString} from '../Hashtag';
-
 import connectThread, {mapStateToProps} from './connect-thread';
+import {ThreadLoaderIcon, ThreadPlaceholder, InfiniteThread} from './thread-interface';
+
 import currentUserId from '../../auth';
 
 import './offer-thread.css';
@@ -24,25 +25,16 @@ const FORMATTER = buildFormatter(russianFormatter);
 
 class ChatOfferThread extends Component {
 
-    _onScroll = e => {
-        if ((window.innerHeight + window.scrollY) / document.body.offsetHeight > 0.8) {
-            const {thread, showMorePosts} = this.props;
-            if (thread.status !== 'loading') showMorePosts();
-        }
-    }
-
-    componentDidMount() {
-        window.addEventListener('scroll', this._onScroll);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('scroll', this._onScroll);
+    _loadMethod = () => {
+        const {thread, showMorePosts} = this.props;
+        if (thread.status !== 'loading') showMorePosts();
     }
 
     render() {
         const {thread, showPosts, placeholder, history, dispatch}= this.props;
         return (
             <div className='offer-thread'>
+                <InfiniteThread {...this.props} />
                 {
                     thread.posts.slice(0, showPosts).map(p => 
                         <OfferPostWrapper
@@ -53,20 +45,8 @@ class ChatOfferThread extends Component {
                         />
                     )
                 }
-                {
-                    thread.status === 'loading' && <div style={{
-                        textAlign: 'center',
-                        padding: '10px'
-                    }}>
-                        <LoaderIcon />
-                    </div>
-                }
-                {
-                    thread.status === 'loaded' && !thread.posts.length &&
-                        <p className='thread-placeholder'>
-                            {placeholder}
-                        </p>
-                }
+                <ThreadLoaderIcon thread={thread} />
+                <ThreadPlaceholder thread={thread} placeholder={placeholder} />
             </div>
         );
     }
@@ -75,7 +55,6 @@ class ChatOfferThread extends Component {
 
 export const OfferPostWrapper = pure(
     (props) => {
-        console.log(props.history);
         return (
             <div className='post-offer-wrapper'>
                 <OfferPost {...props} />
@@ -92,13 +71,14 @@ export const OfferPostWrapper = pure(
     }
 );
 
-export const OfferPost = ({post, author, dispatch}) => {
+export const OfferPost = ({post, author, className, dispatch}) => {
     if (!author) return null;
 
     const classes = classNames(
         'post-item',
         'post-offer-item',
-        {'post-item-deleted': post.status === 'deleted'}
+        {'post-item-deleted': post.status === 'deleted'},
+        className
     );
 
     return (
@@ -108,8 +88,10 @@ export const OfferPost = ({post, author, dispatch}) => {
                     { currentUserId() == author.id && DeletePostMenuItem(post, dispatch) }
                 </DropdownTools>
             </div>
+            <Link className='link-no-style' to={`/user/${author.id}`}>
             <UserAvatar thumbnail={author.thumbnail} />
             <span className='author-name'>{author.firstname}</span>
+            </Link>
             <br />
             <PostTime datetime={post.datetime} />
             {

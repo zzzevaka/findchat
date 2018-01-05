@@ -248,6 +248,24 @@
     font-size: 1.1em;
 }
 
+.post-user-item .buttons {
+    /*text-align: left;*/
+    padding: 10px 0 0 0;
+}
+
+.post-user-item .buttons .button {
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    padding: 0 30px;
+    margin: 0 10px 0 0;
+}
+
+.post-user-item .buttons .button:hover {
+    border-color: #f949b6;
+}
+
+
+
 span.hashtag {
     color: #f949b6;
     margin-right: 10px; 

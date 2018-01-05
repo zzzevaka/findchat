@@ -12,12 +12,12 @@ from .base_handler import *
 from .api_v1.auth import API_Login, API_Logout, API_CheckEmail, API_Registration, API_Auth
 from .api_v1.post import API_Post, API_UnreadedPostCount
 from .api_v1.user import API_Users, API_User
+from .api_v1.follow import API_FollowUser, API_UserFollowing, API_UserFollowers
 from .api_v1.threads import API_Threads, API_Chats
-from .api_v1.thread import API_Thread, API_ThreadChatOffers
+from .api_v1.thread import API_Thread, API_ThreadChatOffers, API_ThreadPeople, API_ThreadNews
 from .api_v1.post_like import API_PostLike, API_PostLikeBrief
 from .api_v1.ws_handler import WSUpdates
 from .api_v1.search import API_SearchUsers
-from .api_v1.thread import API_ThreadPeople
 from .api_v1.image import API_Image
 from .api_v1.language import API_Language
 
@@ -46,6 +46,9 @@ class MainApp(Application):
             (r'/user', API_User),
             (r'/image', API_Image),
             (r'/user/([0-9]+)', API_User),
+            (r'/user/([0-9]+)/follow', API_FollowUser),
+            (r'/user/([0-9]+)/following', API_UserFollowing),
+            (r'/user/([0-9]+)/followers', API_UserFollowers),
             (r'/post', API_Post),
             (r'/post/([0-9]+)', API_Post),
             (r'/post_likes/([0-9]+)', API_PostLike),
@@ -58,6 +61,7 @@ class MainApp(Application):
             # (r'/chat_offer_join/([0-9]+)', API_ReplyChatOffer),
             (r'/search/users', API_SearchUsers),
             (r'/thread/search_users', API_ThreadPeople),
+            (r'/thread/news', API_ThreadNews),
             # (r'/search/chat_offers', API_SearchChatOffers),
             (r'/unreaded_posts', API_UnreadedPostCount),
             (r'/unreaded_posts/([0-9]+)', API_UnreadedPostCount),

@@ -1,50 +1,3 @@
-.top-fixed-bar {
-    position: fixed;
-    display: flex;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 45px;
-    padding: 0 20px;
-    background: #fff;
-    border-bottom: 1px solid #eee;
-    z-index: 10;
-}
-
-.user-page {
-    padding-bottom: 40px;
-}
-
-.company_title {
-    margin: auto;
-    text-align: center;
-}
-
-.company_title .logo {
-    height: 24px;
-    margin-right: 12px;
-}
-
-.company_title .logo_name {
-    height: 15px;
-}
-
-@media screen and (min-width: 768px) {
-
-    .top-fixed-bar {
-        height: 60px;
-    }
-
-    .company_title .logo{
-        height: 30px;
-    }
-
-    .company_title .logo_name {
-        height: 20px;
-    }
-
-}
-
 .user-page-grid {
     padding-top: 45px;
     position: relative;
@@ -53,6 +6,7 @@
 .user-info-background {
     background: rgb(255, 255, 255);
     border-bottom: 1px solid #eee;
+    box-shadow: 0px 1px 2px rgba(150,150,150,0.1);
 }
 
 @media screen and (min-width: 768px) {
@@ -268,11 +222,16 @@
 
 .user-buttons {
     max-width: 620px;
-    margin: 8px auto 0 auto;
+    margin: 14px auto 0 auto;
     height: 48px;
     display: flex;
     padding: 0;
     background: #fff;
+    box-shadow: 0px 1px 2px rgba(150,150,150,0.1);
+}
+
+.user-buttons:empty {
+    display: none;
 }
 
 .button-new-offer {
@@ -283,7 +242,7 @@
 
     .user-buttons {
         height: 38px;
-        margin: 10px auto 0 auto;
+        margin: 14px auto 0 auto;
     }
 
     .button-new-offer {
@@ -301,6 +260,11 @@
     line-height: 38px;
     font-size: 0.9em;
     border-bottom: 1px solid #eee;
+    border-right: 1px solid #eee;
+}
+
+.user-buttons button:last-child {
+    border-right: none;
 }
 
 .user-buttons img {
@@ -323,14 +287,14 @@
     color: #999;
 }
 
-.thread-type-switch button {
+.thread-type-switch a {
     margin: 0px 15px;
-    padding: 0 25px;
+    padding: 8px 25px;
     line-height: 2.5em;
     color: #999;
 }
 
-.thread-type-switch button.thread-active {
+.thread-type-switch a.thread-active {
     color: #333;
     border-bottom: 1px solid rgb(249, 73, 182);
 }

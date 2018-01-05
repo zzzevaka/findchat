@@ -34,6 +34,7 @@ export default class ChatList extends Component {
                 threadID={CHAT_LIST_THREAD}
                 placeholder={CHAT_LIST_PLACEHOLDER}
                 loadMethod={this.chatListLoad}
+                flushOnUnmount
             />
             // <Scrollbars className='chat-list'>
             // {

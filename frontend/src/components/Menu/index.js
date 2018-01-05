@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {Link, NavLink, withRouter} from 'react-router-dom';
 import classNames from 'classnames';
-import {ProfileIcon, MessageIcon, SearchIcon, SettingsIcon, AddColorIcon} from '../Icons';
+import {ProfileIcon, MessageIcon, SearchIcon, SettingsIcon, AddColorIcon, LikeIcon} from '../Icons';
 import currentUserId, {loginRequired} from '../../auth';
 // import {getModalUrl} from '../../utils';
 import './menu.css';
@@ -41,9 +41,15 @@ let Menu = function({unreadedPosts}) {
                 </MenuLink>
             </li>
             <li>
-                <MenuLink to='/search/chat_offers'>
+                <MenuLink to='/search'>
                     <SearchIcon />
                     Searching
+                </MenuLink>
+            </li>
+            <li>
+                <MenuLink to='/news'>
+                    <LikeIcon />
+                    News
                 </MenuLink>
             </li>
         </ul>
@@ -69,11 +75,11 @@ let MobileMenu = function({unreadedPosts, history}) {
             >
                 <AddColorIcon />
             </MenuLink>
-            <MenuLink to='/search/chat_offers'>
+            <MenuLink to='/search'>
                 <SearchIcon />
             </MenuLink>
-            <MenuLink to='/settings'>
-                <SettingsIcon />
+            <MenuLink to='/news'>
+                <LikeIcon />
             </MenuLink>
         </div>
     )

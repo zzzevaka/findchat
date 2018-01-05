@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {browserHistory, Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import {MenuItem} from 'react-bootstrap';
 import classNames from 'classnames';
 import {pure} from 'recompose';
@@ -8,8 +8,9 @@ import {DropdownTools, DeletePostMenuItem} from '../Menu/dropdown-tools';
 import {PhotoSwipeImage} from '../PhotoSwipe';
 import {LoaderIcon} from '../Icons';
 import {UserAvatar} from '../UserPage';
-import {PostTime} from './offer-thread';
+import {PostTime, OfferPost} from './offer-thread';
 import connectThread, {mapStateToProps} from './connect-thread';
+import {ThreadLoaderIcon, ThreadPlaceholder, InfiniteThread} from './thread-interface';
 
 import currentUserId from '../../auth';
 import {updateUser} from '../../actions';
@@ -21,43 +22,35 @@ import ImageUploader from '../upload-image';
 
 
 class PhotoThread extends Component {
-
-    _onScroll = e => {
-        if ((window.innerHeight + window.scrollY) / document.body.offsetHeight > 0.8) {
-            const {thread, showMorePosts} = this.props;
-            if (thread.status !== 'loading') showMorePosts();
-        }
-    }
-
-    componentDidMount() {
-        window.addEventListener('scroll', this._onScroll);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('scroll', this._onScroll);
-    }
-
+    
     render() {
-        const {thread, showPosts, placeholder, dispatch} = this.props;
+        const {thread, showPosts, placeholder, isMyPage, match, dispatch} = this.props;
         return (
             <div className='photo-thread'>
+                <InfiniteThread {...this.props} />
                 {
-                    thread.posts.slice(0, showPosts).map(p => <PhotoThreadItem {...p} key={p.post.id} dispatch={dispatch} />)
+                    isMyPage && 
+                        <center>
+                            <Link
+                                className='link-no-style new-photo'
+                                to={`${match.url}?modalType=new_photo`}
+                            >
+                                <img src='/svg/photo_color.svg' />
+                                <span>New photo</span>
+                            </Link>
+                        </center>
                 }
                 {
-                    thread.status === 'loading' && <div style={{
-                        textAlign: 'center',
-                        padding: '10px'
-                    }}>
-                        <LoaderIcon />
-                    </div>
+                    thread.posts.slice(0, showPosts).map(
+                        p => <OfferPost
+                                {...p}
+                                key={p.post.id}
+                                dispatch={dispatch}
+                            />
+                    )
                 }
-                {
-                    thread.status === 'loaded' && !thread.posts.length &&
-                        <p className='thread-placeholder'>
-                            {placeholder}
-                        </p>
-                }
+                <ThreadLoaderIcon thread={thread} />
+                <ThreadPlaceholder thread={thread} placeholder={placeholder} />
             </div>
         );
 
@@ -66,7 +59,7 @@ class PhotoThread extends Component {
 }
 
 
-const PhotoThreadItem = pure(
+export const PhotoThreadItem = pure(
     ({post, author, dispatch}) => {
         if (!author) return null;
         if (!post.content) return null;

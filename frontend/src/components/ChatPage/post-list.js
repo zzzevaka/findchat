@@ -1,5 +1,8 @@
 import React, {PureComponent} from 'react';
+import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
 import {ChatThread} from '../thread';
+import {UserPageTopFixedBar} from '../UserPage';
 import {loadThread} from '../../actions';
 
 export default class ChatPostList extends PureComponent {
@@ -28,3 +31,33 @@ export default class ChatPostList extends PureComponent {
         );
     }
 }
+
+
+function ChatTopFixedBar({userID}) {
+    return (
+        <UserPageTopFixedBar userID={userID}>
+            <Link
+                to='/chats'
+                className='link-no-style link-to-chats'
+            >
+                <img src='/svg/message.svg' />
+            </Link>
+        </UserPageTopFixedBar>
+    );
+}
+
+function mapStateToProps(state, {match}) {
+    const {threadID} = match.params;
+    const thread = state.threads[threadID];
+    let member = undefined;
+    if (thread && thread.members) {
+        member = thread.members[0];
+    }
+    return {
+        userID: member
+    }
+}
+
+ChatTopFixedBar = connect(mapStateToProps)(ChatTopFixedBar);
+
+export {ChatTopFixedBar};

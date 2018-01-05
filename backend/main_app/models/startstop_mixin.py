@@ -17,6 +17,9 @@ class StartStopMixin(object):
     def revive(self):
         self._stop_date = datetime(MAXYEAR, 12, 31)
 
+    def restore(self):
+        self._stop_date = datetime(MAXYEAR, 12, 31)
+
     # @property
     # def start_date(self):
     #     return self._start_date

@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
 
-import re
-import hashlib
-import bcrypt
 from datetime import datetime
-import logging
 
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, LargeBinary
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
-from sqlalchemy.orm.collections import attribute_mapped_collection
 
 from .basemodel import BaseModel, STRFTIME_FORMAT
 # from .post import Post
 from .startstop_mixin import StartStopMixin
 from .hashtag import Hashtag, hashtag2user
 from .thread import PostThread, User2Thread, THREAD_TYPE
+
 
 DEFAULT_USER_ID = 0
 
@@ -30,9 +26,9 @@ MAX_LEN = dict(
 
 
 class User(BaseModel, StartStopMixin):
-    
+
     __tablename__ = 'users'
-    
+
     id = Column('user_id', Integer, primary_key=True)
     firstname = Column(String(MAX_LEN['firstname']), index=True, default='nobody')
     lastname = Column(String(MAX_LEN['lastname']), index=True)
@@ -87,7 +83,7 @@ class User(BaseModel, StartStopMixin):
         self.offer_thread.user2thread.append(
             User2Thread(user_id=DEFAULT_USER_ID, allow_add_posts=False)
         )
-        
+
     def __setattr__(self, key, value):
         '''a checking of attribut setting'''
         if key in ('_start_date', 'birth_date') and type(value) is not datetime:
@@ -118,7 +114,7 @@ class User(BaseModel, StartStopMixin):
         for l in arg_langs - user_langs:
             self._languages.append(l)
         return 1
-            
+
     @property
     def age(self):
         return int((datetime.now() - self.birth_date).days / 365.25)
@@ -138,13 +134,30 @@ class User(BaseModel, StartStopMixin):
     def get_default():
         return User(id=DEFAULT_USER_ID)
 
-    # @staticmethod
-    # def is_email(string):
-    #     '''check email format'''
-    #     if re.match(r'^[\w]+@[\w\.]+$', str(string)):
-    #         return True
-    #     else:
-    #         return False
+
+class FollowUser(BaseModel, StartStopMixin):
+
+    __tablename__ = 'follow_user'
+
+    id = Column('follow_user_id', Integer, primary_key=True)
+    src_user_id = Column(Integer, ForeignKey('users.user_id'), index=True)
+    dst_user_id = Column(Integer, ForeignKey('users.user_id'), index=True)
+
+    src_user = relationship(
+        User,
+        primaryjoin='FollowUser.src_user_id == User.id'
+    )
+
+    dst_user = relationship(
+        User,
+        primaryjoin='FollowUser.dst_user_id == User.id'
+    )
 
 
+class FollowHashtag(BaseModel, StartStopMixin):
 
+    __tablename__ = 'follow_hashtag'
+
+    id = Column('follow_hashtag_id', Integer, primary_key=True)
+    src_user_id = Column(Integer, ForeignKey('users.user_id'), index=True)
+    dst_hashtag_id = Column(Integer, ForeignKey('hashtags.hashtag_id'), index=True)
