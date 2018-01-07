@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Grid, Row, Col, Image, Glyphicon, MenuItem} from 'react-bootstrap';
 import classNames from 'classnames';
+import { translate } from 'react-i18next';
 import {NavLink, Link, Route, Switch, withRouter} from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -70,7 +71,7 @@ class UserPage extends Component {
     }
     
     renderFollowButton() {
-        const {user, actions} = this.props;
+        const {user, actions, t} = this.props;
         if (user.current_user_follows) {
             return (
                 <button
@@ -78,7 +79,7 @@ class UserPage extends Component {
                     onClick={() => actions.unfollowUser(user.id)}
                 >
                     <img src='/svg/like_color.svg' />
-                    Unfollow
+                    {t('Unfollow')}
                 </button>
             );
         }
@@ -89,14 +90,14 @@ class UserPage extends Component {
                     onClick={() => actions.followUser(user.id)}
                 >
                     <img src='/svg/like_color.svg' />
-                    Follow
+                    {t('Follow')}
                 </button>
             ); 
         }
     }
 
     render() {
-        const {user, match, history, location} = this.props;
+        const {user, match, history, location, t} = this.props;
         if (!user) return null;
         const isMyPage = currentUserId() == user.id;  
         return (
@@ -152,7 +153,7 @@ class UserPage extends Component {
                         onClick={() => {history.push(location.pathname + `?modalType=private_message_composer&userID=${user.id}`)}}
                     >
                         <img src='/svg/message_color.svg' />
-                            Message
+                            {t("Message")}
                     </button>}
                     {!isMyPage && this.renderFollowButton()}
                 </div>
@@ -163,14 +164,14 @@ class UserPage extends Component {
                         className='link-no-style'
                         activeClassName='thread-active'
                         onClick={this.showOffers}
-                    >Chat Offers</NavLink>
+                    >{t("Chat Offers")}</NavLink>
                     <span>/</span>
                     <NavLink
                         to={`${match.url}/photos`}
                         className='link-no-style'
                         activeClassName='thread-active'
                         onClick={this.showOffers}
-                    >Photos</NavLink>
+                    >{t("Photos")}</NavLink>
                 </div>
                 <div className='thread-area'>
                     {this.renderThread()}
@@ -180,6 +181,8 @@ class UserPage extends Component {
     }
 
 }
+
+UserPage = translate('translations')(UserPage);
 
 
 function UserPageTopFixedBar({user, children}) {
@@ -290,23 +293,23 @@ export function UserAvatar({thumbnail}) {
     );
 }
 
-let UserOptions = ({isMyPage, user, history}) => {
+function UserOptions({isMyPage, user, history, t}) {
     // user browserHistory.push instead Link to avoid error: "cannot appear as a descendant..."
     let items = [];
     let browserHistory = [];
     isMyPage && items.push(
         <MenuItem key='edit_page' onClick={() => history.push('/edit_user')}>
-            Edit profile
+            {t("Edit profile")}
         </MenuItem>
     );
     items.push(
         <MenuItem key='followers' onClick={() => history.push(`/user/${user.id}/follow`)}>
-            Followers
+            {t("Followers")}
         </MenuItem>
     );
     isMyPage && items.push(
         <MenuItem key='logout' onClick={() => window.location.href= '/auth/logout'}>
-            Logout
+            {t("Logout")}
         </MenuItem>
     );
     return (
@@ -318,6 +321,7 @@ let UserOptions = ({isMyPage, user, history}) => {
     );
 }
 
+UserOptions = translate('translations')(UserOptions);
 UserOptions = withRouter(UserOptions);
 
 export {UserOptions};

@@ -7,6 +7,10 @@ import currentUserId, {loginRequired} from '../../auth';
 // import {getModalUrl} from '../../utils';
 import './menu.css';
 
+import { translate } from 'react-i18next';
+
+
+
 function MenuLink({children, className, ...rest}) {
     const classes = classNames(
         'menu-link',
@@ -20,20 +24,19 @@ function MenuLink({children, className, ...rest}) {
     )
 }
 
-let Menu = function({unreadedPosts}) {
-
+let Menu = function({unreadedPosts, t}) {
     return (
         <ul className='main-menu'>
             <li>
                 <MenuLink to={`/user/${currentUserId()}`}>
                     <ProfileIcon />
-                    My profile
+                    {t('My profile')}
                 </MenuLink>
             </li>
             <li>
                 <MenuLink to='/chats'>
                     <MessageIcon />
-                    Messages
+                    {t('Messages')}
                     {   
                         Boolean(unreadedPosts) && 
                             <span className='unreaded-posts'>{unreadedPosts}</span>
@@ -43,13 +46,13 @@ let Menu = function({unreadedPosts}) {
             <li>
                 <MenuLink to='/search'>
                     <SearchIcon />
-                    Searching
+                    {t('Searching')}
                 </MenuLink>
             </li>
             <li>
                 <MenuLink to='/news'>
                     <LikeIcon />
-                    News
+                    {t('News')}
                 </MenuLink>
             </li>
         </ul>
@@ -85,16 +88,18 @@ let MobileMenu = function({unreadedPosts, history}) {
     )
 };
 
-let NotLoginMenu = function() {
+export function NotLoginMenu({t}) {
     return (
         <div className='footer gradient'>
         <MenuLink to={'/login?showForm=1'}>
-            Join
+            {false && t('Join')}
+            test
         </MenuLink>
         </div>
     )
 }
 
+NotLoginMenu = translate('translations')(NotLoginMenu);
 
 function mapStateToProps(state) {
     return {
@@ -105,6 +110,9 @@ function mapStateToProps(state) {
 // loginRequired
 Menu = loginRequired(Menu);
 MobileMenu = loginRequired(MobileMenu, NotLoginMenu);
+
+// i18n
+Menu = translate('translations')(Menu);
 
 // connect to store
 Menu = connect(mapStateToProps)(Menu);

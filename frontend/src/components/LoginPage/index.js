@@ -2,11 +2,12 @@ import React, {PureComponent} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {Grid, Row, Col, FormGroup, FormControl, Glyphicon} from 'react-bootstrap';
 import classNames from 'classnames';
+import { translate } from 'react-i18next';
 import { withRouter, Link } from 'react-router-dom';
 import API from '../../api';
 import {parseHistorySearch} from '../../utils';
 
-import './login-page.css';
+// import './login-page.css';
 
 const api = new API('/api_v1');
 
@@ -55,6 +56,7 @@ class LoginPage extends PureComponent {
 
     render() {
         const {showForm} = this.state;
+        const {t} = this.props;
         return (
             <div className='login-page-wrapper'>
                 <Grid fluid className='login-page-grid main-container'>
@@ -71,17 +73,19 @@ class LoginPage extends PureComponent {
                                         key='slogan-wave-1'
                                         className='slogan-wave-1'
                                     >
-                                        <Link className='find-link' to='/search/chat_offers'>Find</Link>
-                                        &nbsp;intresting topics.
+                                        <Link className='find-link' to='/search/chat_offers'>
+                                            {t('Find')}
+                                        </Link>
+                                        &nbsp;{t('intresting topics')}.
                                     </p>
                                     <p
                                         key='slogan-wave-2'
                                         className='slogan-wave-2'
-                                    >Suggest yours.</p>
+                                    >{t('Suggest yours')}.</p>
                                     <p
                                         key='slogan-wave-3'
                                         className='slogan-wave-3'
-                                    >Chat.</p>
+                                    >{t('Chat')}.</p>
                                 </ReactCSSTransitionGroup>
                             </div>
                         </Col>
@@ -94,7 +98,7 @@ class LoginPage extends PureComponent {
                     {
                         showForm
                             ? <i class="fa fa-sort-asc" aria-hidden="true"></i>
-                            : <i>Join</i>
+                            : <i>{t('Join')}</i>
                     }
                 </div>
             </div>
@@ -103,12 +107,13 @@ class LoginPage extends PureComponent {
 
 }
 
+LoginPage = translate('translations')(LoginPage);
 export default withRouter(LoginPage);
 
-export function LoginForm() {
+function LoginForm({t}) {
     return (
         <div className='login-form'> 
-            <p className='header'>Join us:</p>
+            <p className='header'>{t('Join us')}:</p>
             <div className='buttons'>
                 <a href='/auth/vk' className='link-no-style'>
                     <img src='/svg/vk.svg' />
@@ -125,13 +130,20 @@ export function LoginForm() {
     );
 }
 
+LoginForm = translate('translations')(LoginForm);
+export {LoginForm};
 
-function TermsAndPrivacyLinks(props) {
+
+function TermsAndPrivacyLinks({t, ...rest}) {
     return (
-        <div className='link-terms' {...props}>
-            <a href="#" className='link-no-style'>Terms of use</a>
+        <div className='link-terms' {...rest}>
+            <a href="#" className='link-no-style'>{t('Terms of use')}</a>
             <span>/</span>
-            <a href="#" className='link-no-style'>Privacy policy</a>
+            <a href="#" className='link-no-style'>{t('Privacy policy')}</a>
         </div>
     );
 }
+
+TermsAndPrivacyLinks = translate('translations')(TermsAndPrivacyLinks);
+export {TermsAndPrivacyLinks};
+

@@ -24,15 +24,18 @@ import ScrollMemory from './react-router-scroll-memory';
 // import { useScroll } from 'react-router-scroll';
 import currentUserId from './auth';
 
+
 import wsUpdater from './wsUpdater';
 
 import './index.css';
 
 
-import AnimationExample from './animation';
+import { I18nextProvider } from 'react-i18next';
+import i18n from './i18n';
 
 
 const store = configureStore(window.__INITIAL_STATE__);
+
 
 const IndexRedirect = () => {
     return (
@@ -58,6 +61,7 @@ class Wrapp extends React.Component {
 
 ReactDOM.render(
   <Provider store={store}>
+    <I18nextProvider i18n={i18n} >
     <BrowserRouter>
         <ChatApp>
             <Route
@@ -101,14 +105,10 @@ ReactDOM.render(
             </Switch>
         </ChatApp>
     </BrowserRouter>
+    </I18nextProvider>
   </Provider>,
   document.getElementById('root')
 );
-
-// ReactDOM.render(
-//     <AnimationExample />,
-//     document.getElementById('root')
-// );
 
 let ws = new wsUpdater();
 

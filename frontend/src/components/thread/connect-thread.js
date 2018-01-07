@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {withRouter} from 'react-router-dom';
 import { connect } from 'react-redux';
+import { translate } from 'react-i18next';
 import {loadThread, flushThread} from '../../actions';
 import { createSelector } from 'reselect';
 import getCurrentUserId from '../../auth';
@@ -98,6 +99,8 @@ let ConnectedThread = WrappedComponent => {
                 postsOnPage,
                 postsPreload,
                 loadMethod,
+                placeholder,
+                t,
                 ...rest
             } = this.props;
             if (!thread) return null;
@@ -106,6 +109,7 @@ let ConnectedThread = WrappedComponent => {
                     showPosts={this.state.showPosts}
                     showMorePosts={this.showMorePosts}
                     thread={thread}
+                    placeholder={t(placeholder)}
                     {...rest}
                 />
             )
@@ -115,12 +119,13 @@ let ConnectedThread = WrappedComponent => {
 
 }
 
+// ConnectedThread = translate('translations')(ConnectedThread);
 
 export default function connectThread() {
 
-    return WrappedComponent => withRouter(connect.apply(null, arguments)(
+    return WrappedComponent => translate('translations')(withRouter(connect.apply(null, arguments)(
         ConnectedThread(WrappedComponent)
-    ));
+    )));
 
 }
 
