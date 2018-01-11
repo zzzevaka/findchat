@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import {Link, NavLink, withRouter} from 'react-router-dom';
 import classNames from 'classnames';
 import {ProfileIcon, MessageIcon, SearchIcon, SettingsIcon, AddColorIcon, LikeIcon} from '../Icons';
-import currentUserId, {loginRequired} from '../../auth';
-// import {getModalUrl} from '../../utils';
+import {loginRequired, withAuth} from '../../auth';
 import './menu.css';
 
 import { translate } from 'react-i18next';
@@ -24,11 +23,11 @@ function MenuLink({children, className, ...rest}) {
     )
 }
 
-let Menu = function({unreadedPosts, t}) {
+let Menu = function({auth, unreadedPosts, t}) {
     return (
         <ul className='main-menu'>
             <li>
-                <MenuLink to={`/user/${currentUserId()}`}>
+                <MenuLink to={`/user/${auth.user_id}`}>
                     <ProfileIcon />
                     {t('My profile')}
                 </MenuLink>
@@ -59,10 +58,10 @@ let Menu = function({unreadedPosts, t}) {
     );
 }
 
-let MobileMenu = function({unreadedPosts, history}) {
+let MobileMenu = function({auth, unreadedPosts, history}) {
     return (
         <div className='mobile-main-menu'>
-            <MenuLink to={`/user/${currentUserId()}`}>
+            <MenuLink to={`/user/${auth.user_id}`}>
                 <ProfileIcon />
             </MenuLink>
             <MenuLink to='/chats'>
@@ -92,8 +91,7 @@ export function NotLoginMenu({t}) {
     return (
         <div className='footer gradient'>
         <MenuLink to={'/login?showForm=1'}>
-            {false && t('Join')}
-            test
+            {t('Join')}
         </MenuLink>
         </div>
     )

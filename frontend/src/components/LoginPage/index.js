@@ -7,7 +7,7 @@ import { withRouter, Link } from 'react-router-dom';
 import API from '../../api';
 import {parseHistorySearch} from '../../utils';
 
-// import './login-page.css';
+import './login-page.css';
 
 const api = new API('/api_v1');
 
@@ -71,7 +71,7 @@ class LoginPage extends PureComponent {
                                 >
                                     <p
                                         key='slogan-wave-1'
-                                        className='slogan-wave-1'
+                                        className='slogan-wave slogan-wave-1'
                                     >
                                         <Link className='find-link' to='/search/chat_offers'>
                                             {t('Find')}

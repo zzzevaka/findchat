@@ -15,7 +15,7 @@ import {HashtagString} from '../Hashtag';
 import connectThread, {mapStateToProps} from './connect-thread';
 import {ThreadLoaderIcon, ThreadPlaceholder, InfiniteThread} from './thread-interface';
 
-import currentUserId from '../../auth';
+import {withAuth} from '../../auth';
 
 import './offer-thread.css';
 
@@ -71,7 +71,7 @@ export const OfferPostWrapper = pure(
     }
 );
 
-export const OfferPost = ({post, author, className, dispatch}) => {
+function OfferPost({post, author, className, dispatch, auth}) {
     if (!author) return null;
 
     const classes = classNames(
@@ -85,7 +85,7 @@ export const OfferPost = ({post, author, className, dispatch}) => {
         <div className={classes}>
             <div className='post-option'>
                 <DropdownTools>
-                    { currentUserId() == author.id && DeletePostMenuItem(post, dispatch) }
+                    { auth.user_id == author.id && DeletePostMenuItem(post, dispatch) }
                 </DropdownTools>
             </div>
             <Link className='link-no-style' to={`/user/${author.id}`}>
@@ -110,6 +110,10 @@ export const OfferPost = ({post, author, className, dispatch}) => {
         </div>
     );
 };
+
+OfferPost = withAuth(OfferPost);
+
+export {OfferPost};
 
 export function PostTime({datetime}) {
     return (

@@ -12,7 +12,6 @@ import {PostTime, OfferPost} from './offer-thread';
 import connectThread, {mapStateToProps} from './connect-thread';
 import {ThreadLoaderIcon, ThreadPlaceholder, InfiniteThread} from './thread-interface';
 
-import currentUserId from '../../auth';
 import {updateUser} from '../../actions';
 
 import './photo-thread.css';
@@ -60,7 +59,7 @@ class PhotoThread extends Component {
 
 
 export const PhotoThreadItem = pure(
-    ({post, author, dispatch}) => {
+    ({post, author, dispatch, auth}) => {
         if (!author) return null;
         if (!post.content) return null;
 
@@ -105,8 +104,8 @@ export const PhotoThreadItem = pure(
                     <PostTime datetime={post.datetime} />
                     <div className='post-option'>
                         <DropdownTools>
-                            { currentUserId() == author.id && DeletePostMenuItem(post, dispatch) }
-                            { currentUserId() == author.id &&
+                            { auth.user_id == author.id && DeletePostMenuItem(post, dispatch) }
+                            { auth.user_id == author.id &&
                                 <MenuItem
                                     onClick={() => this.imgUploader.setSrc(`/img/${post.content.full}`)}
                                 >

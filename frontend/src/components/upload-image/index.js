@@ -71,15 +71,16 @@ export default class ImageUloader extends PureComponent {
         const key = shortid.generate();
         onUploadStart({key: key, status: 'l'});
         this._onCancel();
-        let xhr = this.api.uploadImage({
+        this.api.uploadImage({
             src: canvas.toDataURL('image/jpeg', 0.6),
-        });
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState !== 4) return;
-            if (xhr.status == 200) {
-                onSuccess({...JSON.parse(xhr.responseText).img, key: key, status: 's'});
+        }).then(
+            r => {
+                if (r.status !== 200) throw 'image not uploaded'
+                return r.json()
             }
-        }
+        ).then(
+            j => onSuccess({...j.img, key: key, status: 's'})
+        );
     }
 
     _onCancel = () => {

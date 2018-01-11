@@ -14,7 +14,7 @@ import {LoaderIcon} from '../Icons';
 import {UserAvatar} from '../UserPage';
 
 import {setThreadAsReaded} from '../../actions';
-import currentUserId from '../../auth';
+import {withAuth} from '../../auth';
 
 const COMPOSER_PLACEHOLDER = 'Your message';
 
@@ -106,8 +106,8 @@ class ChatThread extends Component {
 
 const imgHeightToAuto = e => e.target.style.height = 'auto'
 
-const ChatPost = pure(
-    ({post, author, dispatch, className, ...rest}) => {
+let ChatPost = pure(
+    ({post, author, dispatch, className, auth, ...rest}) => {
         if (!author) return null;
         const classes = classNames(
             className,
@@ -119,7 +119,7 @@ const ChatPost = pure(
             <div className={classes}>
                 <div className='post-option'>
                     <DropdownTools>
-                        { currentUserId() == author.id && DeletePostMenuItem(post, dispatch) }
+                        { auth.user_id == author.id && DeletePostMenuItem(post, dispatch) }
                     </DropdownTools>
                 </div>
                 <UserAvatar thumbnail={author.thumbnail} />
@@ -146,5 +146,7 @@ const ChatPost = pure(
         );
     }
 );
+
+ChatPost = withAuth(ChatPost);
 
 export default connectThread(mapStateToProps, null, null, {withRef: true})(ChatThread);

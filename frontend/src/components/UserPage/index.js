@@ -12,7 +12,6 @@ import {MarsIcon, VenusIcon, MessageIcon} from '../Icons'
 import {DropdownTools} from '../Menu/dropdown-tools';
 
 import * as Actions from '../../actions';
-import currentUserId from '../../auth';
 import { ChatOfferThread, PhotoThread } from '../thread';
 
 import './user-page.css'
@@ -46,9 +45,9 @@ class UserPage extends Component {
     }
 
     renderThread() {
-        const {user, match} = this.props;
+        const {user, auth, match} = this.props;
         if (!user.offer_thread_id) return null;
-        const isMyPage = currentUserId() == user.id; 
+        const isMyPage = auth.user_id == user.id; 
         return (
             <Switch>
                 <Route path={`${match.url}/photos`} render={() => (
@@ -97,9 +96,9 @@ class UserPage extends Component {
     }
 
     render() {
-        const {user, match, history, location, t} = this.props;
+        const {user, auth, match, history, location, t} = this.props;
         if (!user) return null;
-        const isMyPage = currentUserId() == user.id;  
+        const isMyPage = auth.user_id == user.id;  
         return (
             <div className='user-page' key={match.params.userID}>
                 <MobileMenu />
@@ -204,7 +203,7 @@ function UserPageTopFixedBar({user, children}) {
 }
 
 
-function mapStateToProps({users}, props) {
+function mapStateToProps({users, auth}, props) {
     let {userID, match} = props;
     if (!userID) {
         if (match) {
@@ -212,7 +211,8 @@ function mapStateToProps({users}, props) {
         }
     }
     return {
-        user: users[userID]
+        user: users[userID],
+        auth: auth
     };
   }
   

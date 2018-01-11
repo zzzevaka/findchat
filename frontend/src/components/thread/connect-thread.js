@@ -5,8 +5,6 @@ import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import {loadThread, flushThread} from '../../actions';
 import { createSelector } from 'reselect';
-import getCurrentUserId from '../../auth';
-
 
 let ConnectedThread = WrappedComponent => {
 
@@ -134,10 +132,11 @@ const threadPostSelector = createSelector(
         (state, thread) => thread,
         (state, thread) => state.users,
         (state, thread) => state.posts,
+        (state, thread) => state.auth,
     ],
-    (thread, users, posts) => ({
+    (thread, users, posts, auth) => ({
         ...thread,
-        members: [users[ thread.members && thread.members.length ? thread.members[0] : getCurrentUserId()],],
+        members: [users[ thread.members && thread.members.length ? thread.members[0] : auth.user_id],],
         posts: thread.posts.map(pID => {
             return {
                 post: posts[pID],
@@ -163,14 +162,15 @@ const threadChatListSelector = createSelector(
         (state, thread) => thread,
         (state, thread) => state.threads,
         (state, thread) => state.posts,
-        (state, thread) => state.users
+        (state, thread) => state.users,
+        (state, thread) => state.auth,
     ],
-    (thread, threads, posts, users) => {
+    (thread, threads, posts, users, auth) => {
         return {
             ...thread,
             posts: thread.posts.map(id => ({
                 ...threads[id],
-                member: users[threads[id].members[0] || getCurrentUserId()],
+                member: users[threads[id].members[0] || auth.user_id],
                 lastPost: posts[threads[id].posts[0]]
             })).sort((a,b) => {
                 return Number(a.posts[0]) < Number(b.posts[0]) ? 1 : -1

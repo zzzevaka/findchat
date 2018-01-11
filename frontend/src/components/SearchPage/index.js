@@ -6,7 +6,6 @@ import Select, {Creatable} from 'react-select';
 import SearchFiler from './search-filter';
 import MainMenu, {MobileMenu} from '../Menu';
 import {TopFixedBarDummy} from '../TopFixedBar';
-import currentUserId from '../../auth';
 import './search-page.css';
 
 import SearchChatOffers from './SearchChatOffers';

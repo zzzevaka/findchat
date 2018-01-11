@@ -11,7 +11,9 @@ export function ThreadLoaderIcon({thread}) {
                     textAlign: 'center',
                     padding: '10px'
                 }}
-             />
+             >
+                <LoaderIcon />
+             </div>
              : null
     );
 }

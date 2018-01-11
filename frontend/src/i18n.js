@@ -12,7 +12,9 @@ i18n
 
         fallbackLng: 'en',
 
-        debug: true,
+        debug: false,
+
+        whitelist: ['en', 'ru'],
 
         ns: ['translations'],
         defaultNS: 'translations',

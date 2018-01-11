@@ -24,7 +24,7 @@ import * as Actions from '../actions';
 import Notifications from 'react-notification-system-redux';
 
 import { parseHistorySearch } from '../utils';
-import currentUserId, {loginRequired} from '../auth';
+import {loginRequired} from '../auth';
 
 import {UpArrow, AddColorIcon, LoaderIcon} from './Icons';
 import {TopFixedBarDefault} from './TopFixedBar';
@@ -238,7 +238,7 @@ let Modals  = class extends Component {
             }
 
             case 'new_chat_offer': {
-                const user = store.users[currentUserId()];
+                const user = store.users[store.auth.user_id];
                 if (!user || !user.offer_thread_id) return null;
                 return (
                     <NewOfferModal
@@ -252,13 +252,13 @@ let Modals  = class extends Component {
 
             case 'new_photo': {
                 const {avatar} = queryParams;
-                const user = store.users[currentUserId()];
+                const user = store.users[store.auth.user_id];
                 if (!user || !user.offer_thread_id) return null;
                 return (
                     <NewPostPhotoModal
                         show={true}
                         onHide={
-                            () => this.pushHistory(`/user/${currentUserId()}/photos`)
+                            () => this.pushHistory(`/user/${store.auth.user_id}/photos`)
                         }
                         animation={true}
                         title='New Photo'

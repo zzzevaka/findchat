@@ -10,7 +10,6 @@ import {AddColorIcon} from '../Icons';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as Actions from '../../actions';
-import currentUserId from '../../auth';
 
 import './new-offer.css';
 
@@ -113,8 +112,6 @@ class NewOfferModal extends PureComponent {
 
 function mapStateToProps(state, {threadID}) {
     const {postComposers, uploadImages, users} = state;
-    // const currentUser = users[currentUserId()];
-    // if (!currentUser) return {};
     let c = {...INITIAL_STATE, ...postComposers['thread' + threadID] };
     c.imagesObj = c.imagesID.map(i => ({...uploadImages[i], id: i}) );
     return {

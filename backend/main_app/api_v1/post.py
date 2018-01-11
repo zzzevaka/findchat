@@ -112,6 +112,7 @@ class API_Post(BaseHandler, HashTagInterface):
         try:
             post = None
             arg_post = self.get_argument('post')
+            logging.error(self.current_user)
             try:
                 arg_post = json.loads(arg_post)
                 if not Post.check_user_post(arg_post):

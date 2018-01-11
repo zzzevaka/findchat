@@ -87,26 +87,31 @@ class API_Registration(BaseHandler):
 
 class API_Auth(BaseHandler):
 
-    @tornado.web.authenticated
     def get(self):
         '''
             get auth of current user
         '''
         try:
-            password = self.get_argument('password')
-            auth = self.db.query(
-                    Auth
-                ).filter_by(
-                    user_id=self.current_user
-                ).first()
-            # it's an error if auth didn't find by user_id
-            # if not auth:
-            #     raise ValueError(
-            #         "auth didn't find by user_id %s" % self.current_user
-            #     )
-            if not auth or not auth.check_password(password):
-                raise HTTPError(403)
-            self.finish(json_encode({'login': auth.login}))
+            # password = self.get_argument('password')
+            # auth = self.db.query(
+            #         Auth
+            #     ).filter_by(
+            #         user_id=self.current_user
+            #     ).first()
+            # # it's an error if auth didn't find by user_id
+            # # if not auth:
+            # #     raise ValueError(
+            # #         "auth didn't find by user_id %s" % self.current_user
+            # #     )
+            # if not auth or not auth.check_password(password):
+            #     raise HTTPError(403)
+            # self.finish(json_encode({'login': auth.login}))
+            user_id = self.session['user_id']
+            authenticated = bool(user_id)
+            self.finish(json_encode({
+                'user_id': user_id,
+                'authenticated': authenticated
+            }))
         except HTTPError:
             raise
         except:

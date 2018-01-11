@@ -4,15 +4,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { CSSTransitionGroup } from 'react-transition-group';
 import { Provider } from 'react-redux';
-import ChatApp, {ModalDummy} from './components/ChatApp.react';
-// import UserPage from './components/UserPage.react';
+import ChatApp from './components/ChatApp.react';
 import UserPage from './components/UserPage';
 import ChatPage from './components/ChatPage';
 import ChatPostList from './components/ChatPage/post-list';
 import SearchPage from './components/SearchPage';
 import SearchChatOffers from './components/SearchPage/SearchChatOffers';
 import SearchPeople from './components/SearchPage/SearchPeople';
-import SettingsPage from './components/SettingsPage';
 import EditUserPage from './components/EditUserPage';
 import LoginPage from './components/LoginPage';
 import FollowPage from './components/FollowPage';
@@ -21,8 +19,7 @@ import * as Actions from './actions';
 import configureStore from './store/configureStore';
 import { BrowserRouter, withRouter, Route, Switch, Link, Redirect } from 'react-router-dom';
 import ScrollMemory from './react-router-scroll-memory';
-// import { useScroll } from 'react-router-scroll';
-import currentUserId from './auth';
+import AuthProvider, {withAuth} from './auth';
 
 
 import wsUpdater from './wsUpdater';
@@ -37,74 +34,64 @@ import i18n from './i18n';
 const store = configureStore(window.__INITIAL_STATE__);
 
 
-const IndexRedirect = () => {
+function IndexRedirect({auth}) {
+    if (auth.authenticated === undefined) return null;
     return (
-        <Redirect to={currentUserId() ? `/user/${currentUserId()}` : '/login'}
+        <Redirect to={auth.user_id ? `/user/${auth.user_id}` : '/login'}
         />
     );
 }
 
-// ScrollMemory.componentWillReceiveProps = () => {
-//     alert('next');
-// }
+IndexRedirect = withAuth(IndexRedirect);
 
-class Wrapp extends React.Component {
-
-    componentDidUpdate() {
-        // this.scrollMemory && alert(this.scrollMemory.url)
-        console.log(<ScrollMemory />)
-    }
-
-    render = () => null
-
-}
+export const routes = [
+    {
+        path: '/user/:userID/follow',
+        component: FollowPage   
+    },
+    {
+        path: '/user/:userID',
+        component: UserPage
+    },
+    {
+        path: '/search',
+        component: SearchPage
+    },
+    {
+        path: '/news',
+        component: NewsPage
+    },
+    {
+        path: '/chats',
+        component: ChatPage
+    },
+    {
+        path: '/edit_user',
+        component: EditUserPage
+    },
+    {
+        path: '/login',
+        component: LoginPage
+    },
+];
 
 ReactDOM.render(
   <Provider store={store}>
-    <I18nextProvider i18n={i18n} >
-    <BrowserRouter>
-        <ChatApp>
-            <Route
-                exact path='/'
-                component={IndexRedirect}
-            />
-            {true && <ScrollMemory compareOnlyPathname />}
-            <Switch>
-                <Route
-                    path='/user/:userID/follow'
-                    component={FollowPage}
-                />
-                <Route
-                    path='/user/:userID'
-                    component={UserPage}
-                /> 
-                <Route
-                    path='/search'
-                    component={SearchPage}
-                />
-                <Route
-                    path='/news'
-                    component={NewsPage}
-                />
-                <Route
-                    path='/chats'
-                    component={ChatPage}
-                />
-                <Route
-                    path='/settings'
-                    component={SettingsPage}
-                />
-                <Route
-                    path='/edit_user'
-                    component={EditUserPage}
-                />
-                <Route
-                    path='/login'
-                    component={LoginPage}
-                />
-            </Switch>
-        </ChatApp>
-    </BrowserRouter>
+    <I18nextProvider i18n={i18n}>
+        <AuthProvider>
+            <BrowserRouter>
+                <ChatApp>
+                    <Route
+                        exact path='/'
+                        component={IndexRedirect}
+                    />
+                    <ScrollMemory compareOnlyPathname />
+                    <Switch>
+                        {routes.map(route => <Route key={route.path} {...route} />)}
+                    </Switch>
+                </ChatApp>
+            </BrowserRouter>
+        </AuthProvider>
     </I18nextProvider>
   </Provider>,
   document.getElementById('root')
@@ -134,5 +121,5 @@ ws.onmessage = (event) => {
     }
 }
 
-if (currentUserId) store.dispatch(Actions.loadUnreaded());
+store.dispatch(Actions.loadUnreaded());
 

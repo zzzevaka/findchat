@@ -86,46 +86,26 @@ export function loadThread(
     flush=false,
 ) {
     return dispatch => {
-        dispatch(loadThreadRequest([threadID,]));            
-        let xhr = api.getThread(threadID, limit, offset);
-        xhr.send();
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState != 4) return;
-            if (xhr.status === 200) {
-                const body = JSON.parse(xhr.responseText);
-                if (body.threads && body.posts) {
-                    dispatch(loadThreadSuccess(body.threads, body.posts, body.users));
-                }
-                // if (body.users) {
-                //     dispatch(loadUsersSuccess(body.users));
-                // }
-            } else {
-                dispatch(loadThreadError([threadID,], xhr.status));
-            }
-        }
+        dispatch(loadThreadRequest([threadID,]));
+        api.getThread(threadID, limit, offset).then(
+            r => r.json()
+        ).then(
+            ({threads, posts, users}) => dispatch(loadThreadSuccess(threads, posts, users))
+        ).catch(
+            e => dispatch(loadThreadError([threadID,], e))
+        )
     }
-    
 }
 
 export function loadChatOffers(limit=20, offset=0, filter) {
     return (dispatch) => {
         dispatch(loadThreadRequest(['chat_offers',]));
-        let xhr = api.getChatOffers(
-            filter,
-            limit,
-            offset
-        );
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState != 4) return;
-            if (xhr.status === 200) {
-                const body = JSON.parse(xhr.responseText);
-                dispatch(loadThreadSuccess(body.threads, body.posts, body.users));
-                // dispatch(loadUsersSuccess(body.users));
-            } else {
-                dispatch(loadThreadError(['chat_offers',], xhr.status));
-            }
-        }
-    };
+        api.getChatOffers(filter, limit, offset).then(
+            r => r.json()
+        ).then(
+            ({threads, posts, users}) => dispatch(loadThreadSuccess(threads, posts, users))
+        )
+    }
 }
 
 export function loadUsersSuccess(users) {
@@ -146,99 +126,78 @@ export function loadUsers(userID) {
     return dispatch => {
         const ids = Array.isArray(userID) ? userID : [userID,];
         dispatch(loadUsersRequest(ids))
-        let xhr = api.getUsers(ids);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState !== 4) return;
-            
-            if (xhr.status === 200) {
-                const body = JSON.parse(xhr.responseText);
-                dispatch(loadUsersSuccess(body.users));
-            } else {
-                // dispatch(loadUsersError(ids))
-            }
-        };
-        xhr.send();
+        return api.getUsers(ids).then(response => {
+            return response.json()
+        }).then(json => {
+            dispatch(loadUsersSuccess(json.users));
+        })
     }
 }
 
 export function getUserFollowing(userID, limit, offset) {
     return dispatch => {
-        dispatch(loadThreadRequest([`user_following_${userID}`,]));    
-        let xhr = api.getUserFollowing(userID, limit, offset)
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState !== 4) return;
-            if (xhr.status === 200) {
-                const body = JSON.parse(xhr.responseText);
-                console.log(body);
-                dispatch(loadThreadSuccess(
-                    body.threads,
-                    body.posts,
-                    body.users,
-                ));
+        dispatch(loadThreadRequest([`user_following_${userID}`,]));
+        api.getUserFollowing(userID, limit, offset).then(
+            r => {
+                if (r.status !== 200) throw 'err';
+                return r.json();
             }
-        }
+        ).then(
+            ({threads, posts, users}) => dispatch(loadThreadSuccess(threads, posts, users))
+        ).catch(
+            e => alert(e)
+        );
     }
 }
 
 export function getUserFollowers(userID, limit, offset) {
     return dispatch => {
         dispatch(loadThreadRequest([`user_followers_${userID}`,]));
-        let xhr = api.getUserFollowers(userID, limit, offset)
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState !== 4) return;
-            if (xhr.status === 200) {
-                const body = JSON.parse(xhr.responseText);
-                dispatch(loadThreadSuccess(
-                    body.threads,
-                    body.posts,
-                    body.users,
-                ));
+        api.getUserFollowers(userID, limit, offset).then(
+            r => {
+                if (r.status !== 200) throw 'err';
+                return r.json();
             }
-        }
+        ).then(
+            ({threads, posts, users}) => dispatch(loadThreadSuccess(threads, posts, users))
+        ).catch(
+            e => alert(e)
+        )
+
     }
 }
 
-export function updateUser(user, callback) {
-    return dispatch => {
-        let xhr = api.putUser({
-            ...user,
-            id: getCookie('current_user_id')
-        });
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState !== 4) return;
-            if (xhr.status === 200) {
-                const {users} = JSON.parse(xhr.responseText);
-                dispatch(
-                    Notifications.info({
-                        position: 'tr',
-                        children: <EditingSuccess />,
-                    })
-                )
+export function updateUser(user) {
+    return (dispatch, getState) => {
+        const user_id = getState().auth.user_id;
+        if (!user_id) return;
+        return api.putUser({...user, id: user_id}).then(
+            r => r.json()
+        ).then(
+            ({users}) => {
+                dispatch(Notifications.info({
+                    position: 'tr',
+                    children: <EditingSuccess />
+                }));
                 dispatch(loadUsersSuccess(users));
-                if (callback) callback();
+                return Promise.resolve(users[user_id])
             }
-            else {
-                dispatch(
-                    Notifications.error({
-                        position: 'tr',
-                        children: <UnknownError />,
-                    })
-                )
-            }
-        };
+        ).catch(
+            e => dispatch(Notifications.error({
+                position: 'tr',
+                children: <UnknownError />
+            }))
+        )
     }
 }
 
 export function getPost(postID) {
     return dispatch => {
-        let xhr = api.getPost(postID);
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState != 4) return;
-            if (xhr. status === 200) {
-                const {posts, users} = JSON.parse(xhr.responseText);
-                dispatch(loadThreadSuccess({}, posts, users));
-            }    
-        }
+        api.getPost(postID).then(
+            r => r.json()
+        ).then(
+            ({posts, users}) => dispatch(loadThreadSuccess({}, posts, users))
+        )
     }
 }
 
@@ -249,26 +208,14 @@ export function addPost(post, composerKey) {
                 {[composerKey]: { status: 'uploading' }}
             ))
         }
-        let xhr = api.addPost(post);
-        return new Promise((resolve, error) => {
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState != 4) return;
-                if (xhr.status === 200) {
-                    const {posts, new_post_id, threads, unreaded_posts} = JSON.parse(xhr.responseText);
-                    dispatch(loadThreadSuccess(
-                        threads,
-                        posts,
-                        {},
-                    ));
-                    if (composerKey) {
-                        dispatch(updatePostComposers(
-                            {[composerKey]: { status: 'success' }}
-                        ))
-                    }
-                    resolve(posts[new_post_id]);
-                }
+        return api.addPost(post).then(
+            r => r.json()
+        ).then(
+            j => {
+                dispatch(loadThreadSuccess(j.threads, j.posts, {}));
+                return Promise.resolve(j.posts[j.new_post_id]);
             }
-        })
+        );
     }
 }
 
@@ -291,48 +238,45 @@ export function deletePost(postID) {
             { [postID]: {status: 'deleted'} },
             {}
         ));
-        let xhr = api.deletePost(postID);
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState != 4) return;
-            if (xhr.status === 200) {
+        api.deletePost(postID).then(
+            r => {
+                if (r.status !== 200) {
+                    dispatch(Notifications.error({
+                        position: 'tr',
+                        children: <UnknownError />
+                    }));
+                    dispatch(loadThreadSuccess(
+                        {},
+                        { [postID]: {status: 'revived'} },
+                        {}
+                    ));
+                }
             }
-        }
+        )
     }
 }
 
 export function revivePost(postID) {
     return dispatch => {
-        let xhr = api.revivePost(postID);
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState != 4) return;
-            if (xhr.status === 200) {
-                dispatch(loadThreadSuccess(
-                    {},
-                    { [postID]: {status: 'revived'} },
-                    {}
-                ))
+        api.revivePost(postID).then(
+            r => {
+                if (r.status === 200) {
+                    dispatch(loadThreadSuccess(
+                        {},
+                        { [postID]: {status: 'revived'} },
+                        {}
+                    ));
+                }
+                else {
+                    dispatch(Notifications.error({
+                        position: 'tr',
+                        children: <UnknownError />
+                    }));
+                }
             }
-        }
+        )
     }
 }
-
-
-// export function addAvatarPost(post) {
-//     return (dispatch, getState) => {
-//         const user_id = getCookie('current_user_id');
-//         const user = getState().users[user_id];
-//         if (!user || !post.content_id) return;
-//         let xhr = api.addPost({thread_id: user.photo_thread_id, ...post});
-//         xhr.onreadystatechange = function() {
-//             if (xhr.readyState != 4) return;
-//             if (xhr.status === 200) {
-//                 const {new_post_id} = JSON.parse(xhr.responseText);
-//                 dispatch(updateUser({id: user.id, avatar_id: new_post_id}));
-//             }
-//         }
-//     }
-// }
-
 
 export function updatePostLikesSuccess(likes) {
     return {
@@ -341,158 +285,83 @@ export function updatePostLikesSuccess(likes) {
     }
 }
 
-
-function _updatePostLikes(xhr) {
-    return (dispatch, getState) => {
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState != 4) return;
-            if (xhr.status === 200) {
-                const {post_likes} = JSON.parse(xhr.responseText);
-                dispatch(
-                    updatePostLikesSuccess(post_likes)
-                );
-                // load users if it's needed
-                const loaded = arrayFrom(
-                    Object.keys(getState().users), i => Number(i)
-                );
-                let needToLoad = [];
-                for (let postID in post_likes) {
-                    post_likes[postID].users_id.forEach(userID => {
-                        if (loaded.indexOf(userID) === -1) needToLoad.push(userID)
-                    })
-                }
-                if (needToLoad.length) dispatch(loadUsers(needToLoad))
-            }
-        }
-    }
-}
-
-
-export function updatePostLikesBrief(postsID) {
-    return dispatch => {
-        if(!postsID.length) return;
-        let xhr = api.getPostLikesBrief(postsID);
-        dispatch(_updatePostLikes(xhr));
-    }
-}
-
-export function updatePostLikeFull(postID) {
-    return dispatch => {
-        let xhr = api.getPostLikeFull(postID);
-        dispatch(_updatePostLikes(xhr));
-    }
-}
-
-
-export function addPostLike(postID) {
-    return dispatch => {
-        let xhr = api.addPostLike(postID);
-        dispatch(_updatePostLikes(xhr));
-    }
-}
-
-
-export function deletePostLike(postID) {
-    return dispatch => {
-        let xhr = api.deletePostLike(postID);
-        dispatch(_updatePostLikes(xhr));
-    }
-}
-
 export function answerChatOffer(offerID, post) {
     return (dispatch, getState) => {
         const state = getState();
         const offer = state.posts[offerID];
         const user = state.users[offer.author_id];
-        let xhr = api.answerChatOffer(offerID, post);
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState !== 4) return;
-            if (xhr.status == 200) {
-                dispatch(
-                    Notifications.info({
-                        position: 'tr',
-                        children: (
-                            <ChatOfferAnswerSuccess
-                                chatID={JSON.parse(xhr.responseText).thread_id}
-                                thumbnail={user.thumbnail}
-                            />
-                        ),
-                    })
-                )
+        api.answerChatOffer(offerID, post).then( 
+            r => ({status: r.status, json: r.json()})
+        ).then(
+            ({status, json}) => {
+                switch(status) {
+
+                    case 200:
+                        dispatch(
+                            Notifications.info({
+                                position: 'tr',
+                                children: (
+                                    <ChatOfferAnswerSuccess
+                                        chatID={json.thread_id}
+                                        thumbnail={user.thumbnail}
+                                    />
+                                ),
+                            })
+                        );
+                        break;
+
+                    case 409:
+                        dispatch(
+                            Notifications.error({
+                                position: 'tr',
+                                children: <ChatOfferAnswerDoubleAnswer />,
+                            })
+                        );
+                        break;
+
+                    default:
+                        dispatch(
+                            Notifications.error({
+                                position: 'tr',
+                                children: <UnknownError />,
+                            })
+                        );
+                }
             }
-            else if (xhr.status == 409) {
-                dispatch(
-                    Notifications.error({
-                        position: 'tr',
-                        children: <ChatOfferAnswerDoubleAnswer />,
-                    })
-                )
-            }
-            else {
-                dispatch(
-                    Notifications.error({
-                        position: 'tr',
-                        children: <UnknownError />,
-                    })
-                )
-            }
-        }
+        )
     }
 
 }
 
 export function sendPostToUser(userID, post) {
     return dispatch => {
-        let xhr = api.sendPostToUser(userID, post);
-        return new Promise((resolve, error) => {
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState !== 4) return;
-                if (xhr.status == 200) {
-                    console.log(xhr.responseText, userID, post);
-                    return resolve(JSON.parse(xhr.responseText).thread_id);
-                }
-            }            
-        });
-    }
-}
-
-export function addThreadFromOffer(offerID) {
-    return dispatch => {
-        let xhr = api.joinChatOffer(offerID);
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState !== 4) return;
-            if (xhr.status == 200) {
-                // browserHistory.push(`/chats/${JSON.parse(xhr.responseText).thread_id}`);
-                // const body = JSON.parse(xhr.responseText);
-                // dispatch(
-                //     loadThreadSuccess(body.threads, body.posts)
-                // )
-            }
-        }
+        return api.sendPostToUser(userID, post).then(
+            r => r.json()
+        ).then(
+            j => Promise.resolve(j.thread_id)
+        );
     }
 }
 
 export function loadChats(limit, offset) {
     return dispatch => {
         dispatch(loadThreadRequest(['chat_list',]));
-        let xhr = api.loadChats(limit, offset);
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState !== 4) return;
-            if (xhr.status == 200) {
-                const body = JSON.parse(xhr.responseText);
-                let chatListThread = {
+        api.loadChats(limit, offset).then(
+            r => r.json()
+        ).then(
+            ({threads, posts, users}) => {
+                const chatListThread = {
                     id: 'chat_list',
-                    posts: Object.keys(body.threads).map(id => id),
-                    no_more_posts: Object.keys(body.threads).length < limit
+                    posts: Object.keys(threads).map(id => id),
+                    no_more_posts: Object.keys(threads).length < limit
                 };
                 dispatch(loadThreadSuccess(
-                    {chat_list: chatListThread, ...body.threads},
-                    body.posts,
-                    body.users,
-                    () => {},
-                ));
+                    {chat_list: chatListThread, ...threads},
+                    posts,
+                    users
+                ))
             }
-        }
+        );
     }
 }
 
@@ -513,22 +382,11 @@ export function updateSearchUsersID(usersID) {
 export function findUsers(limit=20, offset=0, filter) {
     return dispatch => {
         dispatch(loadThreadRequest(['search_users']));
-        let xhr = api.findUsers(
-            limit,
-            offset,
-            filter
-        );
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState !== 4) return;
-            if (xhr.status == 200) {
-                const body = JSON.parse(xhr.responseText);
-                dispatch(loadThreadSuccess(body.threads, body.posts, body.users, () => {}));
-                // dispatch(loadUsersSuccess(body.users));
-            }
-            else {
-                dispatch(loadThreadError(['search_users',], xhr.status));
-            }
-        }
+        api.findUsers(limit, offset, filter).then(
+            r => r.json()
+        ).then(
+            ({threads, posts, users}) => dispatch(loadThreadSuccess(threads, posts, users, () => {}))
+        )
     }
 }
 
@@ -559,34 +417,6 @@ export function uploadImgSource(storeKey, file) {
     }
 } 
 
-export function uploadImage(storeKey, img) {
-    return dispatch => {
-        dispatch(updateUploadImages({
-            [storeKey]: {result: 'l'}
-        }));
-        let xhr = api.uploadImage(img);
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState !== 4) return;
-            if (xhr.status == 200) {
-                dispatch(updateUploadImages({
-                    [storeKey]: {
-                        src: img.src,
-                        result: JSON.parse(xhr.responseText).img
-                    }
-                }));
-            }
-            else {
-                dispatch(
-                    Notifications.error({
-                        position: 'tr',
-                        message: 'мы все умрем',
-                    })
-                );
-            }
-        }
-    }
-}
-
 export function updateUnreadedPostsFull(unreadedPosts) {
     return {
         type: UPDATE_UNREADED_POSTS.FULL,
@@ -611,80 +441,62 @@ export function updateUnreadedPostsDelFromThread(threadID) {
 
 export function loadUnreaded() {
     return dispatch => {
-        let xhr = api.getUnreaded();
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState != 4) return;
-            if (xhr.status === 200) {
-                console.log(xhr.responseText);
-                const body = JSON.parse(xhr.responseText);
-                console.log(body);
-                dispatch(updateUnreadedPostsFull(body.unreaded_posts));
-            }
-        }
+        api.getUnreaded().then(
+            r => r.json()
+        ).then(
+            j => dispatch(updateUnreadedPostsFull(j.unreaded_posts))
+        );
     }
 }
 
 export function setThreadAsReaded(threadID) {
     return dispatch => {
         dispatch(updateUnreadedPostsDelFromThread(threadID));
-        let xhr = api.setThreadAsReaded(threadID);
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState != 4) return;
-            if (xhr.status !== 200) {
-                console.warn('error at setThreadAsReaded ' + threadID);
-            }
-        }
+        api.setThreadAsReaded(threadID).then(
+            r => {if(r.status !== 200) throw 'unknown error'}
+        ).catch(
+            e => dispatch(Notifications.error({
+                    position: 'tr',
+                    children: <UnknownError />,
+                }))
+        );
     }
 }
 
 
 export function followUser(userID) {
     return dispatch => {
-        let xhr = api.followUser(userID);
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState != 4) return;
-            if (xhr.status === 200) {
-                dispatch(
-                    loadUsersSuccess({
-                        [userID]: {
-                            current_user_follows: true
-                        }
-                    })
-                )
+        api.followUser(userID).then(
+            r => {
+                if (r.status !== 200) throw 'err';
+                dispatch(loadUsersSuccess({
+                    [userID]: {
+                        current_user_follows: true
+                    }
+                }));
             }
-        }
+        ).catch(
+            e => alert(e)
+        )
     }
 }
 
 export function unfollowUser(userID) {
     return dispatch => {
-        let xhr = api.unfollowUser(userID);
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState != 4) return;
-            if (xhr.status === 200) {
-                dispatch(
-                    loadUsersSuccess({
-                        [userID]: {
-                            current_user_follows: false
-                        }
-                    })
-                )
+        api.unfollowUser(userID).then(
+            r => {
+                if (r.status !== 200) throw 'err';
+                dispatch(loadUsersSuccess({
+                    [userID]: {
+                        current_user_follows: false
+                    }
+                }));
             }
-        }
+        ).catch(
+            e => alert(e)
+        )
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 export function updateAuth(auth) {
     return {
@@ -693,70 +505,17 @@ export function updateAuth(auth) {
     };
 }
 
-export function getAuth(password) {
+export function getAuth() {
     return dispatch => {
-        let xhr = api.getAuth(password);
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState != 4) return;
-            if (xhr.status === 200) {
-                dispatch(
-                    updateAuth({
-                        ...JSON.parse(xhr.responseText),
-                        password: password
-                    })
-                );
+        api.getAuth().then(
+            r => {
+                if (r.status !== 200) throw {show_user: true};
+                return r.json()
             }
-            else if (xhr.status === 403) {
-                dispatch(
-                    Notifications.error({
-                        position: 'tr',
-                        message: 'Incorrect password',
-                    })
-                );
-            }
-        }
-    }
-}
-
-export function putAuth(newAuth, password) {
-    return dispatch => {
-        let xhr = api.putAuth(newAuth);
-        xhr.onreadystatechange = () => {
-            try {
-                if (xhr.readyState != 4) return;
-                if (xhr.status === 200) {
-                    dispatch(
-                        updateAuth({
-                            ...JSON.parse(xhr.responseText),
-                            password: password
-                        })
-                    );
-                    dispatch(
-                        Notifications.info({
-                            position: 'tr',
-                            children: <EditingSuccess />,
-                        })
-                    );
-                }
-                else {
-                    const errMsg = JSON.parse(xhr.responseText).error || 'unknown error';
-                    dispatch(
-                        Notifications.error({
-                            position: 'tr',
-                            message: errMsg
-                        })
-                    );
-                }
-            } catch(e) {
-                console.warn(e);
-                dispatch(
-                        Notifications.error({
-                            position: 'tr',
-                            children: <UnknownError />
-                        })
-                    );
-            }
-
-        }
+        ).then(
+            j => dispatch(updateAuth(j))
+        ).catch(
+            e => alert(e)
+        );
     }
 }

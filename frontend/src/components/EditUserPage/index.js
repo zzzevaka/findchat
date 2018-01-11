@@ -5,7 +5,7 @@ import Select from 'react-select';
 import {Grid, Row, Col, FormGroup, ControlLabel, FormControl, Radio} from 'react-bootstrap';
 import MainMenu, {MobileMenu} from '../Menu';
 import {MarsIcon, VenusIcon} from '../Icons'
-import currentUserId from '../../auth';
+import {withAuth} from '../../auth';
 import {loadUsers, updateUser} from '../../actions';
 import API from '../../api';
 
@@ -21,10 +21,10 @@ class EditUserPage extends Component {
     }
 
     componentDidMount() {
-        const {user, dispatch} = this.props;
+        const {user, dispatch, auth} = this.props;
         if (!user) {
             dispatch(
-                loadUsers(currentUserId())
+                loadUsers(auth.user_id)
             );
         }
     }
@@ -65,7 +65,9 @@ class EditUserPage extends Component {
                 this.state.form,
                 () => this.setState(this.getDefaultState())
             )
-        );
+        ).then(
+            () => this.setState(this.getDefaultState())
+        )
     }
 
     render() {
@@ -138,7 +140,8 @@ class EditUserPage extends Component {
 
 function mapStateToProps(state) {
     return {
-        user: state.users[currentUserId()],
+        auth: state.auth,
+        user: state.users[state.auth.user_id],
         dispatch: state.dispatch
     };
 }

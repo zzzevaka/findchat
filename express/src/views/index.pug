@@ -1,0 +1,24 @@
+html
+  head
+    title!= title
+    style
+      include ./bootstrap.css
+      include ../../frontend/index.css
+      include ../../frontend/components/LoginPage/login-page.css
+      include ../../frontend/components/TopFixedBar/top-fixed-bar.css
+      include ../../node_modules/photoswipe/dist/photoswipe.css
+      include ../../node_modules/photoswipe/dist/default-skin/default-skin.css
+  body
+    content!= content
+    script.
+      function test(r, className, newClass) {
+        var els = r.getElementsByClassName(className);
+        Array.prototype.forEach.call(els, function(e) {
+          e.classList.add(newClass);
+        });
+      }
+      var root = document.getElementsByClassName('slogan')[0];
+      test(root, 'slogan-wave-1', 'slogan-appear');
+      setTimeout(function() {
+        test(root, 'slogan-wave-1', 'slogan-appear-active')
+      }, 1000)

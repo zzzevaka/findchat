@@ -9,7 +9,7 @@ import searchFilter from './searchFilter';
 import searchUsers from './searchUsers';
 import postComposers from './postComposers';
 import uploadImages from './uploadImages';
-import sideBar from './sideBar';
+// import sideBar from './sideBar';
 import unreadedPosts from './unreadedPosts';
 import auth from './auth';
 import {reducer as notifications} from 'react-notification-system-redux';
@@ -25,7 +25,7 @@ export default combineReducers({
   searchUsers,
   postComposers,
   uploadImages,
-  sideBar,
+  // sideBar,
   unreadedPosts,
   notifications,
   auth
