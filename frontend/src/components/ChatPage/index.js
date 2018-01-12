@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
-import { CSSTransitionGroup } from 'react-transition-group';
-import {Grid, Row, Col, Modal} from 'react-bootstrap';
-import {Route, Switch} from 'react-router-dom';
+import {Grid, Row, Col} from 'react-bootstrap';
+import {Route} from 'react-router-dom';
 import classNames from 'classnames';
-import PostList from './post-list';
 import MainMenu from '../Menu';
 import ThreadList from './thread-list';
 import ChatPostList from './post-list';
@@ -27,7 +25,7 @@ export default class ChatPage extends Component {
     }
 
     render() {
-        const showChatList = this.props.location.pathname.search('\/chats\/?$') !== -1;
+        const showChatList = this.props.location.pathname.search('/chats/?$') !== -1;
         const gridClasses = classNames(
             'chat-page-grid',
             'main-container',

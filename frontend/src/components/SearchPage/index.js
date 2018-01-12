@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
 import {Grid, Row, Col} from 'react-bootstrap';
-import classNames from 'classnames';
 import {NavLink, Route, Redirect} from 'react-router-dom';
-import Select, {Creatable} from 'react-select';
 import SearchFiler from './search-filter';
-import MainMenu, {MobileMenu} from '../Menu';
+import MainMenu from '../Menu';
 import {TopFixedBarDummy} from '../TopFixedBar';
 import './search-page.css';
 

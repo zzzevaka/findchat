@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
-import {Link, withRouter} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {MenuItem} from 'react-bootstrap';
 import classNames from 'classnames';
 import {pure} from 'recompose';
-import { Scrollbars } from 'react-custom-scrollbars';
 import {DropdownTools, DeletePostMenuItem} from '../Menu/dropdown-tools';
 import {PhotoSwipeImage} from '../PhotoSwipe';
-import {LoaderIcon} from '../Icons';
 import {UserAvatar} from '../UserPage';
 import {PostTime, OfferPost} from './offer-thread';
 import connectThread, {mapStateToProps} from './connect-thread';
@@ -34,7 +32,7 @@ class PhotoThread extends Component {
                                 className='link-no-style new-photo'
                                 to={`${match.url}?modalType=new_photo`}
                             >
-                                <img src='/svg/photo_color.svg' />
+                                <img src='/svg/photo_color.svg' alt='' />
                                 <span>New photo</span>
                             </Link>
                         </center>
@@ -99,13 +97,13 @@ export const PhotoThreadItem = pure(
                         onSuccess={onSuccess}
                         cropperClassName='avatar-cropper'
                     >
-                        <img src='/svg/photo_color.svg' />
+                        <img src='/svg/photo_color.svg' alt='' />
                     </ImageUploader>
                     <PostTime datetime={post.datetime} />
                     <div className='post-option'>
                         <DropdownTools>
-                            { auth.user_id == author.id && DeletePostMenuItem(post, dispatch) }
-                            { auth.user_id == author.id &&
+                            { auth.user_id === author.id && DeletePostMenuItem(post, dispatch) }
+                            { auth.user_id === author.id &&
                                 <MenuItem
                                     onClick={() => this.imgUploader.setSrc(`/img/${post.content.full}`)}
                                 >

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import { createSelector } from 'reselect';
-import {Modal, Grid, Row, Col} from 'react-bootstrap';
+import {Modal} from 'react-bootstrap';
 import {OfferPost} from '../thread/offer-thread';
 import {getPost, answerChatOffer} from '../../actions';
 import PostComposer from '../PostComposer';

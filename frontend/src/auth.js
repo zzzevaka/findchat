@@ -1,12 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {getCookie} from './utils';
 import {connect} from 'react-redux';
 import {getAuth} from './actions';
-
-// export function currentUserId() {
-//     return getCookie('current_user_id');
-// }
 
 const  DefaultComponent = () => null;
 
@@ -38,7 +33,7 @@ class AuthProvider extends Component {
 
     render() {
         const {auth, wait} = this.props;
-        if (auth.authenticated == undefined && wait) {
+        if (auth.authenticated === undefined && wait) {
             return null;
         }
         return this.props.children;

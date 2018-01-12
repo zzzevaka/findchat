@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PhotoSwipe from 'photoswipe/dist/photoswipe.min.js';
 import PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default.js';
 require('photoswipe/dist/photoswipe.css');
@@ -73,6 +73,7 @@ export function PhotoSwipeImage({src, msrc, h, w, ...rest}) {
             data-h={h}
             data-fsrc={src}
             onClick={PhotoSwipeImage.onClick}
+            alt=''
             {...rest}
         />
     );

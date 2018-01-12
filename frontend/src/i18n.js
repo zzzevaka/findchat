@@ -4,15 +4,11 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import { reactI18nextModule } from 'react-i18next';
 
 
-i18n
-    .use(Backend)
-    .use(LanguageDetector)
-    .use(reactI18nextModule)
-    .init({
+export const options = {
 
-        fallbackLng: 'en',
+    fallbackLng: 'en',
 
-        debug: false,
+        debug: true,
 
         whitelist: ['en', 'ru'],
 
@@ -26,7 +22,13 @@ i18n
         react: {
             wait: true
         }
+}
 
-    });
+i18n
+    .use(Backend)
+    .use(LanguageDetector)
+    .use(reactI18nextModule)
+    .init(options);
 
 export default i18n;
+

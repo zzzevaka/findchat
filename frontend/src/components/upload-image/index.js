@@ -1,22 +1,18 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import shortid from 'shortid';
-
-import { FileChoiseButton } from '../Buttons.react';
 import ImageEditModal from './ImageEditModal';
 
 import API from '../../api';
 
 const MAX_FILE_SIZE = 10485760;
 const ELEVATION_MSG = 'the file is too large';
-const NOTIFICATION_POS = 'tr';
 
 export default class ImageUloader extends PureComponent {
     
     static propTypes = {
         maxFileSize: PropTypes.number.isRequired,
         elevationMessage: PropTypes.string.isRequired,
-        notificationPostion: PropTypes.string.isRequired,
         cropRatio: PropTypes.number,
         onSuccess: PropTypes.func.isRequired,
         onUploadStart: PropTypes.func.isRequired,
@@ -25,7 +21,6 @@ export default class ImageUloader extends PureComponent {
     static defaultProps = {
         maxFileSize: MAX_FILE_SIZE,
         elevationMessage: ELEVATION_MSG,
-        notificationPostion: NOTIFICATION_POS,
         onSuccess: () => {},
         onUploadStart: () => {}
     }
@@ -43,11 +38,10 @@ export default class ImageUloader extends PureComponent {
         const {
             maxFileSize,
             elevationMessage,
-            notificationPostion,
         } = this.props;
         const file = e.target.files[0];
         if (file.size > maxFileSize) {
-            // to do
+            alert(elevationMessage);
         }
         this.setState({
             img: {src: 'l'}
@@ -75,7 +69,7 @@ export default class ImageUloader extends PureComponent {
             src: canvas.toDataURL('image/jpeg', 0.6),
         }).then(
             r => {
-                if (r.status !== 200) throw 'image not uploaded'
+                if (r.status !== 200) throw new Error('image not uploaded');
                 return r.json()
             }
         ).then(
@@ -93,7 +87,6 @@ export default class ImageUloader extends PureComponent {
         const {
             maxFileSize,
             elevationMessage,
-            notificationPostion,
             onSuccess,
             cropRatio,
             ...rest

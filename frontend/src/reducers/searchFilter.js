@@ -1,5 +1,4 @@
 import { UPDATE_SEARCH_FILTER } from '../constants/ActionTypesConstants';
-import Set from 'es6-set';
 import u from 'updeep';
 
 const initialState = {

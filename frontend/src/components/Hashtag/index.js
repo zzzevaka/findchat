@@ -1,4 +1,4 @@
-const EXCLUDE_SYMBOLS = '!@#\$%\^&\*\(\)\.,\?\+-=\/{}|\" ';
+const EXCLUDE_SYMBOLS = '!@#$%^&*().,?+-=/{}|" ';
 const HASHTAG_REGEX = new RegExp(`#([^${EXCLUDE_SYMBOLS}]+)`, 'gm');
 
 export function HashtagString(string, className) {

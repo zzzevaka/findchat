@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {Link, NavLink, withRouter} from 'react-router-dom';
+import {NavLink, withRouter} from 'react-router-dom';
 import classNames from 'classnames';
-import {ProfileIcon, MessageIcon, SearchIcon, SettingsIcon, AddColorIcon, LikeIcon} from '../Icons';
-import {loginRequired, withAuth} from '../../auth';
+import {ProfileIcon, MessageIcon, SearchIcon, AddColorIcon, LikeIcon} from '../Icons';
+import {loginRequired} from '../../auth';
 import './menu.css';
 
 import { translate } from 'react-i18next';
@@ -87,7 +87,7 @@ let MobileMenu = function({auth, unreadedPosts, history}) {
     )
 };
 
-export function NotLoginMenu({t}) {
+let NotLoginMenu = function({t}) {
     return (
         <div className='footer gradient'>
         <MenuLink to={'/login?showForm=1'}>
@@ -98,6 +98,8 @@ export function NotLoginMenu({t}) {
 }
 
 NotLoginMenu = translate('translations')(NotLoginMenu);
+
+export {NotLoginMenu};
 
 function mapStateToProps(state) {
     return {

@@ -19,7 +19,6 @@ let ConnectedThread = WrappedComponent => {
             postsOnPage: PropTypes.number.isRequired,
             postsPreload: PropTypes.number.isRequired,
             loadMethod: PropTypes.func.isRequired,
-            filter: PropTypes.object,
             flushOnUnmount: PropTypes.bool
         }
 
@@ -42,12 +41,11 @@ let ConnectedThread = WrappedComponent => {
         }
 
         componentWillUnmount() {
-            // alert(this.props.threadID)
             if (this.props.flushOnUnmount) this.flush()
         }
 
         componentDidUpdate(pProps, pState) {
-            const {thread, filter, postsOnPage, dispatch} = this.props;
+            const {thread} = this.props;
             if (!thread) return;
             if (pState.showPosts < this.state.showPosts || thread.status === 'flushed') {
                 this._loadThread();

@@ -1,7 +1,5 @@
-import React, {Component, PureComponent} from 'react';
+import React, {Component} from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
-import {Image, Glyphicon} from 'react-bootstrap';
-import {Link} from 'react-router-dom';
 import classNames from 'classnames';
 import {pure} from 'recompose';
 
@@ -44,15 +42,10 @@ class ChatThread extends Component {
 
     _onScroll = (e) => {
         this.offsetBottom = e.scrollHeight - e.scrollTop;
-        const {thread, showMorePosts} = this.props;
-        // if (e.top === 0 && thread.status !== 'loading') {
-        //     showMorePosts();
-        // }
     }
 
     render() {
         const {thread, showPosts, showMorePosts, dispatch} = this.props;
-        const member = thread.members ? thread.members[0] : undefined;
         return (
             <div className='chat-thread'>
             <Scrollbars
@@ -119,7 +112,7 @@ let ChatPost = pure(
             <div className={classes}>
                 <div className='post-option'>
                     <DropdownTools>
-                        { auth.user_id == author.id && DeletePostMenuItem(post, dispatch) }
+                        { auth.user_id === author.id && DeletePostMenuItem(post, dispatch) }
                     </DropdownTools>
                 </div>
                 <UserAvatar thumbnail={author.thumbnail} />

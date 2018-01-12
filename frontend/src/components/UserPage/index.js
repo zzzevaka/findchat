@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Grid, Row, Col, Image, Glyphicon, MenuItem} from 'react-bootstrap';
+import {Grid, Row, Col, Glyphicon, MenuItem} from 'react-bootstrap';
 import classNames from 'classnames';
 import { translate } from 'react-i18next';
 import {NavLink, Link, Route, Switch, withRouter} from 'react-router-dom';
@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 
 import MainMemu, {MobileMenu} from '../Menu';
 import {TopFixedBarDummy} from '../TopFixedBar';
-import {MarsIcon, VenusIcon, MessageIcon} from '../Icons'
+import {MarsIcon, VenusIcon} from '../Icons'
 import {DropdownTools} from '../Menu/dropdown-tools';
 
 import * as Actions from '../../actions';
@@ -28,7 +28,7 @@ class UserPage extends Component {
     }
 
     loadUser() {
-        const {user, actions, match} = this.props;
+        const {actions, match} = this.props;
         actions.loadUsers(match.params.userID);
     }
 
@@ -47,7 +47,7 @@ class UserPage extends Component {
     renderThread() {
         const {user, auth, match} = this.props;
         if (!user.offer_thread_id) return null;
-        const isMyPage = auth.user_id == user.id; 
+        const isMyPage = auth.user_id === Number(user.id); 
         return (
             <Switch>
                 <Route path={`${match.url}/photos`} render={() => (
@@ -77,7 +77,7 @@ class UserPage extends Component {
                     className='button-no-style'
                     onClick={() => actions.unfollowUser(user.id)}
                 >
-                    <img src='/svg/like_color.svg' />
+                    <img src='/svg/like_color.svg' alt='' />
                     {t('Unfollow')}
                 </button>
             );
@@ -88,7 +88,7 @@ class UserPage extends Component {
                     className='button-no-style'
                     onClick={() => actions.followUser(user.id)}
                 >
-                    <img src='/svg/like_color.svg' />
+                    <img src='/svg/like_color.svg' alt='' />
                     {t('Follow')}
                 </button>
             ); 
@@ -98,7 +98,7 @@ class UserPage extends Component {
     render() {
         const {user, auth, match, history, location, t} = this.props;
         if (!user) return null;
-        const isMyPage = auth.user_id == user.id;  
+        const isMyPage = auth.user_id === user.id;  
         return (
             <div className='user-page' key={match.params.userID}>
                 <MobileMenu />
@@ -151,7 +151,7 @@ class UserPage extends Component {
                         className='button-no-style'
                         onClick={() => {history.push(location.pathname + `?modalType=private_message_composer&userID=${user.id}`)}}
                     >
-                        <img src='/svg/message_color.svg' />
+                        <img src='/svg/message_color.svg' alt='' />
                             {t("Message")}
                     </button>}
                     {!isMyPage && this.renderFollowButton()}
@@ -184,7 +184,7 @@ class UserPage extends Component {
 UserPage = translate('translations')(UserPage);
 
 
-function UserPageTopFixedBar({user, children}) {
+let UserPageTopFixedBar = function({user, children}) {
     return (
         <TopFixedBarDummy>
             {
@@ -262,7 +262,6 @@ class UserAbout extends Component {
         const {text} = this.props;
         if (!text) return null;
         const {opened, multiline} = this.state;
-        const aboutClass = opened ? 'about-opened' : 'about-short';
         const classes = classNames(
             'about',
             opened ? 'about-opened' : 'about-short',
@@ -288,15 +287,14 @@ export function UserAvatar({thumbnail}) {
 
     return (
         <div className='avatar'>
-            <img src={thumbnail ? `/img/${thumbnail}` : '/svg/user.svg'} />
+            <img src={thumbnail ? `/img/${thumbnail}` : '/svg/user.svg'} alt='' />
         </div>
     );
 }
 
-function UserOptions({isMyPage, user, history, t}) {
-    // user browserHistory.push instead Link to avoid error: "cannot appear as a descendant..."
+let UserOptions = function({isMyPage, user, history, t}) {
+    // use browserHistory.push instead Link to avoid error: "cannot appear as a descendant..."
     let items = [];
-    let browserHistory = [];
     isMyPage && items.push(
         <MenuItem key='edit_page' onClick={() => history.push('/edit_user')}>
             {t("Edit profile")}

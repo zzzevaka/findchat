@@ -1,11 +1,11 @@
-import React, {Component, PureComponent} from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
 import { Image, Glyphicon } from 'react-bootstrap';
 import ContentEditable from 'react-contenteditable';
-import EmojiPicker, {emojiImage, Emoji} from '../emoji-picker/emojiPicker';
+import EmojiPicker, {emojiImage} from '../emoji-picker/emojiPicker';
 import ImageUploader from '../upload-image';
 import { FileChoiseButton } from '../Buttons.react';
 import { bindActionCreators } from 'redux';
@@ -55,8 +55,7 @@ class PostComposer extends PureComponent {
     }
 
     componentDidMount() {
-        const {composer, focus} = this.props;
-        if (focus) {
+        if (this.props.focus) {
             ReactDOM.findDOMNode(this.textarea).focus();
         }
     }
@@ -117,14 +116,14 @@ class PostComposer extends PureComponent {
                         className='glyph-button button-image'
                         onChange={this._onImgFileChanged}
                     >
-                        <img src='/svg/photo.svg' />
+                        <img src='/svg/photo.svg' alt='' />
                     </FileChoiseButton>
                     <ImageUploader
                         ref={e => this.imgUploader = e}
                         onSuccess={this.uploadImageCommit}
                         onUploadStart={this.uploadImageCommit}
                     >
-                        <img src='/svg/photo.svg' />
+                        <img src='/svg/photo.svg' alt='' />
                     </ImageUploader>
                     <ContentEditable
                         ref={e => this.textarea = e}
@@ -139,6 +138,7 @@ class PostComposer extends PureComponent {
                         src='/svg/smile.svg'
                         onClick={showEmojiPicker ? this._hideEmojiPicker : this._showEmojiPicket}
                         className='glyph-button button-emoji'
+                        alt=''
                     />}
                     {this._getSubmitButton(submitDisabled)}
                 </div>
@@ -163,6 +163,7 @@ class PostComposer extends PureComponent {
                 src='/svg/send_color.svg'
                 className={classes}
                 onClick={disabled ? () => {} : this._onSubmit}
+                alt=''
             />
     }
 

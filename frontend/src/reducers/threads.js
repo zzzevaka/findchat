@@ -48,7 +48,7 @@ export default function threads(state = init_state, action) {
             // }
             let chatsID = [].concat(state.chatsID);
             for (const t in action.threads) {
-                if (action.threads[t].type == THREAD_TYPE['CHAT']) {
+                if (action.threads[t].type === THREAD_TYPE['CHAT']) {
                     chatsID.push(t);
                 }
             }

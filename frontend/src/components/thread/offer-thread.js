@@ -1,15 +1,13 @@
-import React, {Component, PureComponent} from 'react';
-import PropTypes from 'prop-types';
-import {Image, Glyphicon} from 'react-bootstrap';
+import React, {Component,} from 'react';
 import {DropdownTools, DeletePostMenuItem} from '../Menu/dropdown-tools';
-import {withRouter, Link} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import classNames from 'classnames';
 import {pure} from 'recompose';
 import TimeAgo from 'react-timeago';
 import buildFormatter from 'react-timeago/lib/formatters/buildFormatter';
 import russianFormatter from 'react-timeago/lib/language-strings/ru';
 import {PhotoSwipeImage} from '../PhotoSwipe';
-import {LoaderIcon, CommentColorIcon} from '../Icons';
+import {CommentColorIcon} from '../Icons';
 import {UserAvatar} from '../UserPage';
 import {HashtagString} from '../Hashtag';
 import connectThread, {mapStateToProps} from './connect-thread';
@@ -71,7 +69,7 @@ export const OfferPostWrapper = pure(
     }
 );
 
-function OfferPost({post, author, className, dispatch, auth}) {
+let OfferPost = function({post, author, className, dispatch, auth}) {
     if (!author) return null;
 
     const classes = classNames(
@@ -85,7 +83,7 @@ function OfferPost({post, author, className, dispatch, auth}) {
         <div className={classes}>
             <div className='post-option'>
                 <DropdownTools>
-                    { auth.user_id == author.id && DeletePostMenuItem(post, dispatch) }
+                    { auth.user_id === author.id && DeletePostMenuItem(post, dispatch) }
                 </DropdownTools>
             </div>
             <Link className='link-no-style' to={`/user/${author.id}`}>

@@ -5,7 +5,6 @@ import Select from 'react-select';
 import {Grid, Row, Col, FormGroup, ControlLabel, FormControl, Radio} from 'react-bootstrap';
 import MainMenu, {MobileMenu} from '../Menu';
 import {MarsIcon, VenusIcon} from '../Icons'
-import {withAuth} from '../../auth';
 import {loadUsers, updateUser} from '../../actions';
 import API from '../../api';
 
@@ -156,17 +155,13 @@ class LanguagesFormGroup extends Component {
     }
 
     componentDidMount() {
-        let xhr = api.getLanguages();
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState != 4) return;
-            if (xhr.status === 200) {
-                const lang = JSON.parse(xhr.responseText).map( l => ({
-                    value: l.name,
-                    label: `${l.name} (${l.native_name})`
-                }));
-                this.setState({options: lang});
-            }
-        }
+        api.getLanguages().then(
+            r => r.json()
+        ).then(
+            j => this.setState({
+                options: j.map(l => ({value: l.name, label: `${l.name} (${l.native_name})`}))
+            })
+        )
     }
 
     _onInputChange = v => v.startsWith(' ') ? '' : v
@@ -257,7 +252,6 @@ class GenderFormGroup extends Component {
                         value='male'
                         defaultChecked={value === 'male'}
                         inline
-                        defaultChecked
                     >
                         <MarsIcon className='icon-gender icon-mars' />
                     </Radio>

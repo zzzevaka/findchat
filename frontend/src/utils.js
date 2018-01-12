@@ -1,5 +1,3 @@
-// import { browserHistory, Link } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import qs from 'qs';
 
 export function parseHistorySearch(history) {
@@ -9,15 +7,8 @@ export function parseHistorySearch(history) {
 
 export function uniqueArray(arr) {
     return arr.filter((item, pos, self) => {
-        return self.indexOf(item) == pos
+        return self.indexOf(item) === Number(pos);
     })
-}
-
-export function getCookie(name) {
-  var matches = document.cookie.match(new RegExp(
-    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-  ));
-  return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
 export function formatDateTime(dt) {

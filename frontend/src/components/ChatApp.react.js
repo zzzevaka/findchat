@@ -2,14 +2,9 @@ import 'react-select/dist/react-select.css';
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
-import { CSSTransitionGroup } from 'react-transition-group'
 // import SideBarWrapper, {SideBarButton} from './SideBar';
-import { Modal, Grid, Row, Col, Glyphicon, Button } from 'react-bootstrap';
 import classNames from 'classnames';
-import { Scrollbars } from 'react-custom-scrollbars';
 import { Switch, Route, withRouter } from 'react-router-dom';
-import qs from 'qs';
 import {NewPostPhotoModal,
         PrivateMessageModal,
         NewOfferModal} from './modals';
@@ -26,7 +21,7 @@ import Notifications from 'react-notification-system-redux';
 import { parseHistorySearch } from '../utils';
 import {loginRequired} from '../auth';
 
-import {UpArrow, AddColorIcon, LoaderIcon} from './Icons';
+import {UpArrow, AddColorIcon} from './Icons';
 import {TopFixedBarDefault} from './TopFixedBar';
 import {UserPageTopFixedBar} from './UserPage';
 import {SearchFilterTopFixedBar} from './SearchPage';
@@ -48,7 +43,7 @@ class ChatApp extends Component {
     }
 
     render() {
-        const { store, actions, match, history } = this.props;
+        const {store} = this.props;
         return (
             <div style={{height: '100%'}}>
                 <PhotoSwipeDummy />

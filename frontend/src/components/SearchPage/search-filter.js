@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Select, {Creatable} from 'react-select';
+import {Creatable} from 'react-select';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -55,14 +55,14 @@ class SearchFiler extends Component {
 
     render() {
 
-        const {filter, actions} = this.props;
+        const {filter} = this.props;
         const selectFilter = filter.tags.map(v => ({label: v, value: v}));
         return (
             <Creatable
                 options={[]}
                 className='search-input'
                 value={selectFilter}
-                placeholder={<img src='/svg/search_color.svg' />}
+                placeholder={<img src='/svg/search_color.svg' alt="search"/>}
                 onChange={this.onChange}
                 shouldKeyDownEventCreateNewOption={this.shouldOptionCreate}
                 onInputChange={this.onInputChange}

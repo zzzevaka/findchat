@@ -17,8 +17,8 @@ export function TopFixedBarDefault(props) {
     return (
         <TopFixedBarDummy>
             <div className='company-title'>
-                <img src='/svg/logo_color.svg' className='logo' />
-                <img src='/svg/findchat.svg' className='logo-name'/>
+                <img src='/svg/logo_color.svg' className='logo' alt='logo' />
+                <img src='/svg/findchat.svg' className='logo-name' alt='sitename' />
             </div>
         </TopFixedBarDummy>
     );

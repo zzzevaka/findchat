@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import connectThread, {mapStateToPropsUsers} from './connect-thread';
 import { UserThreadItem } from './user-thread';
 import {ThreadLoaderIcon, ThreadPlaceholder, InfiniteThread} from './thread-interface';
@@ -7,7 +7,6 @@ function UserFollowingThread(props) {
     const {
         thread,
         showPosts,
-        placeholder,
         dispatch
     } = props;
     return (
@@ -30,9 +29,7 @@ function UserFollowingThread(props) {
     );
 }
 
-UserFollowingThread = connectThread(
+export default connectThread(
                     mapStateToPropsUsers,
                     null, null, {withRef: true}
                )(UserFollowingThread);
-
-export default UserFollowingThread;

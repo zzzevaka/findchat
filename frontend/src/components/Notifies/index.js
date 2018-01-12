@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router';
 import {UserAvatar} from '../UserPage';
 
 import './notifies.css';

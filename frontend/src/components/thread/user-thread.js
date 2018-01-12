@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import classNames from 'classnames';
 import {ThreadLoaderIcon, ThreadPlaceholder, InfiniteThread} from './thread-interface';
 import {UserAvatar} from '../UserPage';
-import InfiniteScroll from '../infinite-scroll';
 import {followUser, unfollowUser} from '../../actions';
 
 import connectThread, {mapStateToPropsUsers} from './connect-thread';
@@ -35,7 +33,7 @@ class UserThread extends Component {
 
 }
 
-function UserThreadItem({user, match, dispatch}) {
+let UserThreadItem = function({user, match, dispatch}) {
     if (!user) return null;
     return (
         <div className='post-item post-user-item'>

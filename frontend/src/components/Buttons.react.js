@@ -17,7 +17,7 @@ export class ImageButton extends React.Component {
     }
         
     render() {
-        const {icon, onChange, accept, width} = this.props;
+        const {icon, onChange, accept} = this.props;
         const id = shortid.generate();
         return (
             <span className={this.props.className}>
@@ -27,7 +27,7 @@ export class ImageButton extends React.Component {
                 <input
                     id={id}
                     type="file"
-                    accept={this.props.accept}
+                    accept={accept}
                     style={{display: 'none'}}
                     onChange={onChange}
                 />

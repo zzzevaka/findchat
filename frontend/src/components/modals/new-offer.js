@@ -1,9 +1,7 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 
 import {Modal, Image, Glyphicon} from 'react-bootstrap';
 import ThreadPostComposer from '../PostComposer/ThreadPostComposer';
-import {OfferPost} from '../thread/offer-thread';
 import UploadImageButton from '../upload-image';
 import {AddColorIcon} from '../Icons';
 
@@ -95,7 +93,7 @@ class NewOfferModal extends PureComponent {
                 className='button-add-photo'
                 onSuccess={this.imageUploaded}
             >
-                <img src='/img/icons/photo.png' />
+                <img src='/img/icons/photo.png' alt='' />
              </UploadImageButton>
         );
     }
@@ -111,7 +109,7 @@ class NewOfferModal extends PureComponent {
 }
 
 function mapStateToProps(state, {threadID}) {
-    const {postComposers, uploadImages, users} = state;
+    const {postComposers, uploadImages} = state;
     let c = {...INITIAL_STATE, ...postComposers['thread' + threadID] };
     c.imagesObj = c.imagesID.map(i => ({...uploadImages[i], id: i}) );
     return {

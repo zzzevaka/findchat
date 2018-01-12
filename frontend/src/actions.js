@@ -1,29 +1,17 @@
 import API from './api';
-import {getCookie} from './utils';
-import shortid from 'shortid';
-import {THREAD_TYPE} from './constants/threadType';
-import arrayFrom from 'array-from';
-import u from 'updeep';
 import {
     UPDATE_THREADS_POSTS,
     UPDATE_USERS,
     UPDATE_POST_LIKES,
-    UPDATE_CHAT_OFFERS,
-    UPDATE_RAW_THREADS,
-    DELETE_RAW_THREAD,
     UPDATE_SEARCH_FILTER,
     SEARCH_USERS_UPDATE,
     UPDATE_POST_COMPOSERS,
     UPDATE_UPLOAD_IMAGES,
-    TOGGLE_SIDEBAR,
     UPDATE_UNREADED_POSTS,
     UPDATE_AUTH
 } from './constants/ActionTypesConstants';
-// import { browserHistory } from 'react-router';
-
 import Notifications from 'react-notification-system-redux';
-import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
+import React from 'react';
 
 import {
     ChatOfferAnswerSuccess,
@@ -31,9 +19,6 @@ import {
     UnknownError,
     EditingSuccess
 } from './components/Notifies';
-
-import Set from 'es6-set';
-
 
 const api = new API('/api_v1');
 
@@ -139,7 +124,7 @@ export function getUserFollowing(userID, limit, offset) {
         dispatch(loadThreadRequest([`user_following_${userID}`,]));
         api.getUserFollowing(userID, limit, offset).then(
             r => {
-                if (r.status !== 200) throw 'err';
+                if (r.status !== 200) throw new Error('err');
                 return r.json();
             }
         ).then(
@@ -155,7 +140,7 @@ export function getUserFollowers(userID, limit, offset) {
         dispatch(loadThreadRequest([`user_followers_${userID}`,]));
         api.getUserFollowers(userID, limit, offset).then(
             r => {
-                if (r.status !== 200) throw 'err';
+                if (r.status !== 200) throw new Error('err');
                 return r.json();
             }
         ).then(
@@ -453,7 +438,7 @@ export function setThreadAsReaded(threadID) {
     return dispatch => {
         dispatch(updateUnreadedPostsDelFromThread(threadID));
         api.setThreadAsReaded(threadID).then(
-            r => {if(r.status !== 200) throw 'unknown error'}
+            r => {if(r.status !== 200) throw new Error('unknown error')}
         ).catch(
             e => dispatch(Notifications.error({
                     position: 'tr',
@@ -468,7 +453,7 @@ export function followUser(userID) {
     return dispatch => {
         api.followUser(userID).then(
             r => {
-                if (r.status !== 200) throw 'err';
+                if (r.status !== 200) throw new Error('err');
                 dispatch(loadUsersSuccess({
                     [userID]: {
                         current_user_follows: true
@@ -485,7 +470,7 @@ export function unfollowUser(userID) {
     return dispatch => {
         api.unfollowUser(userID).then(
             r => {
-                if (r.status !== 200) throw 'err';
+                if (r.status !== 200) throw new Error('err');
                 dispatch(loadUsersSuccess({
                     [userID]: {
                         current_user_follows: false
@@ -509,7 +494,7 @@ export function getAuth() {
     return dispatch => {
         api.getAuth().then(
             r => {
-                if (r.status !== 200) throw {show_user: true};
+                if (r.status !== 200) throw new Error({show_user: true});
                 return r.json()
             }
         ).then(

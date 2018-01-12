@@ -2,13 +2,12 @@ import React, {Component} from 'react';
 import connectThread, {mapStateToProps} from './connect-thread';
 import {ThreadLoaderIcon, ThreadPlaceholder, InfiniteThread} from './thread-interface';
 import {OfferPost, OfferPostWrapper} from './offer-thread';
-import {PhotoThreadItem} from './photo-thread';
 
 
 class NewsThread extends Component {
     
     render() {
-        const {thread, showPosts, placeholder, isMyPage, match, history, dispatch} = this.props;
+        const {thread, showPosts, placeholder, history, dispatch} = this.props;
         return (
             <div className='news-thread'>
                 <InfiniteThread {...this.props} />

@@ -1,5 +1,8 @@
 import express from 'express';
 import React from 'react';
+import i18next from 'i18next';
+import i18nMiddleware from 'i18next-express-middleware';
+
 import { renderToString } from 'react-dom/server';
 import {StaticRouter, Switch, Route, matchPath} from 'react-router-dom';
 import { renderRoutes, matchRoutes } from 'react-router-config';
@@ -12,12 +15,18 @@ import configureStore from '../frontend/store/configureStore';
 import { Provider } from 'react-redux';
 
 import { I18nextProvider } from 'react-i18next';
-import i18n from '../frontend/i18n';
+import {options as i18n_options } from '../frontend/i18n';
 
 import Router from 'react-router/Router'
 
 const store = configureStore({});
 
+const i18n = i18next
+              .use(i18nMiddleware.LanguageDetector)
+              .init({
+                preload: ['en', 'ru'],
+                ...i18n_options
+              });
 
 class Test extends React.Component {
 
@@ -40,6 +49,10 @@ class Test extends React.Component {
 var app = express();
 app.set('view engine', 'pug');
 app.set('views', __dirname + '/views');
+pp.use(i18nMiddleware.handle(i18next, {
+  ignoreRoutes: ["/foo"],
+  removeLngFromUrl: false
+}));
 
 app.get('*', function (req, res) {
   let context = {};
@@ -65,5 +78,5 @@ app.get('*', function (req, res) {
 });
 
 app.listen(80, function () {
-  console.log('Example app listening on port 80!');
+  console.log('Example app listening on port 80!!');
 });

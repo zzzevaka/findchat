@@ -69,7 +69,7 @@
     border-bottom: 1px solid #ddd;
     padding: 20px 20px 20px 80px;
     position: relative;
-    transition: background-color .7s ease-in-out;
+    transition: background-color .3s ease-in-out;
 }
 
 .chat-list-item-active {

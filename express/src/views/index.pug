@@ -18,7 +18,9 @@ html
         });
       }
       var root = document.getElementsByClassName('slogan')[0];
-      test(root, 'slogan-wave-1', 'slogan-appear');
-      setTimeout(function() {
-        test(root, 'slogan-wave-1', 'slogan-appear-active')
-      }, 1000)
+      if (root) {
+        test(root, 'slogan-wave-1', 'slogan-appear');
+        setTimeout(function() {
+          test(root, 'slogan-wave-1', 'slogan-appear-active')
+        }, 1000)
+      }

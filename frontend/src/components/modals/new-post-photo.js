@@ -1,9 +1,7 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 
 import {Modal, Image, Glyphicon} from 'react-bootstrap';
 import PostComposer from '../PostComposer';
-import {OfferPost} from '../thread/offer-thread';
 import ImageUploader from '../upload-image';
 import { FileChoiseButton } from '../Buttons.react';
 
@@ -38,7 +36,7 @@ export class NewPostPhotoModal extends PureComponent {
         return (
             <Modal {...rest} dialogClassName='modal-new-post-photo'>
                 <Modal.Header closeButton>
-                    <img src='/svg/photo_color.svg' className='icon' />
+                    <img src='/svg/photo_color.svg' className='icon' alt='' />
                     {title}
                 </Modal.Header>
                 <Modal.Body>
@@ -64,7 +62,7 @@ export class NewPostPhotoModal extends PureComponent {
     }
 
     onSubmit = post => {
-        const {threadID, submitAction, onHide, location} = this.props;
+        const {threadID, submitAction, onHide} = this.props;
         submitAction(
             {thread_id: threadID, ...post},
             `thread${threadID}`
@@ -98,7 +96,7 @@ export class NewPostPhotoModal extends PureComponent {
                 onChange={this._onFileChanged}
                 className='button-add-photo'
              >
-                <img src='/svg/photo_color.svg' />
+                <img src='/svg/photo_color.svg' alt='' />
             </FileChoiseButton>
         );
     }
@@ -118,7 +116,7 @@ export class NewPostPhotoModal extends PureComponent {
 }
 
 function mapStateToProps(state, {threadID}) {
-    const {postComposers, users} = state;
+    const {postComposers} = state;
     let c = {...INITIAL_STATE, ...postComposers['thread' + threadID] };
     return {
         composer: c

@@ -2,22 +2,18 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { CSSTransitionGroup } from 'react-transition-group';
 import { Provider } from 'react-redux';
 import ChatApp from './components/ChatApp.react';
 import UserPage from './components/UserPage';
 import ChatPage from './components/ChatPage';
-import ChatPostList from './components/ChatPage/post-list';
 import SearchPage from './components/SearchPage';
-import SearchChatOffers from './components/SearchPage/SearchChatOffers';
-import SearchPeople from './components/SearchPage/SearchPeople';
 import EditUserPage from './components/EditUserPage';
 import LoginPage from './components/LoginPage';
 import FollowPage from './components/FollowPage';
 import NewsPage from './components/NewsPage';
 import * as Actions from './actions';
 import configureStore from './store/configureStore';
-import { BrowserRouter, withRouter, Route, Switch, Link, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import ScrollMemory from './react-router-scroll-memory';
 import AuthProvider, {withAuth} from './auth';
 
@@ -34,7 +30,7 @@ import i18n from './i18n';
 const store = configureStore(window.__INITIAL_STATE__);
 
 
-function IndexRedirect({auth}) {
+let IndexRedirect = function({auth}) {
     if (auth.authenticated === undefined) return null;
     return (
         <Redirect to={auth.user_id ? `/user/${auth.user_id}` : '/login'}

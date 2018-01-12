@@ -1,15 +1,12 @@
 import React, {PureComponent} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import {Grid, Row, Col, FormGroup, FormControl, Glyphicon} from 'react-bootstrap';
+import {Grid, Row, Col} from 'react-bootstrap';
 import classNames from 'classnames';
 import { translate } from 'react-i18next';
 import { withRouter, Link } from 'react-router-dom';
-import API from '../../api';
 import {parseHistorySearch} from '../../utils';
 
 import './login-page.css';
-
-const api = new API('/api_v1');
 
 
 class LoginPage extends PureComponent {
@@ -110,19 +107,19 @@ class LoginPage extends PureComponent {
 LoginPage = translate('translations')(LoginPage);
 export default withRouter(LoginPage);
 
-function LoginForm({t}) {
+let LoginForm = function({t}) {
     return (
         <div className='login-form'> 
             <p className='header'>{t('Join us')}:</p>
             <div className='buttons'>
                 <a href='/auth/vk' className='link-no-style'>
-                    <img src='/svg/vk.svg' />
+                    <img src='/svg/vk.svg' alt='' />
                 </a>
                 <a href='/auth/google' className='link-no-style'>
-                    <img src='/svg/google_plus.svg' />
+                    <img src='/svg/google_plus.svg' alt='' />
                 </a>
                 <a href='/auth/facebook' className='link-no-style'>
-                    <img src='/svg/fb.svg' />
+                    <img src='/svg/fb.svg' alt='' />
                 </a>
                 <TermsAndPrivacyLinks />
             </div>
@@ -134,12 +131,12 @@ LoginForm = translate('translations')(LoginForm);
 export {LoginForm};
 
 
-function TermsAndPrivacyLinks({t, ...rest}) {
+let TermsAndPrivacyLinks = function({t, ...rest}) {
     return (
         <div className='link-terms' {...rest}>
-            <a href="#" className='link-no-style'>{t('Terms of use')}</a>
+            <a href="/" className='link-no-style'>{t('Terms of use')}</a>
             <span>/</span>
-            <a href="#" className='link-no-style'>{t('Privacy policy')}</a>
+            <a href="/" className='link-no-style'>{t('Privacy policy')}</a>
         </div>
     );
 }

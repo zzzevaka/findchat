@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import threads from './threads';
 import posts from './posts';
-import users, {currentUserID} from './users';
+import users from './users';
 import postLikes from './postLikes';
 import chatOffers from './chatOffers';
 import rawThreads from './rawThreads';
@@ -25,7 +25,6 @@ export default combineReducers({
   searchUsers,
   postComposers,
   uploadImages,
-  // sideBar,
   unreadedPosts,
   notifications,
   auth

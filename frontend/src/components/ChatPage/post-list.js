@@ -33,14 +33,14 @@ export default class ChatPostList extends PureComponent {
 }
 
 
-function ChatTopFixedBar({userID}) {
+let ChatTopFixedBar = function({userID}) {
     return (
         <UserPageTopFixedBar userID={userID}>
             <Link
                 to='/chats'
                 className='link-no-style link-to-chats'
             >
-                <img src='/svg/message.svg' />
+                <img src='/svg/message.svg' alt='' />
             </Link>
         </UserPageTopFixedBar>
     );

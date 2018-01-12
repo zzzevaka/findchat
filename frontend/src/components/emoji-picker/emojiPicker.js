@@ -40,7 +40,7 @@ export const Emoji = (props) => {
     );
   }
   else {
-    return <img src={`${emojiPath}/${id}.png`} className='emoji-item-img' {...rest}/>
+    return <img src={`${emojiPath}/${id}.png`} className='emoji-item-img' alt='' {...rest}/>
   }
 }
 

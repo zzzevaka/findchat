@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import { findDOMNode } from 'react-dom';
-import { Modal, Glyphicon } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import Cropper from 'react-cropper';
 import '../../../node_modules/cropperjs/dist/cropper.css';
 
@@ -48,7 +47,7 @@ export default class ImageEditModal extends React.Component {
     }
 
     render() {
-        const {img, storeKey} = this.props;
+        const {img} = this.props;
         if (!img) return null;
         return (
             <Modal
@@ -80,7 +79,6 @@ export default class ImageEditModal extends React.Component {
                 aspectRatio={cropRatio}
                 autoCropArea={1}
                 src={img.src}
-                autoCrop={cropRatio ? true : false}
                 background={false}
             />,
             <div className='image-tools' key='tls'>
