@@ -1,4 +1,6 @@
 {
+    "Submit": "Подтвердить",
+    
     "My profile": "Моя страница",
     "Messages": "Сообщения",
     "Searching": "Поиск",
@@ -18,8 +20,27 @@
     "Unfollow": "Отписаться",
     "Chat Offers": "Темы",
     "Photos": "Фото",
-    "Edit profile": "Изменить мою информацию",
-    "Followers": "Подписчики",
+    "Edit profile": "Редактирование профиля",
     "Logout": "Выйти",
-    "There are no offers yet ;(": "Пользователь еще не предложил тем для разговора"
+    "There are no offers yet ;(": "Пользователь еще не предложил тем для разговора",
+
+    "Birth date": "Дата рождения",
+    "Gender": "Пол",
+    "Few words about you": "О себе",
+    "Your name": "Ваше имя",
+    "Languages you want to talk in": "Языки, на которых вы говорите",
+
+    "Topics": "Темы",
+    "People": "Люди",
+
+    "Followers": "Подписчики",
+    "Following": "Подписки",
+
+    "Answer": "Ответить",
+
+    "New photo": "Добавить фото",
+    "Add new topic": "Предложить новую тему",
+
+    "Choose a chat": "Выберите чат"
+
 } 

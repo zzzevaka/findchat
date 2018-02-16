@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import connectThread, {mapStateToProps} from './connect-thread';
 import {ThreadLoaderIcon, ThreadPlaceholder, InfiniteThread} from './thread-interface';
 import {OfferPost, OfferPostWrapper} from './offer-thread';
+import {PhotoPost} from './photo-thread';
 
 
 class NewsThread extends Component {
@@ -30,7 +31,7 @@ export function NewsPost(props) {
 
         case 1:
             return (
-                <OfferPost
+                <PhotoPost
                     {...props}
                 />
             );

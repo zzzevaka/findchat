@@ -38,13 +38,13 @@ export default class ChatPage extends Component {
             >
             <Grid fluid className={gridClasses}>
                 <Row>
-                    <Col sm={2} className='col-menu'>
+                    <Col sm={2}className='col-menu'>
                         <MainMenu />
                     </Col>
                     <Col sm={4} className='col-chat-list'>
                         <ThreadList />
                     </Col>
-                    <Col sm={6} className='col-post-list'>
+                    <Col sm={6} md={5} className='col-post-list'>
                         <Route
                             path="/chats/:threadID?"
                             component={ChatPostList}

@@ -5,6 +5,7 @@ import {Modal} from 'react-bootstrap';
 import {OfferPost} from '../thread/offer-thread';
 import {getPost, answerChatOffer} from '../../actions';
 import PostComposer from '../PostComposer';
+
 import './post-modal.css';
 
 class PostModal extends Component {
@@ -30,6 +31,7 @@ class PostModal extends Component {
                 <Modal.Body>
                     <div className='post-area'>
                         <OfferPost
+                            className='post-offer-item'
                             post={post}
                             author={post.author}
                             dispatch={dispatch}

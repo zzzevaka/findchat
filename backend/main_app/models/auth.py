@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import re
-import hashlib
 import bcrypt
 from datetime import datetime
 
@@ -32,7 +31,7 @@ class Auth(BaseModel):
     def __init__(self, password, **kwargs):
         # self.password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
         self.password = self.get_hash(password)
-        super(Auth, self).__init__(**kwargs)        
+        super(Auth, self).__init__(**kwargs)
 
     def check_password(self, password):
         '''is hash of password from argument are equal to self.password'''

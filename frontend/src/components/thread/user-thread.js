@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {translate} from 'react-i18next';
 import {Link, withRouter} from 'react-router-dom';
 import {ThreadLoaderIcon, ThreadPlaceholder, InfiniteThread} from './thread-interface';
 import {UserAvatar} from '../UserPage';
@@ -33,7 +34,7 @@ class UserThread extends Component {
 
 }
 
-let UserThreadItem = function({user, match, dispatch}) {
+let UserThreadItem = function({user, match, dispatch, t}) {
     if (!user) return null;
     return (
         <div className='post-item post-user-item'>
@@ -60,23 +61,24 @@ let UserThreadItem = function({user, match, dispatch}) {
                 {
                     user.current_user_follows
                         ? <button
-                            className='button-no-style button'
+                            className='button button-follow'
                             onClick={() => dispatch(unfollowUser(user.id)) }
-                        >Unfollow</button>
+                        >{t("Unfollow")}</button>
                         : <button
-                            className='button-no-style button'
+                            className='button button-follow'
                             onClick={() => dispatch(followUser(user.id)) }
-                        >Follow</button>
+                        >{t("Follow")}</button>
                 }
                 <Link
                     to={`${match.url}?modalType=private_message_composer&userID=${user.id}`}
-                    className='link-no-style button'
-                >Message</Link>
+                    className='link-no-style button button-message'
+                >{t("Message")}</Link>
             </div>
         </div>
     )
 }
 
+UserThreadItem = translate('translations')(UserThreadItem);
 UserThreadItem = withRouter(UserThreadItem);
 
 export {UserThreadItem};

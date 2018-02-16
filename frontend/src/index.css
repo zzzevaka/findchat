@@ -36,8 +36,8 @@ body {
 }
 
 .main-container {
-    max-width: 970px;
-    /*max-width: 1280px;*/
+    /* max-width: 970px; */
+    max-width: 1096px;
     margin: auto;
 }
 
@@ -441,4 +441,8 @@ svg.icon-venus {
 .fade-leave.fade-leave-active {
     opacity: 0;
     transition: opacity .7s ease-out;
+}
+
+#nprogress .bar {
+    background: #F54598;
 }

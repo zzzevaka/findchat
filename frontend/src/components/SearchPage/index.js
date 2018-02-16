@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Grid, Row, Col} from 'react-bootstrap';
 import {NavLink, Route, Redirect} from 'react-router-dom';
+import { translate } from 'react-i18next';
 import SearchFiler from './search-filter';
 import MainMenu from '../Menu';
 import {TopFixedBarDummy} from '../TopFixedBar';
@@ -10,10 +11,10 @@ import SearchChatOffers from './SearchChatOffers';
 import SearchPeople from './SearchPeople';
 
 
-export default class SearchPage extends Component {
+class SearchPage extends Component {
 
     render() {
-        const {match} = this.props;
+        const {match, t} = this.props;
         return (
             <div className='search-page'>
                 <Grid fluid className='search-page-grid main-container'>
@@ -28,7 +29,7 @@ export default class SearchPage extends Component {
                                     className='link-no-style'
                                     activeClassName='link-active'
                                 >
-                                    Chat Offers
+                                    {t("Topics")}
                                 </NavLink>
                                 <span>/</span>
                                 <NavLink
@@ -36,7 +37,7 @@ export default class SearchPage extends Component {
                                     className='link-no-style'
                                     activeClassName='link-active'
                                 >
-                                    People
+                                    {t("People")}
                                 </NavLink>
                             </div>
                             <Route
@@ -53,6 +54,8 @@ export default class SearchPage extends Component {
 
     }
 }
+
+export default translate('translations')(SearchPage);
 
 export function SearchFilterTopFixedBar(props) {
     return (

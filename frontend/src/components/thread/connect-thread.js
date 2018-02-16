@@ -100,10 +100,12 @@ let ConnectedThread = WrappedComponent => {
                 ...rest
             } = this.props;
             if (!thread) return null;
+            const noMorePosts = thread.no_more_posts && this.state.showPosts >= thread.posts.length;
             return (
                 <WrappedComponent
                     showPosts={this.state.showPosts}
                     showMorePosts={this.showMorePosts}
+                    noMorePosts={noMorePosts}
                     thread={thread}
                     placeholder={t(placeholder)}
                     {...rest}

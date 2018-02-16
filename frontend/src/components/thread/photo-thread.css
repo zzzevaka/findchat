@@ -3,86 +3,101 @@
 }
 
 .post-photo-item {
-    margin-bottom: 15px;
-    padding: 0 10px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    position: relative;
+    padding: 20px 12px 10px 22px;
+    background: #fff;
+    border: 1px solid #dfdfdf;
+    margin-bottom: 8px;
+}
+
+.post-photo-item .post-header {
+    padding-left: 48px;
+}
+
+.post-photo-item .post-body {
+    text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+    
+    .post-photo-item {
+        padding: 20px 22px 10px 22px;
+        margin-bottom: 18px;
+    }
+
+    .post-photo-item .post-header {
+        padding-left: 60px;
+    }
+
 }
 
 .post-photo-item .avatar {
     position: absolute;
-    top: 10px;
-    left: 0;
-    display: none;
+    top: 18px;
+    left: 12px;
+    height: 45px;
+    width: 45px;
 }
 
 @media screen and (min-width: 768px) {
-
-    .post-photo-item {
-        padding: 0 60px;
-    }
-
     .post-photo-item .avatar {
-        display: block;
+        top: 18px;
+        left: 18px;
     }
-
 }
 
 .post-photo-item .post-option {
     position: absolute;
-    bottom: 7px;
-    right: 10px;
+    top: 18px;
+    right: 12px;
     font-size: 1.2em;
 }
 
-.post-photo-item .post-option .button-tools {
-    color: #bbb;
+@media screen and (min-width: 768px) {
+    .post-photo-item .post-option {
+        top: 12px;
+        right: 18px;
+    }
 }
 
-.post-photo-item .post-content-wrapper {
-    flex-grow: 2;
-    border-radius: 10px;
-    border: 1px solid #dfdfdf;
-    overflow: hidden;
-    max-height: 800px;
+.post-photo-item .author-name {
+    font-size: 1.2em;
+}
+
+.post-photo-item .post-text {
+    margin: 0;
 }
 
 .post-photo-item .post-content {
-    width: 100%;
+    margin: 14px 0;
+    max-height: 450px;
+    max-width: 100%;
 }
 
-.post-photo-item .post-footer {
-    width: 100%;
-    padding: 10px;
-    position: relative;
-}
 
-.photo-thread .new-photo {
-    border: 2px solid #aaa;
+/* BUTTON NEW PHOTO */
+
+.button-new-post {
+    border: 1px solid #ddd;
     max-width: 250px;
-    background: #444;
-    /*max-width: 450px;*/
-    border-radius: 30px;
+    background: #3897F0 !important;
+    border-radius: 5px;
     display: block;
     text-align: center;
     margin: 20px 10px;
-    padding: 2px;
+    padding: 5px 0;
 }
 
-.photo-thread .new-photo:hover {
+.button-new-post:hover {
     border-color: #f949b6;
 }
-
-.photo-thread .new-photo img {
+.button-new-post img {
     height: 2em;
     width: 2em;
     margin-right: 1em;
 }
 
-.photo-thread .new-photo span {
+.button-new-post span {
+    color: #fff;
     vertical-align: middle;
     font-size: 1.2em;
-    color: #ddd;
 }

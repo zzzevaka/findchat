@@ -2,9 +2,11 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
+import { translate } from 'react-i18next';
 import {Grid, Row, Col, FormGroup, ControlLabel, FormControl, Radio} from 'react-bootstrap';
 import MainMenu, {MobileMenu} from '../Menu';
-import {MarsIcon, VenusIcon} from '../Icons'
+import {MarsIcon, VenusIcon} from '../Icons';
+import {TopFixedBarDummy} from '../TopFixedBar';
 import {loadUsers, updateUser} from '../../actions';
 import API from '../../api';
 
@@ -70,16 +72,11 @@ class EditUserPage extends Component {
     }
 
     render() {
-        const {user} = this.props;
+        const {user, t} = this.props;
         const { form, edited } = this.state;
         if (!user) return null;
         return (
             <div className='edit-user-page'>
-                <div className='top-fixed-bar'>
-                    <div className='title'>
-                        <span>User's information</span>
-                    </div>
-                </div>
                 <MobileMenu />
                 <Grid fluid className='edit-user-page-grid main-container'>
                     <Row>
@@ -96,27 +93,32 @@ class EditUserPage extends Component {
                                             placeholder={user.firstname}
                                             onChange={this._inputChange}
                                             value={form.firstname || ''}
+                                            t={t}
                                         />
                                         <hr />
                                         <BirthDateFormGroup
                                             value={new Date(form.birth_date || user.birth_date)}
                                             onChange={this._birthChange}
+                                            t={t}
                                         />
                                         <hr />
                                         <GenderFormGroup
                                             value={form.gender || user.gender}
                                             onChange={this._inputChange}
+                                            t={t}
                                         />
                                         <hr />
                                         <LanguagesFormGroup
                                             value={form.lang || user.lang}
                                             onChange={this._laguagesChange}
+                                            t={t}
                                         />
                                         <hr />
                                         <AboutFormGroup
                                             placeholder={user.about}
                                             onChange={this._inputChange}
                                             value={form.about}
+                                            t={t}
                                         />
                                         <hr />
                                         <br />
@@ -124,7 +126,7 @@ class EditUserPage extends Component {
                                             className='button-no-style button-submit'
                                             disabled={!edited}
                                         >
-                                            Submit
+                                            {t("Submit")}
                                         </button>
                                     </center>
                                 </form>
@@ -144,6 +146,8 @@ function mapStateToProps(state) {
         dispatch: state.dispatch
     };
 }
+
+EditUserPage = translate("translations")(EditUserPage);
 
 export default connect(mapStateToProps)(EditUserPage);
 
@@ -169,10 +173,10 @@ class LanguagesFormGroup extends Component {
     render() {
         const {options} = this.state;
         if (!options) return null;
-        const {value, onChange} = this.props;
+        const {value, onChange, t} = this.props;
         return (
                 <FormGroup>
-                    <ControlLabel>Languages you want to talk in:</ControlLabel>
+                    <ControlLabel>{t("Languages you want to talk in")}:</ControlLabel>
                     <Select
                         className='search-input'
                         placeholder=''
@@ -194,10 +198,10 @@ class LanguagesFormGroup extends Component {
 class UsernameFormGroup extends Component {
 
     render() {
-        const {value, onChange, placeholder} = this.props;
+        const {value, onChange, placeholder, t} = this.props;
         return (
                 <FormGroup className='input-round'>
-                    <ControlLabel>Your name:</ControlLabel>
+                    <ControlLabel>{t("Your name")}:</ControlLabel>
                     <FormControl
                         name='firstname'
                         type="text"
@@ -218,11 +222,11 @@ class AboutFormGroup extends Component {
 
     render() {
         const {
-            value, placeholder, onChange
+            value, placeholder, onChange, t
         } = this.props;
         return (
                 <FormGroup className='input-round'>
-                    <ControlLabel>Few words about you:</ControlLabel>
+                    <ControlLabel>{t("Few words about you")}:</ControlLabel>
                     <FormControl
                         name='about'
                         componentClass="textarea"
@@ -237,16 +241,15 @@ class AboutFormGroup extends Component {
 
 }
 
-
 class GenderFormGroup extends Component {
 
     render() {
         const {
-            value, onChange
+            value, onChange, t
         } = this.props;
         return (
                 <FormGroup className='form-group-inline' onChange={onChange}>
-                    <ControlLabel>Gender:</ControlLabel>
+                    <ControlLabel>{t('Gender')}:</ControlLabel>
                     <Radio
                         name="gender"
                         value='male'
@@ -274,11 +277,11 @@ class BirthDateFormGroup extends Component {
 
     render() {
         const {
-            value, onChange
+            value, onChange, t
         } = this.props;
         return (
                 <FormGroup>
-                    <ControlLabel>Birth date:</ControlLabel>
+                    <ControlLabel>{t('Birth date')}:</ControlLabel>
                     <DateSelect
                         value={value}
                         onChange={onChange}
@@ -405,3 +408,22 @@ class DateSelect extends Component {
     }
 
 }
+
+
+let EditUserTopFixedBar = function({t}) {
+    return (
+        <TopFixedBarDummy>
+            <div style={{
+                display: 'flex',
+                width: '100%',
+                height: '100%',
+            }}>
+                <p style={{margin: 'auto'}}>{t('Edit profile')}</p>
+            </div>
+        </TopFixedBarDummy>
+    );
+}
+
+EditUserTopFixedBar = translate("translations")(EditUserTopFixedBar);
+
+export {EditUserTopFixedBar};

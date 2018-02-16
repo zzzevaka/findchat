@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {translate} from 'react-i18next';
 import PageDummy from '../RegularPage';
 import {NavLink, Switch, Route, Redirect} from 'react-router-dom';
 import {FollowingThread} from '../thread';
@@ -44,7 +45,7 @@ class FollowPage extends Component {
     }
 
     render() {
-        const {match} = this.props;
+        const {match, t} = this.props;
         const {userID} = match.params;
         return (
             <PageDummy>
@@ -54,7 +55,7 @@ class FollowPage extends Component {
                         className='link-no-style'
                         activeClassName='link-active'
                     >
-                        Followers
+                        {t("Followers")}
                     </NavLink>
                     <span>/</span>
                     <NavLink
@@ -62,7 +63,7 @@ class FollowPage extends Component {
                         className='link-no-style'
                         activeClassName='link-active'
                     >
-                        Following
+                        {t("Following")}
                     </NavLink>
                 </div>
                 <Route
@@ -97,6 +98,8 @@ class FollowPage extends Component {
         )
     }
 }
+
+FollowPage = translate('translations')(FollowPage);
 
 function mapStateToProps(state, {match}) {
     return {

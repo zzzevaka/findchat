@@ -1,6 +1,7 @@
 import React, {Component,} from 'react';
 import {DropdownTools, DeletePostMenuItem} from '../Menu/dropdown-tools';
 import {Link} from 'react-router-dom';
+import {translate} from 'react-i18next';
 import classNames from 'classnames';
 import {pure} from 'recompose';
 import TimeAgo from 'react-timeago';
@@ -29,10 +30,21 @@ class ChatOfferThread extends Component {
     }
 
     render() {
-        const {thread, showPosts, placeholder, history, dispatch}= this.props;
+        const {thread, showPosts, placeholder, history, isMyPage, match, t, dispatch}= this.props;
         return (
             <div className='offer-thread'>
                 <InfiniteThread {...this.props} />
+                {
+                    isMyPage && 
+                        <center>
+                            <Link
+                                className='link-no-style button-new-post'
+                                to={`${match.url}?modalType=new_chat_offer`}
+                            >
+                                <span>{t("Add new topic")}</span>
+                            </Link>
+                        </center>
+                }
                 {
                     thread.posts.slice(0, showPosts).map(p => 
                         <OfferPostWrapper
@@ -51,17 +63,19 @@ class ChatOfferThread extends Component {
 
 }
 
-export const OfferPostWrapper = pure(
+ChatOfferThread = translate('translations')(ChatOfferThread);
+
+let OfferPostWrapper = pure(
     (props) => {
         return (
             <div className='post-offer-wrapper'>
-                <OfferPost {...props} />
+                <OfferPost {...props} className='post-offer-item' />
                 <div className='button-area'>
                     <Link
                         to={props.history.location.pathname + `?modalType=chat_offer&postID=${props.post.id}`}
                         className='link-no-style button-answer'>
                         <CommentColorIcon />
-                        <span className='button-text'>ANSWER</span>
+                        <span className='button-text'>{props.t("Answer")}</span>
                     </Link>
                 </div>
             </div>
@@ -69,12 +83,15 @@ export const OfferPostWrapper = pure(
     }
 );
 
+OfferPostWrapper = translate('translations')(OfferPostWrapper);
+
+export {OfferPostWrapper}
+
 let OfferPost = function({post, author, className, dispatch, auth}) {
     if (!author) return null;
 
     const classes = classNames(
         'post-item',
-        'post-offer-item',
         {'post-item-deleted': post.status === 'deleted'},
         className
     );
@@ -87,11 +104,16 @@ let OfferPost = function({post, author, className, dispatch, auth}) {
                 </DropdownTools>
             </div>
             <Link className='link-no-style' to={`/user/${author.id}`}>
-            <UserAvatar thumbnail={author.thumbnail} />
-            <span className='author-name'>{author.firstname}</span>
+                <UserAvatar thumbnail={author.thumbnail} />
             </Link>
-            <br />
-            <PostTime datetime={post.datetime} />
+            <div className='post-header'>
+                <Link className='link-no-style' to={`/user/${author.id}`}>
+                    <span className='author-name'>{author.firstname}</span>
+                </Link>
+                <br />
+                <PostTime datetime={post.datetime} />
+            </div>
+            <div className='post-body'>
             {
                 post.content && <PhotoSwipeImage
                     className='post-content'
@@ -104,7 +126,8 @@ let OfferPost = function({post, author, className, dispatch, auth}) {
             }
             {
                 post.text && <p className='post-text' dangerouslySetInnerHTML={{__html: HashtagString(post.text)}} />
-            }            
+            }
+            </div>
         </div>
     );
 };

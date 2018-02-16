@@ -22,10 +22,13 @@ import { parseHistorySearch } from '../utils';
 import {loginRequired} from '../auth';
 
 import {UpArrow, AddColorIcon} from './Icons';
-import {TopFixedBarDefault} from './TopFixedBar';
+import {TopFixedBarDefault, TopFixedBarDefaultWithLang} from './TopFixedBar';
 import {UserPageTopFixedBar} from './UserPage';
+import {EditUserTopFixedBar} from './EditUserPage';
 import {SearchFilterTopFixedBar} from './SearchPage';
+import {NewsTopFixedBar} from './NewsPage';
 import {ChatTopFixedBar} from './ChatPage/post-list';
+import wsUpdater from '../wsUpdater';
 
 
 class ChatApp extends Component { 
@@ -38,8 +41,37 @@ class ChatApp extends Component {
         }
     }
 
+    onWsMessage = (e) => {
+        const obj = JSON.parse(e.data);
+        const {actions} = this.props;
+        if (obj.threads) {
+            actions.loadThreadSuccess(
+                obj.threads,
+                obj.posts,
+                {},
+            );
+        }
+        if (obj.users) {
+            actions.loadUsersSuccess(obj.users);
+        }
+        if (obj.unreaded_posts) {
+            actions.updateUnreadedPostsAddToThread(
+                obj.unreaded_posts.thread_id,
+                obj.unreaded_posts.count
+            );
+        }
+    }
+
     componentDidMount() {
+        this.props.actions.loadUnreaded();
         document.addEventListener('click', this._hashtagClicked, false);
+        this.ws = new wsUpdater();
+        this.ws.open(`wss://${window.location.host}/ws`);
+        this.ws.onmessage = this.onWsMessage;
+    }
+
+    componentWillUnmount() {
+        this.ws.close();
     }
 
     render() {
@@ -49,12 +81,14 @@ class ChatApp extends Component {
                 <PhotoSwipeDummy />
                 <div className='fixed-buttons-area'>
                     <ScrollBodyUpButton />
-                    <NewOfferButton />
                 </div>
                 <Switch>
                     <Route path='/user/:userID/follow' component={UserPageTopFixedBar} />
                     <Route path='/chats/:threadID' component={ChatTopFixedBar} />
+                    <Route path='/edit_user' component={EditUserTopFixedBar} />
                     <Route path='/search' component={SearchFilterTopFixedBar} />
+                    <Route path='/news' component={NewsTopFixedBar} />
+                    <Route path='/login' component={TopFixedBarDefaultWithLang} />
                     <Route path='/' component={TopFixedBarDefault} />
                 </Switch>
                 <Switch>

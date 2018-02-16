@@ -43,6 +43,7 @@
 
 .col-avatar {
     display: flex;
+    margin-top: 20px;
     padding: 14px;
     position: relative;
 }
@@ -83,6 +84,7 @@
 
     .col-avatar {
         height: 190px;
+        margin-top: 0;
     }
 
     .col-avatar .avatar,
@@ -141,7 +143,8 @@
     position: relative;
     font-size: 0.9em;
     color: #555;
-    padding: 0 12px 20px 12px;
+    padding: 0px 12px;
+    /* margin-bottom: 10px; */
 }
 
 .about p > span {
@@ -174,11 +177,15 @@
     height: auto;
     max-height: 30vh;
     overflow-y: auto;
-    padding-right: 20px;
+    padding-bottom: 40px;
+    overflow: auto;
 }
 
-.about-opened p {
-    overflow: auto;
+@media screen and (min-width: 768px) {
+    .about-opened p {
+        padding-bottom: 0;
+        padding-right: 20px;
+    }
 }
 
 .about .about-toggle {
@@ -188,7 +195,7 @@
     position: absolute;
     right: calc(50% - 8px);
     bottom: 4px;
-    z-index: 2;
+    z-index: 1;
     padding: 0;
     margin: 0;
     border: none;
@@ -304,6 +311,10 @@
         margin-top: 18px;
         margin-bottom: 0;
     }
+}
+
+.user-page {
+    padding-bottom: 50px;
 }
 
 .user-page .thread-area {

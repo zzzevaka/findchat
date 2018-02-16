@@ -182,7 +182,8 @@ class API_Thread(BaseHandler):
                     list(for_export['posts'].keys()),
                     reverse=True
                 )
-            if len(posts) <= int(limit or 0):
+            if len(posts) < int(limit or 0):
+                logging.debug('limit: %i\n. posts count: %i' % (int(limit or 0), len(posts)))
                 for_export['threads'][thread_id]['no_more_posts'] = True
             # dict -> json
             for_export = json.dumps(
@@ -346,10 +347,18 @@ class API_ThreadChatOffers(BaseHandler):
             subquery()
         request = self.db.query(Post).\
             join(Post.thread).\
+            join(User2Thread, Post.thread_id == User2Thread.thread_id).\
+            outerjoin(
+                IgnoredPosts, and_(
+                    Post.id == IgnoredPosts.post_id,
+                    User2Thread.id == IgnoredPosts.u2t_id
+                )
+            ).\
             options(joinedload('_author', innerjoin='unnested')).\
             options(joinedload('content')).\
             filter(PostThread.type == THREAD_TYPE['CHAT_OFFER']).\
             filter(Post.is_current()).\
+            filter(IgnoredPosts.post_id == None).\
             filter(Post.id.notin_(user_answered))
         if tag:
             request = request.join(Post.hashtags).filter(text("hashtags.name % '{}'".format(tag)))
@@ -361,7 +370,7 @@ class API_ThreadChatOffers(BaseHandler):
             for_export['posts'][p.id] = p.export_dict
             for_export['users'][p.author_id] = p._author.export_dict
             for_export['threads']['chat_offers']['posts'].append(p.id)
-        if len(result) < int(limit or 0):
+        if len(result) < int(limit or 1):
                 for_export['threads']['chat_offers']['no_more_posts'] = True
         for_export = json.dumps(
                 for_export,
@@ -484,10 +493,17 @@ class API_ThreadNews(BaseHandler):
                 )
             ).outerjoin(
                 PostContent, Post.content_id == PostContent.id
+            ).outerjoin(
+                IgnoredPosts, and_(
+                    Post.id == IgnoredPosts.post_id,
+                    User2Thread.id == IgnoredPosts.u2t_id
+                )
             ).options(
                 joinedload(Post.content)
             ).options(
                 joinedload(Post._author)
+            ).filter(
+                IgnoredPosts.post_id == None
             ).filter(
                 Post.is_current()
             ).filter(
@@ -514,7 +530,7 @@ class API_ThreadNews(BaseHandler):
                 list(for_export['posts'].keys()),
                 reverse=True
             )
-        if len(result) <= int(limit or 0):
+        if len(result) < int(limit or 1):
             for_export['threads']['news']['no_more_posts'] = True
         # dict -> json
         for_export = json.dumps(

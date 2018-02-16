@@ -45,7 +45,7 @@ class ChatThread extends Component {
     }
 
     render() {
-        const {thread, showPosts, showMorePosts, dispatch} = this.props;
+        const {thread, showPosts, showMorePosts, noMorePosts, dispatch} = this.props;
         return (
             <div className='chat-thread'>
             <Scrollbars
@@ -63,7 +63,7 @@ class ChatThread extends Component {
                     </div>
                 }
                 {
-                    thread.status !== 'loading' && (!thread.no_more_posts || thread.posts.length >= showPosts) &&
+                    thread.status !== 'loading' && !noMorePosts &&
                     <div className='button-show-more'>
                     <button onClick={showMorePosts} className='button-no-style'>
                         Load more

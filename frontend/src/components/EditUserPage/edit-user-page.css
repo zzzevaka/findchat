@@ -101,6 +101,16 @@
     margin-top: 5px;
 }
 
+.edit-user-page .button-submit {
+    color: rgb(249, 73, 182);
+    transition: color 1s linear;
+}
+
+.edit-user-page .button-submit:disabled {
+    color: #aaa;
+    cursor: not-allowed;
+}
+
 
 /* DATE SELECT */
 

@@ -93,29 +93,26 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-let ws = new wsUpdater();
+// let ws = new wsUpdater();
 
-ws.open(`wss://${window.location.host}/ws`);
+// ws.open(`wss://${window.location.host}/ws`);
 
-ws.onmessage = (event) => {
-    const obj = JSON.parse(event.data)
-    if (obj.threads) {
-        store.dispatch(Actions.loadThreadSuccess(
-            obj.threads,
-            obj.posts,
-            {},
-        ));
-    }
-    if (obj.users) {
-        store.dispatch(Actions.loadUsersSuccess(obj.users));
-    }
-    if (obj.unreaded_posts) {
-        store.dispatch(Actions.updateUnreadedPostsAddToThread(
-            obj.unreaded_posts.thread_id,
-            obj.unreaded_posts.count
-        ));
-    }
-}
-
-store.dispatch(Actions.loadUnreaded());
-
+// ws.onmessage = (event) => {
+//     const obj = JSON.parse(event.data)
+//     if (obj.threads) {
+//         store.dispatch(Actions.loadThreadSuccess(
+//             obj.threads,
+//             obj.posts,
+//             {},
+//         ));
+//     }
+//     if (obj.users) {
+//         store.dispatch(Actions.loadUsersSuccess(obj.users));
+//     }
+//     if (obj.unreaded_posts) {
+//         store.dispatch(Actions.updateUnreadedPostsAddToThread(
+//             obj.unreaded_posts.thread_id,
+//             obj.unreaded_posts.count
+//         ));
+//     }
+// }

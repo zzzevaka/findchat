@@ -1,11 +1,12 @@
 import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
+import {translate} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import {ChatThread} from '../thread';
 import {UserPageTopFixedBar} from '../UserPage';
 import {loadThread} from '../../actions';
 
-export default class ChatPostList extends PureComponent {
+class ChatPostList extends PureComponent {
 
     loadMethod = (limit, offset, dispatch) => dispatch(
         loadThread(this.props.match.params.threadID, limit, offset)
@@ -24,13 +25,15 @@ export default class ChatPostList extends PureComponent {
                 }
                 { !threadID &&
                     <div className='chat-dummy'>
-                        <span>It's just dummy</span>
+                        <span>{this.props.t("Choose a chat")}</span>
                     </div>
                 }
             </div>
         );
     }
 }
+
+export default translate('translations')(ChatPostList);
 
 
 let ChatTopFixedBar = function({userID}) {

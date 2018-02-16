@@ -3,8 +3,8 @@
     "name": "Findchat",
     "icons": [
         {
-            "src": "icon/logo-192x192.png",
-            "sizes": "192x192",            
+            "src": "icon/logo-256x256.png",
+            "sizes": "192x192 256x256",
             "type": "image/png"
         },
         {

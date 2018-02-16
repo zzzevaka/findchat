@@ -1,4 +1,5 @@
 import API from './api';
+import 'nprogress/nprogress.css';
 import {
     UPDATE_THREADS_POSTS,
     UPDATE_USERS,
@@ -12,6 +13,7 @@ import {
 } from './constants/ActionTypesConstants';
 import Notifications from 'react-notification-system-redux';
 import React from 'react';
+import NProgress from 'nprogress';
 
 import {
     ChatOfferAnswerSuccess,
@@ -21,6 +23,12 @@ import {
 } from './components/Notifies';
 
 const api = new API('/api_v1');
+NProgress.configure({
+    easing: 'ease-out',
+    speed: 600,
+    showSpinner: false
+});
+
 
 export function loadThreadRequest(threads) {
     return {
@@ -71,25 +79,31 @@ export function loadThread(
     flush=false,
 ) {
     return dispatch => {
+        NProgress.start();
         dispatch(loadThreadRequest([threadID,]));
         api.getThread(threadID, limit, offset).then(
             r => r.json()
         ).then(
-            ({threads, posts, users}) => dispatch(loadThreadSuccess(threads, posts, users))
+            r => dispatch(loadThreadSuccess(r.threads, r.posts, r.users))
         ).catch(
             e => dispatch(loadThreadError([threadID,], e))
+        ).then(
+            () => NProgress.done()
         )
     }
 }
 
 export function loadChatOffers(limit=20, offset=0, filter) {
+    NProgress.start();
     return (dispatch) => {
         dispatch(loadThreadRequest(['chat_offers',]));
         api.getChatOffers(filter, limit, offset).then(
             r => r.json()
         ).then(
             ({threads, posts, users}) => dispatch(loadThreadSuccess(threads, posts, users))
-        )
+        ).then(
+            () => NProgress.done()
+        );
     }
 }
 
@@ -111,15 +125,16 @@ export function loadUsers(userID) {
     return dispatch => {
         const ids = Array.isArray(userID) ? userID : [userID,];
         dispatch(loadUsersRequest(ids))
-        return api.getUsers(ids).then(response => {
-            return response.json()
-        }).then(json => {
+        return api.getUsers(ids).then(
+            response => response.json()
+        ).then(json => {
             dispatch(loadUsersSuccess(json.users));
         })
     }
 }
 
 export function getUserFollowing(userID, limit, offset) {
+    NProgress.start();
     return dispatch => {
         dispatch(loadThreadRequest([`user_following_${userID}`,]));
         api.getUserFollowing(userID, limit, offset).then(
@@ -131,11 +146,14 @@ export function getUserFollowing(userID, limit, offset) {
             ({threads, posts, users}) => dispatch(loadThreadSuccess(threads, posts, users))
         ).catch(
             e => alert(e)
+        ).then(
+            () => NProgress.done()
         );
     }
 }
 
 export function getUserFollowers(userID, limit, offset) {
+    NProgress.start();
     return dispatch => {
         dispatch(loadThreadRequest([`user_followers_${userID}`,]));
         api.getUserFollowers(userID, limit, offset).then(
@@ -147,7 +165,9 @@ export function getUserFollowers(userID, limit, offset) {
             ({threads, posts, users}) => dispatch(loadThreadSuccess(threads, posts, users))
         ).catch(
             e => alert(e)
-        )
+        ).then(
+            () => NProgress.done()
+        );
 
     }
 }
@@ -329,6 +349,7 @@ export function sendPostToUser(userID, post) {
 }
 
 export function loadChats(limit, offset) {
+    NProgress.start();
     return dispatch => {
         dispatch(loadThreadRequest(['chat_list',]));
         api.loadChats(limit, offset).then(
@@ -346,6 +367,8 @@ export function loadChats(limit, offset) {
                     users
                 ))
             }
+        ).then(
+            () => NProgress.done()
         );
     }
 }
@@ -365,13 +388,16 @@ export function updateSearchUsersID(usersID) {
 }
 
 export function findUsers(limit=20, offset=0, filter) {
+    NProgress.start();
     return dispatch => {
         dispatch(loadThreadRequest(['search_users']));
         api.findUsers(limit, offset, filter).then(
             r => r.json()
         ).then(
             ({threads, posts, users}) => dispatch(loadThreadSuccess(threads, posts, users, () => {}))
-        )
+        ).then(
+            () => NProgress.done()
+        );
     }
 }
 

@@ -5,9 +5,10 @@
     <meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="theme-color" content="#fff">
     <link rel="manifest" href="/js/manifest.json">
-    <!--<link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">-->
+    <link rel="icon" sizes="192x192" href="/icon/logo-256x256.png">
+    <link rel="shortcut icon" href="/icon/logo-256x256.png">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>findchat</title>
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -19,14 +20,31 @@
 
       gtag('config', 'UA-111372474-1');
     </script>
-
   </head>
   <body>
     <noscript>
       You need to enable JavaScript to run this app.
     </noscript>
     <div id="root">
-      <img src='/svg/logo_color.svg' style='height: 10vh; margin-left: calc(50vw - 5vh); margin-top: 40vh' />
+      <style>
+        @keyframes changeScale {
+          0% {
+            transform: scale(1);
+          }
+          
+          100% {
+            transform: scale(1.4);
+          }
+          
+        }
+        .logo {
+          height: 10vh;
+          margin-left: calc(50vw - 5vh);
+          margin-top: 40vh;
+          animation: changeScale 0.8s ease-in-out infinite alternate;
+        }
+      </style>
+      <img class='logo' src='/svg/logo_color.svg' />
     </div>
     <link rel="stylesheet" href="/css/ReactCrop.css">
   </body>

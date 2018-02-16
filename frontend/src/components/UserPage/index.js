@@ -63,6 +63,7 @@ class UserPage extends Component {
                         threadID={user.offer_thread_id}
                         loadMethod={this.chatOfferLoad}
                         placeholder={OFFER_PLACEHOLDER}
+                        isMyPage={isMyPage}
                     />                
                 )} />
             </Switch>
