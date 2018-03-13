@@ -66,14 +66,18 @@ class ChatOfferThread extends Component {
 ChatOfferThread = translate('translations')(ChatOfferThread);
 
 let OfferPostWrapper = pure(
-    (props) => {
+    ({auth, ...props}) => {
+        const answerLink = auth.authenticated
+            ? props.history.location.pathname + `?modalType=chat_offer&postID=${props.post.id}`
+            : '/login?showForm=1';
         return (
             <div className='post-offer-wrapper'>
                 <OfferPost {...props} className='post-offer-item' />
                 <div className='button-area'>
                     <Link
-                        to={props.history.location.pathname + `?modalType=chat_offer&postID=${props.post.id}`}
-                        className='link-no-style button-answer'>
+                        to={answerLink}
+                        className='link-no-style button-answer'
+                    >
                         <CommentColorIcon />
                         <span className='button-text'>{props.t("Answer")}</span>
                     </Link>
@@ -84,6 +88,7 @@ let OfferPostWrapper = pure(
 );
 
 OfferPostWrapper = translate('translations')(OfferPostWrapper);
+OfferPostWrapper = withAuth(OfferPostWrapper);
 
 export {OfferPostWrapper}
 

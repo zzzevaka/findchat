@@ -4,6 +4,7 @@ import {Link, withRouter} from 'react-router-dom';
 import {ThreadLoaderIcon, ThreadPlaceholder, InfiniteThread} from './thread-interface';
 import {UserAvatar} from '../UserPage';
 import {followUser, unfollowUser} from '../../actions';
+import {withAuth} from '../../auth';
 
 import connectThread, {mapStateToPropsUsers} from './connect-thread';
 
@@ -34,7 +35,7 @@ class UserThread extends Component {
 
 }
 
-let UserThreadItem = function({user, match, dispatch, t}) {
+let UserThreadItem = function({auth, user, match, dispatch, t}) {
     if (!user) return null;
     return (
         <div className='post-item post-user-item'>
@@ -63,14 +64,20 @@ let UserThreadItem = function({user, match, dispatch, t}) {
                         ? <button
                             className='button button-follow'
                             onClick={() => dispatch(unfollowUser(user.id)) }
+                            disabled={!auth.authenticated}
                         >{t("Unfollow")}</button>
                         : <button
                             className='button button-follow'
                             onClick={() => dispatch(followUser(user.id)) }
+                            disabled={!auth.authenticated}
                         >{t("Follow")}</button>
                 }
                 <Link
-                    to={`${match.url}?modalType=private_message_composer&userID=${user.id}`}
+                    to={
+                        auth.authenticated
+                            ? `${match.url}?modalType=private_message_composer&userID=${user.id}`
+                            : '/login?showForm=1'
+                    }
                     className='link-no-style button button-message'
                 >{t("Message")}</Link>
             </div>
@@ -78,6 +85,7 @@ let UserThreadItem = function({user, match, dispatch, t}) {
     )
 }
 
+UserThreadItem = withAuth(UserThreadItem);
 UserThreadItem = translate('translations')(UserThreadItem);
 UserThreadItem = withRouter(UserThreadItem);
 

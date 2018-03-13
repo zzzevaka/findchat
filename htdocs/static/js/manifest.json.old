@@ -1,0 +1,39 @@
+{
+    "short_name": "Findchat",
+    "name": "Findchat",
+    "icons": [
+        {
+            "src": "icon/logo-256x256.png",
+            "sizes": "192x192 256x256",            
+            "type": "image/png"
+        },
+        {
+            "src": "icon/logo-152x152.png",
+            "sizes": "152x152",            
+            "type": "image/png"
+        },
+        {
+            "src": "icon/logo-144x144.png",
+            "sizes": "144x144",
+            "type": "image/png"
+        },
+        {
+            "src": "icon/logo-128x128.png",
+            "sizes": "128x128",
+            "type": "image/png"
+        },
+        {
+            "src": "icon/logo-64x64.png",
+            "sizes": "64x64",
+            "type": "image/png"
+        },
+        {
+            "src": "icon/logo-32x32.png",
+            "sizes": "32x32",
+            "type": "image/png"
+        }
+    ],
+    "start_url": "/",
+    "display": "standalone",
+    "orientation": "portrait"
+}
