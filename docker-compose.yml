@@ -1,4 +1,9 @@
 version: "3.2"
+
+networks:
+  findchat-dev:
+    driver: bridge
+
 services:
   #
   # POSTGRESQL
@@ -9,9 +14,9 @@ services:
       POSTGRES_USER: findchat
       POSTGRES_PASSWORD: hfpldfnhb
     volumes:
-      - type: bind
-        source: ./pgsql/pgdata
-        target: /var/lib/postgresql/data
+      - psql-data:/var/lib/postgresql/data
+    networks:
+      - findchat-dev
   #
   # SQL WEB CLIENT
   #
@@ -19,78 +24,76 @@ services:
     image: adminer
     ports:
       - "8080:8080"
+    networks:
+      - findchat-dev
   #
   # REDIS
   #
   redis:
     image: redis
     volumes:
-      - type: bind
-        source: ./redis/data
-        target: /data
+      - redis-data:/data
+    networks:
+      - findchat-dev
   #
   # FINDCHAT WEB APP
   #
   webapp:
-    image: findchat-app
     volumes:
-      - type: bind
-        source: ./backend
-        target: /app
-      - type: bind
-        source: ./htdocs
-        target: /htdocs
+      - ./backend:/app
+      - ./htdocs:/htdocs
+    networks:
+      - findchat-dev
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
   #
   # NGINX
   #
   nginx:
-    image: nginx 
-    deploy:
-      replicas: 1
-      resources:
-        limits:
-          cpus: "0.1"
-          memory: 50M
-      restart_policy:
-        condition: on-failure
+    image: nginx
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - type: bind
-        source: ./htdocs
-        target: /htdocs
-      - type: bind
-        source: ./nginx/etc/conf.d
-        target: /etc/nginx/conf.d
-      - type: bind
-        source: ./nginx/etc/nginx.conf
-        target: /etc/nginx/nginx.conf
-      - type: bind
-        source: ./nginx/cert
-        target: /cert
+      - ./htdocs:/htdocs
+      - ./nginx/etc/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/etc/conf.d:/etc/nginx/conf.d
+      - ./nginx/cert:/cert
+    networks:
+      - findchat-dev
   #
   # FINDCHAT REACT APP
   #
   react:
-    image: findchat-react
+#    image: findchat-react
     volumes:
-      - type: bind
-        source: ./frontend/src
-        target: /app/findchat-react/src
+      - ./frontend/src:/app/findchat-react/src
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    networks:
+      - findchat-dev
   #
   # FINDCHAT EXPRESS FROM SSR
   #
-  express:
-    image: findchat-express
-    ports:
-      - "5000:80"
-    volumes:
-      - type: bind
-        source: ./express/src
-        target: /app/src
-      - type: bind
-        source: ./frontend/src/
-        target: /app/frontend
-networks:
-  webnet:
+#  express:
+#    image: findchat-express
+#    ports:
+#      - "5000:80"
+#    volumes:
+#      - type: bind
+#        source: ./express/src
+#        target: /app/src
+#      - type: bind
+#        source: ./frontend/src/
+#        target: /app/frontend
+
+volumes:
+  psql-data:
+    driver: local
+  redis-data:
+    driver: local
+
+
