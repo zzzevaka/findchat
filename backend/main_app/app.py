@@ -7,7 +7,6 @@ from tornado.web import Application, StaticFileHandler
 from sqlalchemy.orm import sessionmaker
 from tornado.locale import load_translations
 
-
 from .base_handler import *
 from .api_v1.auth import API_Login, API_Logout, API_CheckEmail, API_Registration, API_Auth
 from .api_v1.post import API_Post, API_UnreadedPostCount

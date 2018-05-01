@@ -19,6 +19,8 @@ from ..models.hashtag import Hashtag, HashTagInterface
 
 from ..base_handler import BaseHandler
 
+from ..utils.search import search_index
+
 class API_Post(BaseHandler, HashTagInterface):
     
     def get(self, post_id):
@@ -172,7 +174,7 @@ class API_Post(BaseHandler, HashTagInterface):
                     post.author_id: post._author.export_dict
                 }
             )
-            if (thread.type == THREAD_TYPE['PRIVATE_CHAT']):
+            if thread.type == THREAD_TYPE['PRIVATE_CHAT']:
                 for_export['unreaded_posts'] = {
                     'thread_id': thread.id,
                     'count': 1
@@ -187,6 +189,9 @@ class API_Post(BaseHandler, HashTagInterface):
                 if u2t.user_id == DEFAULT_USER_ID:
                     self.redis.publish('updates:thread:%s' % u2t.thread_id, jsoined)
                 self.redis.publish('updates:user:%s' % u2t.user_id, jsoined)
+            if thread.type == THREAD_TYPE['CHAT_OFFER']:
+                search_index(doc_type='post', id=post.id, body=post.get_search_index())
+
         except tornado.web.HTTPError:
             raise
         except:

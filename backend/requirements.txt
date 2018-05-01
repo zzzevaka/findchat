@@ -5,3 +5,4 @@ tornado
 pillow
 bcrypt
 psycopg2
+elasticsearch

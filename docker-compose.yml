@@ -66,7 +66,6 @@ services:
   # FINDCHAT REACT APP
   #
   react:
-#    image: findchat-react
     volumes:
       - ./frontend/src:/app/findchat-react/src
     build:
@@ -75,24 +74,25 @@ services:
     networks:
       - findchat-dev
   #
-  # FINDCHAT EXPRESS FROM SSR
+  # ELASTICSEARCH
   #
-#  express:
-#    image: findchat-express
-#    ports:
-#      - "5000:80"
-#    volumes:
-#      - type: bind
-#        source: ./express/src
-#        target: /app/src
-#      - type: bind
-#        source: ./frontend/src/
-#        target: /app/frontend
+  elastic:
+    build:
+      context: ./elastic
+      dockerfile: Dockerfile
+    networks:
+      - findchat-dev
+    ports:
+      - "9201:9200"
+    volumes:
+      - elastic-data:/usr/share/elasticsearch/data
 
 volumes:
   psql-data:
     driver: local
   redis-data:
+    driver: local
+  elastic-data:
     driver: local
 
 

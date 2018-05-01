@@ -3,8 +3,9 @@
 from datetime import datetime
 import logging
 
-from sqlalchemy import Table, Column, Integer, DateTime, String, ForeignKey, and_, or_, update
+from sqlalchemy import Table, Column, Integer, DateTime, String, ForeignKey, and_, or_, update, event
 from sqlalchemy.orm import relationship
+
 
 from .basemodel import BaseModel
 from .startstop_mixin import StartStopMixin
@@ -100,6 +101,13 @@ class Post(BaseModel, StartStopMixin):
                 logging.error(k)
                 return 0
         return 1
+
+    def get_search_index(self):
+        return {
+            'text': self.text,
+            'publish_at': self._start_date,
+            'hashtags': [h.name for h in self.hashtags]
+        }
 
 
 class PostAnswer(BaseModel):
