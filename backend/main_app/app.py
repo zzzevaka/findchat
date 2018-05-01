@@ -22,6 +22,7 @@ from .api_v1.image import API_Image
 from .api_v1.language import API_Language
 
 from .auth.google import GoogleOAuth2Handler, FacebookOAuth2Handler, VKOAuth2Handler
+from .auth.dev_auth import DevAuthHandler
 from .auth.logout import AuthLogout
 
 class MainApp(Application):
@@ -32,6 +33,7 @@ class MainApp(Application):
             (r'/auth/google', GoogleOAuth2Handler),
             (r'/auth/facebook', FacebookOAuth2Handler),
             (r'/auth/vk', VKOAuth2Handler),
+            (r'/auth/dev', DevAuthHandler),
             (r'/auth/logout', AuthLogout),
             (r'/registration', API_Registration),
             (r'/login', API_Login),

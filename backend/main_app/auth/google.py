@@ -149,7 +149,6 @@ class VKOAuth2Handler(BaseAuthHandler,
                     client_secret=self.settings['vk_oauth']['secret'],
                     code=self.get_argument("code")
                 )
-                logging.debug(oauth2_user)
                 self.auth_by_user_id(str(oauth2_user['user_id']))
             else:
                 yield self.authorize_redirect(

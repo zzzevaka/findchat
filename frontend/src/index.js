@@ -14,7 +14,7 @@ import NewsPage from './components/NewsPage';
 import * as Actions from './actions';
 import configureStore from './store/configureStore';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import ScrollMemory from './react-router-scroll-memory';
+import ScrollMemory from 'react-router-scroll-memory';
 import AuthProvider, {withAuth} from './auth';
 
 
