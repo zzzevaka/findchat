@@ -90,6 +90,15 @@ services:
     volumes:
       - elastic-data:/usr/share/elasticsearch/data
 
+  #
+  # MAILHOG
+  #
+  mailhog:
+    image: 42bv/mailhog:latest
+    ports:
+      - "587:587"
+      - "8025:8025"
+
 volumes:
   psql-data:
     driver: local

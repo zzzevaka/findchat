@@ -49,7 +49,8 @@ class SearchFiler extends Component {
     }
 
     onInputChange = value => {
-        return value.replace(/ /g, '_').toLowerCase();
+        return value
+        // return value.replace(/ /g, '_').toLowerCase();
     };
 
     render() {

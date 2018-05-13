@@ -67,10 +67,11 @@ def search(search_term, fields=None):
             'query': {
                 'multi_match': {
                     'query': search_term,
-                    'fields': ['text^0.5', 'hashtags']
+                    'fields': ['text^0.9', 'hashtags']
                 }
             },
             '_source': ['_id'],
+             'min_score': 0.25
         }
     )
     return [int(h['_id']) for h in result['hits']['hits']]
