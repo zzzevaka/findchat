@@ -15,4 +15,8 @@ unittest = dict(
         host='elastic',
         port=9200,
     ),
+    smtp=dict(
+        host='mailhog',
+        port=587,
+    ),
 )

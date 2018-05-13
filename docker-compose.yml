@@ -89,7 +89,6 @@ services:
       - "9201:9200"
     volumes:
       - elastic-data:/usr/share/elasticsearch/data
-
   #
   # MAILHOG
   #
@@ -98,6 +97,8 @@ services:
     ports:
       - "587:587"
       - "8025:8025"
+    networks:
+      - findchat-dev
 
 volumes:
   psql-data:

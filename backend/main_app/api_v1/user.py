@@ -6,7 +6,7 @@ import logging
 import json
 from datetime import datetime
 
-from main_app.utils.email import email
+from main_app.utils.email_utils import email
 
 import tornado.web
 
