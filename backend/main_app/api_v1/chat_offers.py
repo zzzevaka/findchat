@@ -91,7 +91,6 @@ class API_ChatOffer(BaseHandler):
         jsoined = json.dumps(
             for_export, cls=alchemy_encoder(), check_circular=False
         )
-        # logging.error(jsoined)
         self.finish(
             json.dumps(
                 for_export, cls=alchemy_encoder(), check_circular=False
@@ -182,12 +181,6 @@ class API_ReplyChatOffer(BaseHandler):
             # create Post from offer and add it to the thread
             thread.posts.append(
                 ChatOffer.post_from_chat_offer(offer)
-                # Post(
-                #     text=offer.title,
-                #     author_id=offer.author_id,
-                #     thread_id=thread.id,
-                #     type=POST_TYPE['CHAT_OFFER']
-                # )
             )
             # create answer post
             thread.posts.append(
@@ -221,7 +214,6 @@ class API_ReplyChatOffer(BaseHandler):
                 'offer_author': offer._author.export_dict
             }
             for_export['threads'][thread.id]['posts'] = [p.id for p in thread.posts]
-            # for_export['threads'][thread.id]['members'] = offer.author_id
             for_export = json.dumps(
                 for_export,
                 cls=alchemy_encoder(),

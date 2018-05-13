@@ -40,7 +40,7 @@ class EditUserPage extends Component {
             },
             edited: true
         })
-    }
+    };
 
     _birthChange = v => this.setState({
         form: {
@@ -196,7 +196,6 @@ class LanguagesFormGroup extends Component {
 
 
 class UsernameFormGroup extends Component {
-
     render() {
         const {value, onChange, placeholder, t} = this.props;
         return (
@@ -214,7 +213,6 @@ class UsernameFormGroup extends Component {
                 </FormGroup>
         );
     }
-
 }
 
 

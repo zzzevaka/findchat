@@ -42,10 +42,6 @@ export default function threads(state = init_state, action) {
                 }, action.threads), // u.map
                 state
             ); // u
-            // if (action.postsMiddleware) {
-            //     console.log(new_state);
-            //     new_state.posts = action.postsMiddleware(new_state.posts);
-            // }
             let chatsID = [].concat(state.chatsID);
             for (const t in action.threads) {
                 if (action.threads[t].type === THREAD_TYPE['CHAT']) {

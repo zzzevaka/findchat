@@ -100,7 +100,7 @@ export function loadChatOffers(limit=20, offset=0, filter) {
         api.getChatOffers(filter, limit, offset).then(
             r => r.json()
         ).then(
-            ({threads, posts, users}) => dispatch(loadThreadSuccess(threads, posts, users))
+            ({threads, posts, users}) => dispatch(loadThreadSuccess(threads, posts, users, () => {}))
         ).then(
             () => NProgress.done()
         );

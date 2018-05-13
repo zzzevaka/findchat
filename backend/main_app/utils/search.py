@@ -2,17 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from elasticsearch import Elasticsearch
+import settings
 
-ES_URL = 'http://elastic:9200'
-ES = Elasticsearch(ES_URL)
+ES = Elasticsearch('http://{}:{}'.format(settings.unittest['elastic']['host'], settings.unittest['elastic']['port']))
 INDEX = 'findchat-search'
-
-
-# ['settings']['analysis']['analyzer']['edgengram_mapping_analyzer'] = {
-#             "type": "custom",
-#             "tokenizer": "standard",
-#             "filter": ["lowercase", "haystack_edgengram"],
-#             "char_filter": ["russian_mapping"]
 
 
 MAPPING = {
@@ -51,13 +44,7 @@ MAPPING = {
                 'edgengram_mapping_analyzer': {
                     'type': 'custom',
                     'tokenizer': 'standard',
-                    # 'filter': ['lowercase',
-                    #            'russian_stop', 'russian_morphology',
-                    #            'english_morphology', 'english_stopwords'],
-                    'filter': ['lowercase',
-                               # 'russian_morphology',
-                               # 'english_morphology',
-                               'custom_edgengram']
+                    'filter': ['lowercase', 'custom_edgengram']
                 }
             }
         }
@@ -71,3 +58,19 @@ def search_index(doc_type, id, body, index=INDEX):
 
 def create_mapping(mapping=MAPPING):
     ES.indices.create(index=INDEX, ignore=400, body=MAPPING)
+
+
+def search(search_term, fields=None):
+    result = ES.search(
+        index=INDEX,
+        body={
+            'query': {
+                'multi_match': {
+                    'query': search_term,
+                    'fields': ['text^0.5', 'hashtags']
+                }
+            },
+            '_source': ['_id'],
+        }
+    )
+    return [int(h['_id']) for h in result['hits']['hits']]

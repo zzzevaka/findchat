@@ -30,9 +30,9 @@ class DevAuthHandler(BaseHandler):
             self.db.add(side_auth)
             self.db.commit()
             auth = side_auth.auth
-            self.session['user_id'] = auth.user_id
-            self.set_cookie(
-                'current_user_id',
-                str(auth.user_id),
-                expires_days=365
-            )
+        self.session['user_id'] = auth.user_id
+        self.set_cookie(
+            'current_user_id',
+            str(auth.user_id),
+            expires_days=365
+        )

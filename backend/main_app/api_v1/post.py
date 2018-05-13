@@ -189,6 +189,7 @@ class API_Post(BaseHandler, HashTagInterface):
                 if u2t.user_id == DEFAULT_USER_ID:
                     self.redis.publish('updates:thread:%s' % u2t.thread_id, jsoined)
                 self.redis.publish('updates:user:%s' % u2t.user_id, jsoined)
+            # TODO перенести в celery task
             if thread.type == THREAD_TYPE['CHAT_OFFER']:
                 search_index(doc_type='post', id=post.id, body=post.get_search_index())
 

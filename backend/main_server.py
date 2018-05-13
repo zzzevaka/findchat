@@ -6,7 +6,6 @@ import logging
 import aioredis
 
 from redis import StrictRedis
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from tornado.httpserver import HTTPServer
 from tornado.platform.asyncio import AsyncIOMainLoop
@@ -36,7 +35,6 @@ if __name__ == '__main__':
     redis = StrictRedis(
         host=settings.unittest['redis']['host'],
         port=settings.unittest['redis']['port'],
-        # password=settings.unittest['redis']['password']
     )
     redis_pool = loop.run_until_complete(aioredis.create_pool(
         (settings.unittest['redis']['host'], settings.unittest['redis']['port']),
@@ -47,5 +45,4 @@ if __name__ == '__main__':
     app = MainApp(db_engine, redis, redis_pool=redis_pool, debug=True)
     httpserver = HTTPServer(app)
     httpserver.listen(8080, '0.0.0.0')
-    logging.error('start server')
     loop.run_forever()

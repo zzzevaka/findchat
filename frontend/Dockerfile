@@ -11,5 +11,5 @@ RUN cd findchat-react && npm install
 
 EXPOSE 3000
 
-CMD cd /app/findchat-react && npm start
+CMD cd /app/findchat-react && CHOKIDAR_USEPOLLING=true npm start
 

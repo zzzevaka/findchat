@@ -24,6 +24,8 @@ from ..models.language import Language
 
 from ..base_handler import BaseHandler
 
+from ..utils import search
+
 
 class ThreadInterface():
     
@@ -320,7 +322,14 @@ class API_Thread(BaseHandler):
 
 
 class API_ThreadChatOffers(BaseHandler):
-    
+
+    @staticmethod
+    def get_sort_key(value, search_ids):
+        try:
+            return search_ids.index(value)
+        except ValueError:
+            return -1
+
     def post(self):
         '''
             Get chat offers
@@ -328,10 +337,10 @@ class API_ThreadChatOffers(BaseHandler):
         limit = self.get_argument('limit', None)
         offset = self.get_argument('offset', None)
         search_filter = json.loads(self.get_argument('filter'))
+        search_ids = []
         tag = None
         if search_filter['tags']:
             tag = search_filter['tags'][0]
-        logging.debug(tag)
         for_export = {
             'posts': {},
             'threads': {
@@ -361,12 +370,16 @@ class API_ThreadChatOffers(BaseHandler):
             filter(IgnoredPosts.post_id == None).\
             filter(Post.id.notin_(user_answered))
         if tag:
-            request = request.join(Post.hashtags).filter(text("hashtags.name % '{}'".format(tag)))
+            search_ids = search.search(tag)
+            request = request.filter(Post.id.in_(search_ids))
         request.order_by(Post.id.desc())
         request.limit(limit)
         request.offset(offset)
         result = request.all()
+        logging.error(search_ids)
+        result = sorted(result, key=lambda x: self.get_sort_key(x.id, search_ids))
         for p in result:
+            logging.error(p.id)
             for_export['posts'][p.id] = p.export_dict
             for_export['users'][p.author_id] = p._author.export_dict
             for_export['threads']['chat_offers']['posts'].append(p.id)
@@ -377,6 +390,7 @@ class API_ThreadChatOffers(BaseHandler):
                 cls=alchemy_encoder(),
                 check_circular=False
             )
+        logging.error(for_export)
         self.finish(for_export)
 
 
@@ -426,14 +440,6 @@ class API_ThreadPeople(BaseHandler):
             request = request.filter(Language.name.in_(search_filter['lang']))
         if ('tags' in search_filter and search_filter['tags']):
             request = request.filter(Hashtag.name.in_(search_filter['tags']))
-        # if ('lang' in search_filter and search_filter['lang']):
-        #     query = query.join(User.languages).filter(
-        #         Language.name.in_(search_filter['lang'])
-        #     )
-        # if ('tags' in search_filter and search_filter['tags']):
-        #     query = query.join(User.hashtags).filter(
-        #         Hashtag.name.in_(search_filter['tags'])
-        #     )
         request = request.group_by(User.id, FollowUser.dst_user_id)
         request = request.order_by('total DESC')
         request.limit(limit)

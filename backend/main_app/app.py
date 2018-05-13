@@ -68,13 +68,6 @@ class MainApp(Application):
             (r'/unreaded_posts/([0-9]+)', API_UnreadedPostCount),
             (r'/check_email', API_CheckEmail),
             (r'/language', API_Language),
-            #~ (r'/logout', LogoutHandler),
-            #~ (r'/new_person', NewPersonHandler),
-            #~ (r'/edit_person', EditPersonHandler),
-            #~ (r'/photo_upload', PhotoUploadHandler),
-            #~ (r'/about_edit', AboutEditHandler),
-            #~ (r'/chat', ChatMainHandler),
-            #~ (r"/chatsocket", ChatSocketHandler),
             (r"/(.*)", StaticFileHandler, {"path": '/htdocs/static'}),
         ]
         load_translations(dirname(__file__))

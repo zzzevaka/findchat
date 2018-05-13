@@ -17,15 +17,17 @@ services:
       - psql-data:/var/lib/postgresql/data
     networks:
       - findchat-dev
+    ports:
+      - "5432:5432"
   #
   # SQL WEB CLIENT
   #
-  adminer:
-    image: adminer
-    ports:
-      - "8080:8080"
-    networks:
-      - findchat-dev
+#  adminer:
+#    image: adminer
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - findchat-dev
   #
   # REDIS
   #
@@ -47,6 +49,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    restart: always
   #
   # NGINX
   #

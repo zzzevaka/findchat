@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Creatable} from 'react-select';
-
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
@@ -41,7 +40,7 @@ class SearchFiler extends Component {
         actions.updateSearchFilter({
             tags: values ? values.split(',').map(v => v) : []
         });
-    }
+    };
 
     getInputProps() {
         return {
@@ -51,10 +50,9 @@ class SearchFiler extends Component {
 
     onInputChange = value => {
         return value.replace(/ /g, '_').toLowerCase();
-    }
+    };
 
     render() {
-
         const {filter} = this.props;
         const selectFilter = filter.tags.map(v => ({label: v, value: v}));
         return (
@@ -73,10 +71,7 @@ class SearchFiler extends Component {
                 multi
             />
         );
-
     }
-
-
 }
 
 function mapStateToProps(state) {
