@@ -6,3 +6,4 @@ pillow
 bcrypt
 psycopg2
 elasticsearch
+celery

@@ -100,6 +100,23 @@ services:
     networks:
       - findchat-dev
 
+  #
+  # CELERY
+  #
+  celery:
+    volumes:
+      - ./backend:/app
+      - ./htdocs:/htdocs
+    networks:
+      - findchat-dev
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      C_FORCE_ROOT: 1
+    command: celery worker -A main_app.celery_app --loglevel=DEBUG
+    restart: always
+
 volumes:
   psql-data:
     driver: local

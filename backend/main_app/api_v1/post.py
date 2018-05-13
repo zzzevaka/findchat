@@ -19,7 +19,7 @@ from ..models.hashtag import Hashtag, HashTagInterface
 
 from ..base_handler import BaseHandler
 
-from ..utils.search import search_index
+from ..celery_app import task_search_index
 
 class API_Post(BaseHandler, HashTagInterface):
     
@@ -191,7 +191,7 @@ class API_Post(BaseHandler, HashTagInterface):
                 self.redis.publish('updates:user:%s' % u2t.user_id, jsoined)
             # TODO перенести в celery task
             if thread.type == THREAD_TYPE['CHAT_OFFER']:
-                search_index(doc_type='post', id=post.id, body=post.get_search_index())
+                task_search_index.delay(doc_type='post', id=post.id, body=post.get_search_index())
 
         except tornado.web.HTTPError:
             raise
