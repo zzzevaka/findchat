@@ -35,7 +35,8 @@
     "shortid": "^2.2.8",
     "updeep": "^1.0.0",
     "es6-promise": "^4.2.2",
-    "isomorphic-fetch": "^2.2.1"
+    "isomorphic-fetch": "^2.2.1",
+    "centrifuge": "^1.4.8"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,8 +1,8 @@
 import 'react-select/dist/react-select.css';
 
 import React, { Component } from 'react';
+import Centrifuge from 'centrifuge';
 import PropTypes from 'prop-types';
-// import SideBarWrapper, {SideBarButton} from './SideBar';
 import classNames from 'classnames';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import {NewPostPhotoModal,
@@ -28,8 +28,6 @@ import {EditUserTopFixedBar} from './EditUserPage';
 import {SearchFilterTopFixedBar} from './SearchPage';
 import {NewsTopFixedBar} from './NewsPage';
 import {ChatTopFixedBar} from './ChatPage/post-list';
-import wsUpdater from '../wsUpdater';
-
 
 class ChatApp extends Component { 
 
@@ -39,39 +37,51 @@ class ChatApp extends Component {
             const {history} = this.props;
             history.push(`/search/chat_offers?tags=${e.target.innerHTML}`)
         }
-    }
+    };
 
-    onWsMessage = (e) => {
-        const obj = JSON.parse(e.data);
-        const {actions} = this.props;
-        if (obj.threads) {
+    onCentrifugeMsg = (msg) => {
+        console.log(msg)
+        const { actions } = this.props;
+        const { data } = msg;
+        if (data.threads) {
             actions.loadThreadSuccess(
-                obj.threads,
-                obj.posts,
+                data.threads,
+                data.posts,
                 {},
             );
         }
-        if (obj.users) {
-            actions.loadUsersSuccess(obj.users);
+        if (data.users) {
+            actions.loadUsersSuccess(data.users);
         }
-        if (obj.unreaded_posts) {
+        if (data.unreaded_posts) {
             actions.updateUnreadedPostsAddToThread(
-                obj.unreaded_posts.thread_id,
-                obj.unreaded_posts.count
+                data.unreaded_posts.thread_id,
+                data.unreaded_posts.count
             );
         }
-    };
+    }
 
     componentDidMount() {
         this.props.actions.loadUnreaded();
         document.addEventListener('click', this._hashtagClicked, false);
-        this.ws = new wsUpdater();
-        this.ws.open(`wss://${window.location.host}/ws`);
-        this.ws.onmessage = this.onWsMessage;
-    }
 
-    componentWillUnmount() {
-        this.ws.close();
+        // centrifuge
+
+        const { authenticated, wss } = this.props.store.auth;
+        if (authenticated) {
+            this.centrifuge = new Centrifuge({
+                url: `wss://${window.location.host}/centrifugo/`,
+                token: wss.token,
+                user: wss.user,
+                timestamp: wss.timestamp,
+                token: wss.token,
+                debug: true,
+                authEndpoint: "/auth/centrifugo/",
+            });
+            this.centrifuge.subscribe(`$private_${wss.user}`, this.onCentrifugeMsg);
+            this.centrifuge.connect();
+        }
+
     }
 
     render() {

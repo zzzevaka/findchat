@@ -1,0 +1,14 @@
+{
+    "secret": "secret",
+    "connection_lifetime": 0,
+    "anonymous": true,
+    "publish": true,
+    "watch": true,
+    "presence": true,
+    "join_leave": true,
+    "history_size": 100,
+    "history_lifetime": 300,
+    "recover": true,
+    "admin_password": "password",
+    "admin_secret": "strong_secret_key_to_sign_authorization_token"
+}

@@ -302,15 +302,29 @@ class API_Thread(BaseHandler):
                     'count': 1
                 },
             }
-            for_export = json.dumps(
+            jsoined = json.dumps(
                 for_export,
                 cls=alchemy_encoder(),
                 check_circular=False,
             )
-            self.finish(for_export)
+            self.finish(jsoined)
             self.db.commit()
             for u_id in users_id:
-                self.redis.publish('updates:user:%s' % u_id, for_export)
+                centrifuge_cmd = {
+                    'method': 'publish',
+                    'params': {
+                        'channel': '$private_{}'.format(u_id),
+                        'data': for_export,
+                    }
+                }
+                self.redis.rpush(
+                    "centrifugo.api",
+                    json.dumps(
+                        centrifuge_cmd,
+                        cls=alchemy_encoder(),
+                        check_circular=False,
+                    )
+                )
         except tornado.web.HTTPError:
             raise
         except:

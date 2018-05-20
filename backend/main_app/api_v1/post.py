@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import os.path
 import json
 import logging
 from datetime import datetime
@@ -11,15 +10,15 @@ import tornado.web
 from sqlalchemy import and_, or_, update, func
 from sqlalchemy.orm import joinedload, contains_eager
 
-from ..models.basemodel import STRFTIME_FORMAT, alchemy_encoder
-from ..models.user import User, DEFAULT_USER_ID
-from ..models.post import Post
-from ..models.thread import PostThread, User2Thread, IgnoredPosts, THREAD_TYPE
-from ..models.hashtag import Hashtag, HashTagInterface
+from main_app.models.basemodel import STRFTIME_FORMAT, alchemy_encoder
+from main_app.models.user import User, DEFAULT_USER_ID
+from main_app.models.post import Post
+from main_app.models.thread import PostThread, User2Thread, IgnoredPosts, THREAD_TYPE
+from main_app.models.hashtag import Hashtag, HashTagInterface
 
-from ..base_handler import BaseHandler
+from main_app.base_handler import BaseHandler
 
-from ..celery_app import task_search_index
+from main_app.celery_app import task_search_index
 
 class API_Post(BaseHandler, HashTagInterface):
     
@@ -187,10 +186,27 @@ class API_Post(BaseHandler, HashTagInterface):
                 check_circular=False,
             )
             self.finish(jsoined)
+
             for u2t in thread.user2thread:
                 if u2t.user_id == DEFAULT_USER_ID:
-                    self.redis.publish('updates:thread:%s' % u2t.thread_id, jsoined)
-                self.redis.publish('updates:user:%s' % u2t.user_id, jsoined)
+                    ch_name = 'public_thread:{}'.format(u2t.thread_id)
+                else:
+                    ch_name = '$private_{}'.format(u2t.user_id)
+                centrifuge_cmd = {
+                    'method': 'publish',
+                    'params': {
+                        'channel': ch_name,
+                        'data': for_export,
+                    }
+                }
+                self.redis.rpush(
+                    "centrifugo.api",
+                    json.dumps(
+                        centrifuge_cmd,
+                        cls=alchemy_encoder(),
+                        check_circular=False,
+                    )
+                )
             # TODO перенести в celery task
             if thread.type == THREAD_TYPE['CHAT_OFFER']:
                 task_search_index.delay(doc_type='post', id=post.id, body=post.get_search_index())

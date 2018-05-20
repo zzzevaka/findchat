@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker
 from tornado.locale import load_translations
 
 from .base_handler import *
-from .api_v1.auth import API_Login, API_Logout, API_CheckEmail, API_Registration, API_Auth
+from .api_v1.auth import API_Logout, API_CheckEmail, API_Auth, API_AuthCentrifugo
 from .api_v1.post import API_Post, API_UnreadedPostCount
 from .api_v1.user import API_Users, API_User
 from .api_v1.follow import API_FollowUser, API_UserFollowing, API_UserFollowers
@@ -34,8 +34,9 @@ class MainApp(Application):
             (r'/auth/vk', VKOAuth2Handler),
             (r'/auth/dev', DevAuthHandler),
             (r'/auth/logout', AuthLogout),
-            (r'/registration', API_Registration),
-            (r'/login', API_Login),
+            (r'/auth/centrifugo/', API_AuthCentrifugo),
+            # (r'/registration', API_Registration),
+            # (r'/login', API_Login),
             (r'/logout', API_Logout),
             (r'/auth', API_Auth),
             (r'/threads', API_Threads),
@@ -55,7 +56,6 @@ class MainApp(Application):
             (r'/post_likes/([0-9]+)', API_PostLike),
             (r'/post_likes_brief', API_PostLikeBrief),
             (r'/', MainHandler),
-            # (r'/login', LoginHandler),
             (r'/ws', WSUpdates),
             # (r'/chat_offers', API_ChatOffer),
             # (r'/chat_offers/([0-9]+)', API_ChatOffer),

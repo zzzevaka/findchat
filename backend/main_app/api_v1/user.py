@@ -154,18 +154,40 @@ class API_User(BaseHandler):
                         user.hashtags = hashtags
                         # for h in hashtags:
                         #     user.hashtags.append(h)
+
+            for_export = {
+                'users': {
+                    id: {**user.export_dict, 'age': user.age}
+                },
+            }
             jsoined = json.dumps(
-                dict(
-                    users={
-                        id: {**user.export_dict, 'age': user.age}
-                    },
-                ),
+                for_export,
                 cls=alchemy_encoder(),
                 check_circular=False,
             )
             self.db.commit()
             self.finish(jsoined)
-            self.redis.publish('updates:user:%i' % int(id), jsoined)
+
+            # TODO дублирование данных: отправляем новые данные в HTTP ответе и WS.
+            # TODO. WS хотелось бы сохранить, т.к. пользователь может открыть
+            # TODO в нескольких вкладках
+
+
+            centrifuge_cmd = {
+                'method': 'publish',
+                'params': {
+                    'channel': '$private_{}'.format(user.id),
+                    'data': for_export,
+                }
+            }
+            self.redis.rpush(
+                "centrifugo.api",
+                json.dumps(
+                    centrifuge_cmd,
+                    cls=alchemy_encoder(),
+                    check_circular=False,
+                )
+            )
             task_search_index.delay(
                 doc_type='user', id=id, body=user.get_search_index()
             )
