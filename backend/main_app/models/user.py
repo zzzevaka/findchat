@@ -130,7 +130,8 @@ class User(BaseModel, StartStopMixin):
         
     @property
     def fullname(self):
-        return '%s %s' % (self.firstname, self.lastname)
+        return self.firstname
+        # return '%s %s' % (self.firstname, self.lastname)
 
     @property
     def editable_by_api(self):

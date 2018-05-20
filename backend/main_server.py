@@ -30,6 +30,7 @@ if __name__ == '__main__':
             settings.unittest['db']['host'],
             settings.unittest['db']['dbname'],
         ),
+        pool_size=100,
         pool_recycle=300
     )
     redis = StrictRedis(

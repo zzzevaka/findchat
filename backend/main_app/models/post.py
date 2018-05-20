@@ -62,10 +62,11 @@ class Post(BaseModel, StartStopMixin):
     
     def __init__(self, text='', content_id=0, *args, **kwargs):
         super(Post, self).__init__(*args, **kwargs)
-        if not str(text) and not int(content_id):
+        if not str(text) and content_id is None:
             raise ValueError("a post can't be empty'")
         self.text = text
-        self.content_id = content_id or None
+        if content_id and isinstance(content_id, int):
+            self.content_id = content_id
 
     def add_comment_thread(self):
         self._comment_thread = PostThread(type=THREAD_TYPE['COMMENT'])

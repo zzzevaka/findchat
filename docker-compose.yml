@@ -117,6 +117,19 @@ services:
     command: celery worker -A main_app.celery_app --loglevel=DEBUG
     restart: always
 
+  #
+  # CENTRIFUGO
+  #
+  centrifugo:
+    image: centrifugo/centrifugo
+    volumes:
+      - ./centrifugo:/centrifugo
+    networks:
+      - findchat-dev
+    ports:
+      - "8888:8000"
+    command: centrifugo --config=config.json --engine=redis --redis_api --redis_host=redis --web
+
 volumes:
   psql-data:
     driver: local

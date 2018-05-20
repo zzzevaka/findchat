@@ -9,7 +9,7 @@ export default function configureStore(initialState) {
         rootReducer,
         initialState,
         applyMiddleware(
-            logger,
+            // logger,
             trunk
         )
     );

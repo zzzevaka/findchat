@@ -1,31 +1,28 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {getAuth} from './actions';
+import { connect } from 'react-redux';
+import { getAuth } from './actions';
 
 const  DefaultComponent = () => null;
 
 export function loginRequired(WrappedComponent, ComponentIFNotLogin=DefaultComponent) {
-
     return withAuth(function(props) {
         return props.auth.authenticated
             ? <WrappedComponent {...props} />
             : <ComponentIFNotLogin />
-    })
-
+    });
 }
 
 class AuthProvider extends Component {
-
     static propTypes = {
         wait: PropTypes.bool.isRequired,
-    }
+    };
 
     static defaultProps = {
         wait: true,
-    }
+    };
 
-    loadData = () => this.props.dispatch(getAuth())
+    loadData = () => this.props.dispatch(getAuth());
 
     componentDidMount() {
         this.loadData();
@@ -40,7 +37,7 @@ class AuthProvider extends Component {
     }
 }
 
-const withAuth = connect(state => ({auth: state.auth}));
+const withAuth = connect(state => ({ auth: state.auth }));
 
 export {withAuth};
 

@@ -8,7 +8,7 @@ export const options = {
 
     fallbackLng: 'en',
 
-        debug: true,
+        debug: false,
 
         whitelist: ['en', 'ru'],
 

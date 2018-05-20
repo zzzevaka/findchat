@@ -20,21 +20,29 @@
   color: #999;
 }
 
-  .post-composer-image .textarea {
-      margin-left: 35px;
-  }
-  
-  .post-composer-main .glyph-button {
+.post-composer-image .textarea {
+    margin-left: 35px;
+}
+
+.post-composer-main .glyph-button {
     position: absolute;
     cursor: pointer;
-  }
-  
-  .post-composer-main .button-send {
-    bottom: 12px;    
+}
+
+.post-composer-main .button-send {
+    bottom: 12px;
     right: 20px;
     height: 20px;
     width: 20px;
-  }
+    transition: 0.2s opacity linear;
+    opacity: 1;
+}
+
+.post-composer-main .button-send-disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+}
+
 
   .post-composer-main .button-emoji {
     bottom: 13px;
@@ -59,26 +67,26 @@
   display: block;
 }
 
-  .post-composer .attach-preview {
+.post-composer .attach-preview {
     max-height: 100px;
     padding: 5px;
     flex-grow: 0;
     border-bottom: 1px solid #ddd;
-  }
+}
   
 
 
-  .post-composer .attach-preview-item {
-      display: inline-block;
-      position: relative;
-      max-height: 75px;
-      max-width: 80%;
-  }
+.post-composer .attach-preview-item {
+  display: inline-block;
+  position: relative;
+  max-height: 75px;
+  max-width: 80%;
+}
 
-  .post-composer .attach-preview-item img {
-    max-height: 75px;
-    max-width: 100%;
-  }
+.post-composer .attach-preview-item img {
+max-height: 75px;
+max-width: 100%;
+}
 
 .post-composer .attach-preview-delete {
     position: absolute;
@@ -89,9 +97,3 @@
     color: #fff;
     background: rgba(34, 34, 34, 0.7) !important;
 }
-  
-  .post-composer-main .send.send-disabled {
-    color: #c2b8b8;
-    cursor: wait;
-  }
-  

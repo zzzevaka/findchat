@@ -97,8 +97,8 @@ class PostComposer extends PureComponent {
             actions,
             ...rest
         } = this.props;
-        const {showEmojiPicker, text} = composer;
-        let submitDisabled = false;
+        const {showEmojiPicker, text, image} = composer;
+        const submitDisabled = !text && !image;
         return (
             <div
                 className={
@@ -172,63 +172,64 @@ class PostComposer extends PureComponent {
             e.preventDefault();
             this._onSubmit(e);
         }
-    }
+    };
 
     _onSubmit = () => {
-        const {onSubmit, composer} = this.props;
+        const { onSubmit, composer } = this.props;
         const {text, image} = composer;
+        if (!text && !image) return;
         onSubmit({
             text: text,
             content_id: image ? image.id : null,
         });
         this._updateInStore(INITIAL_STATE);
-    }
+    };
 
     _onTextChange = e => {
         this._updateInStore({
             text: e.target.value,
         });
-    }
+    };
 
     uploadImageRemove = key => {
         this._updateInStore({
             image: undefined
         });
-    }
+    };
 
     uploadImageCommit = img => {
         this._updateInStore({
             image: img
         });
-    }
+    };
 
     _onImgFileChanged = e => {
         this.imgUploader._onFileChanged(e);
-    }
+    };
 
     _showEmojiPicket = () => {
         this._updateInStore({
             showEmojiPicker: true
         });
-    }
+    };
 
     _hideEmojiPicker = () => {
         this._updateInStore({
             showEmojiPicker: false
         });
-    }
+    };
 
     _toggleEmojiPicker = () => {
         this._updateInStore({
             showEmojiPicker: !this.props.composer.showEmojiPicker
         });
-    }
+    };
 
     _addEmoji = e => {
         this._updateInStore({
             text: this.props.composer.text + emojiImage(e.id)
         });
-    }
+    };
 }
 
 

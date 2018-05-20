@@ -127,6 +127,8 @@ class API_ReplyChatOffer(BaseHandler):
     @tornado.web.authenticated
     def post(self, offer_id):
         '''
+            DEPRECATED
+
             Creates private thread between self.currrent user and
                 chat_offer.author_id
 
