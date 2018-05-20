@@ -1,28 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import logging
-
 import json
+import logging
 from datetime import datetime
-
-from main_app.utils.email_utils import email
 
 import tornado.web
 
 from sqlalchemy import and_
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import joinedload
 
-from ..models.basemodel import STRFTIME_FORMAT, alchemy_encoder
-from ..models.user import User, FollowUser, DEFAULT_USER_ID
-from ..models.thread import PostThread, User2Thread
-from ..models.language import Language
+from main_app.models.basemodel import STRFTIME_FORMAT, alchemy_encoder
+from main_app.models.user import User, FollowUser, DEFAULT_USER_ID
+from main_app.models.thread import PostThread, User2Thread
+from main_app.models.language import Language
+from main_app.models.hashtag import Hashtag
 
 from ..base_handler import BaseHandler
 
-# FRO DEV
-import logging
+from main_app.celery_app import task_search_index
 
 
 class API_Users(BaseHandler):
@@ -132,22 +128,32 @@ class API_User(BaseHandler):
         try:
             arg_user = json.loads(arg_user)
             # check the permissons
-            if id != self.current_user:
-                pass
-                # self.set_status(403)
-                # self.finish()
-                # return
+            if int(id) != self.current_user:
+                logging.error(id)
+                logging.error(self.current_user)
+                self.set_status(403)
+                self.finish()
+                return
             user = self.db.query(User).filter_by(id=id).first()
             for key in user.editable_by_api:
                 if key in arg_user and arg_user[key] is not None:
                     setattr(user, key, arg_user[key])
                     if key is 'avatar_id':
                         user.thumbnail = user.avatar.content.preview
-                    if key is 'lang':
+                    elif key is 'lang':
                         langs = Language.get_languages_from_db(
                             arg_user[key], self.db
                         )
                         user.update_languages(langs)
+                    elif key is 'about':
+                        # create hashtags
+                        hashtags = Hashtag.get_hashtags_from_string(
+                            arg_user[key],
+                            self.db
+                        )
+                        user.hashtags = hashtags
+                        # for h in hashtags:
+                        #     user.hashtags.append(h)
             jsoined = json.dumps(
                 dict(
                     users={
@@ -160,6 +166,9 @@ class API_User(BaseHandler):
             self.db.commit()
             self.finish(jsoined)
             self.redis.publish('updates:user:%i' % int(id), jsoined)
+            task_search_index.delay(
+                doc_type='user', id=id, body=user.get_search_index()
+            )
         except:
             logging.error('An error has occured', exc_info=True)
             raise tornado.web.HTTPError(500)

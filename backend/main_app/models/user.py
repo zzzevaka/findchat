@@ -8,7 +8,7 @@ from sqlalchemy.orm import relationship
 from .basemodel import BaseModel, STRFTIME_FORMAT
 # from .post import Post
 from .startstop_mixin import StartStopMixin
-from .hashtag import Hashtag, hashtag2user
+from .hashtag import Hashtag
 from .thread import PostThread, User2Thread, THREAD_TYPE
 
 
@@ -114,6 +114,15 @@ class User(BaseModel, StartStopMixin):
         for l in arg_langs - user_langs:
             self._languages.append(l)
         return 1
+
+    def get_search_index(self):
+        return {
+            'name': self.fullname,
+            'text': self.about,
+            'age': self.age,
+            'languages': [l.name for l in self._languages],
+            'hashtags': [h.name for h in self.hashtags],
+        }
 
     @property
     def age(self):

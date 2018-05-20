@@ -141,17 +141,19 @@ class API_Post(BaseHandler, HashTagInterface):
             # user2thread.allow_add_posts is not True - raise 404
             if not cur_user_u2t or not cur_user_u2t.allow_add_posts is True:
                 raise tornado.web.HTTPError(404)
-            if (thread.type == THREAD_TYPE['PUBLIC'] or thread.type == THREAD_TYPE['CHAT_OFFER']):
+            if thread.type == THREAD_TYPE['PUBLIC'] or thread.type == THREAD_TYPE['CHAT_OFFER']:
+                # комментарии отключены пока
                 # add comment thread
                 # post.add_comment_thread()
-                post._comment_thread = PostThread(type=THREAD_TYPE['COMMENT'])
-                for u2t in thread.user2thread:
-                    post._comment_thread.user2thread.append(
-                        User2Thread(
-                            user_id=DEFAULT_USER_ID,
-                            allow_del_posts=u2t.allow_del_posts
-                        )
-                    )
+                # post._comment_thread = PostThread(type=THREAD_TYPE['COMMENT'])
+                # for u2t in thread.user2thread:
+                #     post._comment_thread.user2thread.append(
+                #         User2Thread(
+                #             user_id=DEFAULT_USER_ID,
+                #             allow_del_posts=u2t.allow_del_posts
+                #         )
+                #     )
+
                 # create hashtags
                 for t in Hashtag.get_hashtags_from_string(post.text, self.db):
                     post.hashtags.append(t)

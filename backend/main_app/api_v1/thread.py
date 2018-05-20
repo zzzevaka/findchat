@@ -370,13 +370,12 @@ class API_ThreadChatOffers(BaseHandler):
             filter(IgnoredPosts.post_id == None).\
             filter(Post.id.notin_(user_answered))
         if tag:
-            search_ids = search.search(tag)
+            search_ids = search.search(tag, type='post')
             request = request.filter(Post.id.in_(search_ids))
         request.order_by(Post.id.desc())
         request.limit(limit)
         request.offset(offset)
         result = request.all()
-        logging.error(search_ids)
         result = sorted(result, key=lambda x: self.get_sort_key(x.id, search_ids))
         for p in result:
             logging.error(p.id)
@@ -413,6 +412,16 @@ class API_ThreadPeople(BaseHandler):
             },
             'users': {},
         }
+
+        # search in elastic
+        # if ('lang' in search_filter and search_filter['lang']):
+        #     request = request.filter(Language.name.in_(search_filter['lang']))
+        # if ('tags' in search_filter and search_filter['tags']):
+        #     request = request.filter(Hashtag.name.in_(search_filter['tags']))
+
+
+
+
         request = self.db.query(
             User,
             FollowUser.dst_user_id,
@@ -436,10 +445,15 @@ class API_ThreadPeople(BaseHandler):
                     )
         request = request.outerjoin(Language, User._languages)
         request = request.outerjoin(Hashtag, User.hashtags)
-        if ('lang' in search_filter and search_filter['lang']):
-            request = request.filter(Language.name.in_(search_filter['lang']))
-        if ('tags' in search_filter and search_filter['tags']):
-            request = request.filter(Hashtag.name.in_(search_filter['tags']))
+
+        searchTerm = search_filter.get('tags')
+        if searchTerm:
+            search_ids = search.search(searchTerm[0], type='user')
+            request = request.filter(User.id.in_(search_ids))
+        # if ('lang' in search_filter and search_filter['lang']):
+        #     request = request.filter(Language.name.in_(search_filter['lang']))
+        # if ('tags' in search_filter and search_filter['tags']):
+        #     request = request.filter(Hashtag.name.in_(search_filter['tags']))
         request = request.group_by(User.id, FollowUser.dst_user_id)
         request = request.order_by('total DESC')
         request.limit(limit)
@@ -544,6 +558,5 @@ class API_ThreadNews(BaseHandler):
             cls=alchemy_encoder(),
             check_circular=False,
         )
-        logging.debug(for_export)
         self.finish(for_export)
     

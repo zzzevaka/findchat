@@ -60,7 +60,7 @@ class ChatApp extends Component {
                 obj.unreaded_posts.count
             );
         }
-    }
+    };
 
     componentDidMount() {
         this.props.actions.loadUnreaded();
@@ -94,15 +94,15 @@ class ChatApp extends Component {
                 <Switch>
                     <Route path='/chats/:chatID' render={() => null} />
                     <Route path='/login' render={() => null} />
-                    <Route path='/' component={MobileMenu} />
+                    <Route path='/' component={ MobileMenu } />
                 </Switch>
-                <Notifications notifications={store.notifications}/>
+                <Notifications notifications={ store.notifications }/>
                 {this.props.children}
-                <Modals {...this.props} />
+                <Modals { ...this.props } />
             </div>
         )
     }
-};
+}
 
 
 let NewOfferButton = ({history}) => {
@@ -188,7 +188,7 @@ class ScrollBodyUpButton extends Component {
                 hidden: true
             });
         }
-    }
+    };
 
     onClick = e => {
         e.preventDefault();
@@ -200,7 +200,7 @@ class ScrollBodyUpButton extends Component {
             0,
             this.props.duration
         );
-    }
+    };
 
     render() {
         const classes = classNames(

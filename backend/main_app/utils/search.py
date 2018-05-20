@@ -25,6 +25,18 @@ MAPPING = {
                     'analyzer': 'edgengram_mapping_analyzer',
                 },
             }
+        },
+        'user': {
+            'properties': {
+                'text': {
+                    'type': 'string',
+                    'analyzer': 'edgengram_mapping_analyzer',
+                },
+                'hashtags': {
+                    'type': 'string',
+                    'analyzer': 'edgengram_mapping_analyzer',
+                },
+            }
         }
     },
     'settings': {
@@ -55,21 +67,32 @@ MAPPING = {
 def search_index(doc_type, id, body, index=INDEX):
     ES.index(index=index, doc_type=doc_type, id=id, body=body)
 
-
 def create_mapping(mapping=MAPPING):
     ES.indices.create(index=INDEX, ignore=400, body=MAPPING)
 
-
-def search(search_term, fields=None):
+def search(search_term, type):
     result = ES.search(
         index=INDEX,
         body={
             'query': {
-                'multi_match': {
-                    'query': search_term,
-                    'fields': ['text^0.9', 'hashtags']
+                'bool': {
+                    'should': {
+                        'multi_match': {
+                            'query': search_term,
+                            'fields': ['text^0.7', 'languages^0.9', 'hashtags']
+                        }
+                    },
+                    'must': {
+                        'match': {
+                            '_type': type
+                        }
+                    }
                 }
             },
+            "sort": [
+                "_score",
+                { "publish_at": "desc" }
+            ],
             '_source': ['_id'],
              'min_score': 0.25
         }

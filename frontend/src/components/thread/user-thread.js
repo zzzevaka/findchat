@@ -54,7 +54,7 @@ let UserThreadItem = function({auth, user, match, dispatch, t}) {
                 <br />
                 <div className='hashtags'>
                 {
-                    user.hashtags && user.hashtags.map(v => <span key={v} className='hashtag'>{`#${v}`}</span>)
+                    user.hashtags && user.hashtags.map(v => <span key={v} className='hashtag'>{ v }</span>)
                 }
                 </div>
             </Link>

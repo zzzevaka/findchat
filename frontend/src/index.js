@@ -11,14 +11,10 @@ import EditUserPage from './components/EditUserPage';
 import LoginPage from './components/LoginPage';
 import FollowPage from './components/FollowPage';
 import NewsPage from './components/NewsPage';
-import * as Actions from './actions';
 import configureStore from './store/configureStore';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import ScrollMemory from 'react-router-scroll-memory';
 import AuthProvider, {withAuth} from './auth';
-
-
-import wsUpdater from './wsUpdater';
 
 import './index.css';
 
@@ -30,13 +26,12 @@ import i18n from './i18n';
 const store = configureStore(window.__INITIAL_STATE__);
 
 
-let IndexRedirect = function({auth}) {
+let IndexRedirect = function({ auth }) {
     if (auth.authenticated === undefined) return null;
     return (
-        <Redirect to={auth.user_id ? `/user/${auth.user_id}` : '/login'}
-        />
+        <Redirect to={ auth.user_id ? `/user/${auth.user_id}` : '/login' } />
     );
-}
+};
 
 IndexRedirect = withAuth(IndexRedirect);
 
@@ -83,7 +78,7 @@ ReactDOM.render(
                     />
                     <ScrollMemory compareOnlyPathname />
                     <Switch>
-                        {routes.map(route => <Route key={route.path} {...route} />)}
+                        { routes.map(route => <Route key={ route.path } { ...route } />) }
                     </Switch>
                 </ChatApp>
             </BrowserRouter>
@@ -93,26 +88,3 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-// let ws = new wsUpdater();
-
-// ws.open(`wss://${window.location.host}/ws`);
-
-// ws.onmessage = (event) => {
-//     const obj = JSON.parse(event.data)
-//     if (obj.threads) {
-//         store.dispatch(Actions.loadThreadSuccess(
-//             obj.threads,
-//             obj.posts,
-//             {},
-//         ));
-//     }
-//     if (obj.users) {
-//         store.dispatch(Actions.loadUsersSuccess(obj.users));
-//     }
-//     if (obj.unreaded_posts) {
-//         store.dispatch(Actions.updateUnreadedPostsAddToThread(
-//             obj.unreaded_posts.thread_id,
-//             obj.unreaded_posts.count
-//         ));
-//     }
-// }
