@@ -1,5 +1,3 @@
-// This file bootstraps the entire application.
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -12,6 +10,7 @@ import LoginPage from './components/LoginPage';
 import FollowPage from './components/FollowPage';
 import NewsPage from './components/NewsPage';
 import configureStore from './store/configureStore';
+import Page404 from './components/Page404/index';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import ScrollMemory from 'react-router-scroll-memory';
 import AuthProvider, {withAuth} from './auth';
@@ -64,6 +63,10 @@ export const routes = [
         path: '/login',
         component: LoginPage
     },
+    {
+        path: '/',
+        component: Page404,
+    }
 ];
 
 ReactDOM.render(

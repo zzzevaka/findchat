@@ -5,13 +5,15 @@ import extendClassName from './extendClassName';
 import './picker.css';
 
 
-export const CategoryList = extendClassName(
+const PickerCategoryList = extendClassName(
   props => <div {...props} />,
   'picker-category-list'
 )
 
+PickerCategoryList.contextTypes = {currentCategory: PropTypes.string}
 
-export const CategoryListItem = (props, context) => {
+
+const PickerCategoryListItem = (props, context) => {
   const {category, className, ...rest} = props;
   const classes = classNames(
     'picker-categoty-list-item',
@@ -27,24 +29,25 @@ export const CategoryListItem = (props, context) => {
   );
 }
 
-CategoryListItem.contextTypes = {
+PickerCategoryListItem.contextTypes = {
   categorySelected: PropTypes.func,
   currentCategory: PropTypes.string
 }
 
 
-export const ItemList = extendClassName(
+const PickerItemList = extendClassName(
   (props, context) => {
-    const {category, ...rest} = props;
-    return category === context.currentCategory ? <div {...rest} /> : null;
+    return props.category === context.currentCategory
+      ? <div {...props}/>
+      : null;
   },
   'picker-item-list'
 )
 
-ItemList.contextTypes = {currentCategory: PropTypes.string}
+PickerItemList.contextTypes = {currentCategory: PropTypes.string}
 
 
-export const ItemListItem = (props, context) => {
+const PickerItemListItem = (props, context) => {
   const {className, value, ...rest} = props;
   const classes = classNames('picker-item-list-item', className);
   return (
@@ -56,17 +59,14 @@ export const ItemListItem = (props, context) => {
   );
 }
 
-ItemListItem.contextTypes = {itemSelected: PropTypes.func}
+PickerItemListItem.contextTypes = {itemSelected: PropTypes.func}
 
 
-export default class Picker extends Component {
+class Picker extends Component {
 
-  static propTypes = {
-    onSelect: PropTypes.func.isRequired,
-    initCategory: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ]).isRequired
+  static defaultProps = {
+      onSelect=PropTypes.func.isRequired,
+      currentCa
   }
 
   static childContextTypes = {
@@ -74,6 +74,15 @@ export default class Picker extends Component {
     categorySelected: PropTypes.func,
     currentCategory: PropTypes.string
   }
+
+  constructor() {
+    super();
+    this.state = {
+      currentCategory: 'people'
+    };
+  }
+
+
 
   getChildContext() {
     return {
@@ -83,19 +92,16 @@ export default class Picker extends Component {
     };
   }
 
-  itemSelected = value => this.props.onSelect(value);
+  itemSelected = key => {console.log(key + ' choosen item')};
 
-  categorySelected = value => this.setState({currentCategory: value});
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentCategory: props.initCategory
-    };
+  categorySelected = key => {
+    console.log(key + ' choosen category')
+    this.setState({currentCategory: key})  
   }
 
+
   render() {
-    const {className, initCategory, ...rest} = this.props;
+    const {className, ...rest} = this.props;
     const classes = classNames('picker-container', className);
     return <div {...rest} className={classes} />
   }

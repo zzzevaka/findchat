@@ -1,0 +1,11 @@
+.page-404 {
+    width: 100%;
+    min-height: 300px;
+    display: flex;
+}
+
+.page-404__text {
+    font-size: 1.6em;
+    margin: auto;
+    color: #777;
+}

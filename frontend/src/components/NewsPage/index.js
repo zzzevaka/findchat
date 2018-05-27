@@ -1,9 +1,9 @@
 import React from 'react';
-import {translate} from 'react-i18next';
+import { translate}  from 'react-i18next';
 import PageDummy from '../RegularPage';
-import {TopFixedBarDummy} from '../TopFixedBar';
-import {NewsThread} from '../thread';
-import {loadThread} from '../../actions';
+import { TopFixedBarDummy } from '../TopFixedBar';
+import { NewsThread } from '../thread';
+import { loadThread } from '../../actions';
 
 
 const NEWS_PLACEHOLDER = 'There are no news';
@@ -14,7 +14,7 @@ export default function NewsPage(props) {
         dispatch(
             loadThread('news', limit, offset)
         );
-    }
+    };
 
     return (
         <PageDummy>
@@ -25,7 +25,6 @@ export default function NewsPage(props) {
             />
         </PageDummy>
     );
-
 }
 
 
@@ -37,7 +36,7 @@ let NewsTopFixedBar = function({t}) {
                 width: '100%',
                 height: '100%',
             }}>
-                <p style={{margin: 'auto'}}>{t('News')}</p>
+                <p style={ { margin: 'auto' } }>{ t('News') }</p>
             </div>
         </TopFixedBarDummy>
     );
@@ -45,4 +44,4 @@ let NewsTopFixedBar = function({t}) {
 
 NewsTopFixedBar = translate("translations")(NewsTopFixedBar);
 
-export {NewsTopFixedBar};
+export { NewsTopFixedBar };
