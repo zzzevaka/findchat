@@ -79,7 +79,7 @@ def search(search_term, type):
                     'should': {
                         'multi_match': {
                             'query': search_term,
-                            'fields': ['text^0.7', 'languages^0.9', 'hashtags']
+                            'fields': ['text^0.7', 'languages^0.7', 'name^0.7', 'hashtags']
                         }
                     },
                     'must': {
