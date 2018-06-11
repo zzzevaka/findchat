@@ -1,3 +1,7 @@
+.notification {
+    border-top: none;
+}
+
 .notify-content {
     vertical-align: middle;
     display: flex;
@@ -10,7 +14,7 @@
 }
 
 .notify-offer-answer-success span {
-    /*line-height: 1em;*/
+    color: #fff;
     font-size: 1.3em;
     margin: auto 20px;
 }
