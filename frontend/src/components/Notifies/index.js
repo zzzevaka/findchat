@@ -1,10 +1,8 @@
 import React from 'react';
-import {UserAvatar} from '../UserPage';
-import { withRouter, Link } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
 import './notifies.css';
 
-export const ChatOfferAnswerSuccess = withRouter(({ thumbnail, chatID, ...rest }) => {
+export const ChatOfferAnswerSuccess = ({ thumbnail, chatID, ...rest }) => {
     return (
         <Link to={ `/chats/${chatID}/` } className="link-no-style">
             <div className='notify-content notify-offer-answer-success' {...rest}>
@@ -12,7 +10,7 @@ export const ChatOfferAnswerSuccess = withRouter(({ thumbnail, chatID, ...rest }
             </div>
         </Link>
     );
-});
+};
 
 export function ChatOfferAnswerDoubleAnswer(props) {
     return (

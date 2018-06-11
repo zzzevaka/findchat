@@ -180,7 +180,7 @@ export function updateUser(user) {
             r => r.json()
         ).then(
             ({users}) => {
-                dispatch(Notifications.info({
+                dispatch(Notifications.success({
                     position: 'tr',
                     children: <EditingSuccess />
                 }));
@@ -295,24 +295,27 @@ export function answerChatOffer(offerID, post) {
         const state = getState();
         const offer = state.posts[offerID];
         const user = state.users[offer.author_id];
-        api.answerChatOffer(offerID, post).then( 
+        api.answerChatOffer(offerID, post).then(
             r => ({status: r.status, json: r.json()})
         ).then(
             ({status, json}) => {
                 switch(status) {
 
                     case 200:
-                        dispatch(
-                            Notifications.success({
-                                position: 'tr',
-                                children: (
-                                    <ChatOfferAnswerSuccess
-                                        chatID={json.thread_id}
-                                        thumbnail={user.thumbnail}
-                                    />
-                                ),
-                            })
-                        );
+                        json.then(body => {
+                            dispatch(
+                                Notifications.success({
+                                    position: 'tr',
+                                    children: (
+                                        <ChatOfferAnswerSuccess
+                                            chatID={body.thread_id}
+                                            thumbnail={body.thumbnail}
+                                        />
+                                    ),
+                                })
+                            );
+                        });
+
                         break;
 
                     case 409:
