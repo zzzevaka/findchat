@@ -14,7 +14,7 @@ class PostModal extends Component {
         const {dispatch, postID, onHide} = this.props;
         dispatch(answerChatOffer(postID, p));
         onHide();
-    }
+    };
 
     componentDidMount() {
         const {post, postID, dispatch} = this.props;

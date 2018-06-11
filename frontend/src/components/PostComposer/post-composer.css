@@ -44,11 +44,17 @@
 }
 
 
-  .post-composer-main .button-emoji {
+.post-composer-main .button-emoji {
     bottom: 13px;
     right: 60px;
     height: 18px;
     width: 18px;
+    opacity: 0.2;
+    transition: 0.4s opacity linear;
+}
+
+.post-composer-main .button-emoji:hover {
+    opacity: 1;
 }
 
 .post-composer .button-image {
@@ -58,13 +64,19 @@
 }
 
 .post-composer .button-image img {
-  height: 18px;
-  width: 18px;
+    height: 18px;
+    width: 18px;
 }
 
 .post-composer-image .button-image {
-  color: #777;
-  display: block;
+    color: #777;
+    display: block;
+    opacity: 0.4;
+    transition: 0.2s opacity linear;
+}
+
+.post-composer-image .button-image:hover {
+    opacity: 1;
 }
 
 .post-composer .attach-preview {

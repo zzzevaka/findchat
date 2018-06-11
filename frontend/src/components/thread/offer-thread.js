@@ -13,7 +13,10 @@ import {UserAvatar} from '../UserPage';
 import {HashtagString} from '../Hashtag';
 import connectThread, {mapStateToProps} from './connect-thread';
 import {ThreadLoaderIcon, ThreadPlaceholder, InfiniteThread} from './thread-interface';
+import PostComposer from '../PostComposer';
 
+
+import { answerChatOffer } from '../../actions';
 import {withAuth} from '../../auth';
 
 import './offer-thread.css';
@@ -67,21 +70,25 @@ ChatOfferThread = translate('translations')(ChatOfferThread);
 
 let OfferPostWrapper = pure(
     ({auth, ...props}) => {
-        const answerLink = auth.authenticated
-            ? props.history.location.pathname + `?modalType=chat_offer&postID=${props.post.id}`
-            : '/login?showForm=1';
+        const handleSubmit = p => props.dispatch(answerChatOffer(props.post.id, p));
+
         return (
             <div className='post-offer-wrapper'>
                 <OfferPost {...props} className='post-offer-item' />
-                <div className='button-area'>
-                    <Link
-                        to={answerLink}
-                        className='link-no-style button-answer'
-                    >
-                        <CommentColorIcon />
-                        <span className='button-text'>{props.t("Answer")}</span>
-                    </Link>
-                </div>
+                {
+                    auth.authenticated
+                        ? <PostComposer
+                            id={ `offer_${props.post.id}` }
+                            onSubmit={ handleSubmit }
+                            placeholder='Ответить в личном сообщении'
+                        />
+                        : <div className="post-offer-wrapper__login-link">
+                            <Link className="link-no-style" to="/login?showForm=1">
+                                Войдите, чтобы ответить
+                            </Link>
+                        </div>
+                }
+
             </div>
         );
     }

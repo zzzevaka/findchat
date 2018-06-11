@@ -101,6 +101,17 @@
     vertical-align: middle;
 }
 
+.post-offer-wrapper .post-composer {
+    border-top: 1px solid #ddd;
+}
+
+.post-offer-wrapper__login-link {
+    width: 100%;
+    text-align: center;
+    border-top: 1px solid #ddd;
+    padding: 10px;
+}
+
  /* CHAT POST */
 
 .chat-thread {

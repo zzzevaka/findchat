@@ -11,7 +11,7 @@ class SearchChatOffers extends Component {
 
     loadOffers = (limit, offset, dispatch) => {
         dispatch(loadChatOffers(limit, offset, this.props.filter));
-    }
+    };
 
     componentWillUpdate(nProps) {
         if (this.props.filter !== nProps.filter) {
