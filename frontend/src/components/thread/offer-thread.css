@@ -72,6 +72,28 @@
     margin-bottom: 8px;
 }
 
+.post-offer-wrapper__share {
+    padding: 10px 18px;
+    height: 44px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.post-offer-wrapper__share__title {
+    margin: auto 0;
+}
+
+.post-offer-wrapper__share .SocialMediaShareButton {
+    margin-left: 10px;
+    outline: none;
+    opacity: 0.4;
+    transition: 0.2s opacity linear;
+}
+
+.post-offer-wrapper__share .SocialMediaShareButton:hover {
+    opacity: 1;
+}
+
 @media screen and (min-width: 768px) {
     
     .post-offer-wrapper {

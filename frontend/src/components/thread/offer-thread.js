@@ -14,6 +14,18 @@ import {HashtagString} from '../Hashtag';
 import connectThread, {mapStateToProps} from './connect-thread';
 import {ThreadLoaderIcon, ThreadPlaceholder, InfiniteThread} from './thread-interface';
 import PostComposer from '../PostComposer';
+import {
+    VKShareButton,
+    VKIcon,
+
+    FacebookShareButton,
+    FacebookIcon,
+
+    OKShareButton,
+    OKIcon,
+
+
+} from 'react-share';
 
 
 import { answerChatOffer } from '../../actions';
@@ -68,20 +80,57 @@ class ChatOfferThread extends Component {
 
 ChatOfferThread = translate('translations')(ChatOfferThread);
 
+
+
+
+
+let SharePostComposer = ({ post, ...rest }) => {
+    const postUrl = `https://findchat.io/post/${post.id}`;
+    return (
+        <div { ...rest } className="post-offer-wrapper__share">
+            <VKShareButton
+                title='lala'
+                desciption="lalalla"
+                url={ '/lala/' }
+            >
+                <VKIcon size={24} round />
+            </VKShareButton>
+            <FacebookShareButton
+                title='lala'
+                desciption="lalalla"
+                url={ '/lala/' }
+            >
+                <FacebookIcon size={24} round />
+            </FacebookShareButton>
+            <OKShareButton
+                title='lala'
+                desciption="lalalla"
+                url={ '/lala/' }
+            >
+                <OKIcon size={24} round />
+            </OKShareButton>
+        </div>
+    );
+};
+
+
 let OfferPostWrapper = pure(
     ({auth, ...props}) => {
         const handleSubmit = p => props.dispatch(answerChatOffer(props.post.id, p));
-
         return (
             <div className='post-offer-wrapper'>
                 <OfferPost {...props} className='post-offer-item' />
                 {
                     auth.authenticated
-                        ? <PostComposer
-                            id={ `offer_${props.post.id}` }
-                            onSubmit={ handleSubmit }
-                            placeholder='Ответить в личном сообщении'
-                        />
+                        ? auth.user_id !== props.post.author_id
+                            ? <PostComposer
+                                id={ `offer_${props.post.id}` }
+                                onSubmit={ handleSubmit }
+                                placeholder='Ответить в личном сообщении'
+                            />
+                            : <SharePostComposer
+                                post={ props.post }
+                            />
                         : <div className="post-offer-wrapper__login-link">
                             <Link className="link-no-style" to="/login?showForm=1">
                                 Войдите, чтобы ответить
