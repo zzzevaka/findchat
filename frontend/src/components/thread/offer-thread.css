@@ -51,6 +51,8 @@
 }
 
 .post-offer-item .post-text {
+    font-size: 1.2em;
+    color: #555;
     margin: 14px 0;
 }
 

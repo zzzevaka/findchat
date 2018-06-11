@@ -303,7 +303,7 @@ export function answerChatOffer(offerID, post) {
 
                     case 200:
                         dispatch(
-                            Notifications.info({
+                            Notifications.success({
                                 position: 'tr',
                                 children: (
                                     <ChatOfferAnswerSuccess

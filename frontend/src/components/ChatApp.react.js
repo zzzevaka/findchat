@@ -106,7 +106,37 @@ class ChatApp extends Component {
                     <Route path='/login' render={() => null} />
                     <Route path='/' component={ MobileMenu } />
                 </Switch>
-                <Notifications notifications={ store.notifications }/>
+                <Notifications
+                    notifications={ store.notifications }
+                    style={{
+                        NotificationItem: {
+                            DefaultStyle: {
+                                borderTop: 'none',
+                            },
+                            success: {
+                                backgroundColor: '#8BC34A',
+                                color: '#FFF',
+                            },
+                            error: {
+                                backgroundColor: '#FF5722',
+                                color: '#FFF',
+                            }
+                        },
+
+                        Dismiss: {
+                            DefaultStyle: {
+                                color: '#FFF',
+                                backgroundColor: 'transparent',
+                            },
+                            success: {
+                                backgroundColor: 'transparent',
+                            },
+                            error: {
+                                backgroundColor: 'transparent',
+                            }
+                        },
+                    }}
+                />
                 {this.props.children}
                 <Modals { ...this.props } />
             </div>
