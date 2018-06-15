@@ -86,28 +86,30 @@ ChatOfferThread = translate('translations')(ChatOfferThread);
 
 let SharePostComposer = ({ post, ...rest }) => {
     const postUrl = `https://findchat.io/post/${post.id}`;
+    const iconSize = 32;
+    const title = 'Новая тема на findchat.io'
     return (
         <div { ...rest } className="post-offer-wrapper__share">
             <VKShareButton
-                title='lala'
-                desciption="lalalla"
-                url={ '/lala/' }
+                title={ title }
+                desciption={ post.text }
+                url={ `https://findchat.io/posts/` }
             >
-                <VKIcon size={24} round />
+                <VKIcon size={iconSize} round />
             </VKShareButton>
             <FacebookShareButton
-                title='lala'
-                desciption="lalalla"
+                title={ title }
+                desciption={ post.text }
                 url={ '/lala/' }
             >
-                <FacebookIcon size={24} round />
+                <FacebookIcon size={iconSize} round />
             </FacebookShareButton>
             <OKShareButton
-                title='lala'
-                desciption="lalalla"
+                title={ title }
+                desciption={ post.text }
                 url={ '/lala/' }
             >
-                <OKIcon size={24} round />
+                <OKIcon size={iconSize} round />
             </OKShareButton>
         </div>
     );
