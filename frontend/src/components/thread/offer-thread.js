@@ -91,21 +91,21 @@ let SharePostComposer = ({ post, ...rest }) => {
     return (
         <div { ...rest } className="post-offer-wrapper__share">
             <VKShareButton
-                title={ title }
+                title={ post.text }
                 desciption={ post.text }
                 url={ `https://findchat.io/posts/` }
             >
                 <VKIcon size={iconSize} round />
             </VKShareButton>
             <FacebookShareButton
-                title={ title }
+                title={ post.text }
                 desciption={ post.text }
                 url={ '/lala/' }
             >
                 <FacebookIcon size={iconSize} round />
             </FacebookShareButton>
             <OKShareButton
-                title={ title }
+                title={ post.text }
                 desciption={ post.text }
                 url={ '/lala/' }
             >
