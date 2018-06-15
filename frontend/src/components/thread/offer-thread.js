@@ -86,7 +86,7 @@ ChatOfferThread = translate('translations')(ChatOfferThread);
 
 let SharePostComposer = ({ post, ...rest }) => {
     const postUrl = `https://findchat.io/post/${post.id}`;
-    const iconSize = 32;
+    const iconSize = 24;
     const title = 'Новая тема на findchat.io'
     return (
         <div { ...rest } className="post-offer-wrapper__share">
