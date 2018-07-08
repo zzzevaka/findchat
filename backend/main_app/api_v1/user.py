@@ -129,8 +129,6 @@ class API_User(BaseHandler):
             arg_user = json.loads(arg_user)
             # check the permissons
             if int(id) != self.current_user:
-                logging.error(id)
-                logging.error(self.current_user)
                 self.set_status(403)
                 self.finish()
                 return

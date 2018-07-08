@@ -97,7 +97,7 @@ class EditUserPage extends Component {
                                         />
                                         <hr />
                                         <BirthDateFormGroup
-                                            value={new Date(form.birth_date || user.birth_date)}
+                                            value={new Date(`${form.birth_date || user.birth_date}Z`)}
                                             onChange={this._birthChange}
                                             t={t}
                                         />
@@ -347,7 +347,6 @@ class DateSelect extends Component {
     }
 
     _onChange(y, m, d) {
-        console.log(y,m,d);
         let newDate = new Date(this.props.value);
         if (y != null) newDate.setYear(y);
         if (m != null) newDate.setMonth(m);
