@@ -347,10 +347,11 @@ class DateSelect extends Component {
     }
 
     _onChange(y, m, d) {
+        console.log(y,m,d);
         let newDate = new Date(this.props.value);
-        if (y) newDate.setYear(y);
-        if (m) newDate.setMonth(m);
-        if (d) newDate.setDate(d);
+        if (y != null) newDate.setYear(y);
+        if (m != null) newDate.setMonth(m);
+        if (d != null) newDate.setDate(d);
         this.props.onChange(newDate);
     }
 
